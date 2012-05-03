@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/node_modules/jsdom/node_modules/htmlparser/Htmlparser.iml" filepath="$PROJECT_DIR$/node_modules/jsdom/node_modules/htmlparser/Htmlparser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/node_modules/express/node_modules/connect/lib/public/Public.iml" filepath="$PROJECT_DIR$/node_modules/express/node_modules/connect/lib/public/Public.iml" />
+      <module fileurl="file://$PROJECT_DIR$/node_modules/underscore/Underscore.iml" filepath="$PROJECT_DIR$/node_modules/underscore/Underscore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/node_modules/express/testing/views/Views.iml" filepath="$PROJECT_DIR$/node_modules/express/testing/views/Views.iml" />
+    </modules>
+  </component>
+</project>
+
