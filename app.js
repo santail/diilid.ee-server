@@ -68,14 +68,35 @@ app.get('/deals', function (req, res) {
 
                 if (!(err || response.statusCode !== 200) && body) {
                     parsePage(body, function($) {
-                        if (!result.items[$site]) {
-                            result.items[$site] = [];
-                        }
 
-                        result.items[$site].push(deal);
+                        deal.origin = $('iframe.offerpage_content').attr('src');
 
-                        if (counter === 0) {
-                            res.json(result);
+                        if (deal.origin) {
+                            request({
+                                uri: deal.origin,
+                                timeout: 30000
+                            }, function (err, response, body) {
+                                if (!(err || response.statusCode !== 200) && body) {
+                                    parsePage(body, function($) {
+
+                                        console.log($('body'))
+
+                                        if (!result.items[$site]) {
+                                            result.items[$site] = [];
+                                        }
+
+                                        result.items[$site].push(deal);
+
+                                    });
+                                }
+                                else {
+                                    console.log('Error: ', err);
+                                }
+
+                                if (counter === 0) {
+                                    res.json(result);
+                                }
+                            });
                         }
                     });
                 }
@@ -83,8 +104,6 @@ app.get('/deals', function (req, res) {
                     console.log('Error: ', err, deal.href);
                 }
             });
-
-            sleep(1000);
         });
     });
 
