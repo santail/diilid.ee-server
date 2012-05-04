@@ -45,66 +45,161 @@ app.get('/deals', function (req, res) {
 
         console.log('Deals total: ', $deals.length);
 
-        $deals.each(function (i, item) {
-            var $title = $(item).find('h3'),
-                $a = $title.children('a'),
-                $img = $(item).children('a').children('img'),
-                $site = $(item).children('span.site-name').text();
+        async.series([
+            function (callback) {
 
-            var deal = {
-                href:$a.attr('href'),
-                title:$title.attr('title').trim(),
-                thumbnail:$img.attr('src'),
-                site: $site
-            };
+                $deals.each(function (i, item) {
+                    var $title = $(item).find('h3'),
+                        $a = $title.children('a'),
+                        $img = $(item).children('a').children('img'),
+                        $site = $(item).children('span.site-name').text();
 
-            request({
-                uri: deal.href,
-                timeout: 30000
-            }, function (err, response, body) {
-                counter--;
+                    var deal = {
+                        href:$a.attr('href'),
+                        title:$title.attr('title').trim(),
+                        thumbnail:$img.attr('src'),
+                        site: $site
+                    };
 
-                console.log('counting: ', counter);
+                    setTimeout(function(){
+                        console.log('waiting to request', deal.href)
 
-                if (!(err || response.statusCode !== 200) && body) {
-                    parsePage(body, function($) {
+                        request({
+                            uri: deal.href,
+                            timeout: 30000
+                        }, function (err, response, body) {
+                            counter--;
 
-                        deal.origin = $('iframe.offerpage_content').attr('src');
+                            console.log('counting: ', counter);
 
-                        if (deal.origin) {
-                            request({
-                                uri: deal.origin,
-                                timeout: 30000
-                            }, function (err, response, body) {
-                                if (!(err || response.statusCode !== 200) && body) {
-                                    parsePage(body, function($) {
+                            if (!(err || response.statusCode !== 200) && body) {
+                                parsePage(body, function($) {
+                                    deal.origin = $('iframe.offerpage_content').attr('src');
 
-                                        console.log($('body'))
-
+                                    if (deal.origin) {
                                         if (!result.items[$site]) {
                                             result.items[$site] = [];
                                         }
 
                                         result.items[$site].push(deal);
 
+                                    }
+                                });
+                            }
+                            else {
+                                console.log('Error: ', err, deal.href);
+                            }
+
+                            if (counter === 0) {
+                                callback(null, 'one');
+                            }
+                        });
+                    }, 1000);
+
+
+                });
+                console.log('perform first iteration')
+            },
+            function (callback) {
+                var siteCounter = _.keys(result.items).length;
+
+                async.forEach(_.keys(result.items), function($site) {
+                    var dealsCounter = result.items[$site].length
+
+                    console.log($site)
+
+                    async.forEach(result.items[$site], function(deal) {
+
+                        setTimeout(function(){
+                            console.log('waiting to request', deal.origin)
+
+                            request({
+                                uri: deal.origin,
+                                timeout: 30000
+                            }, function (err, response, body) {
+                                dealsCounter--;
+
+                                console.log('counting: ', dealsCounter);
+
+                                if (!(err || response.statusCode !== 200) && body) {
+                                    parsePage(body, function($) {
+                                        if ($site === 'www.super24.ee') {
+                                            var pictures = [];
+                                            pictures.push({
+                                                url: $('#container .c-main .inner.clearfix2 .main-img-wrp img').attr('src'),
+                                                main: true
+                                            })
+
+                                            $('#container .c-info .inner .form-item .photos a').each(function (i, link) {
+                                                pictures.push({
+                                                    url: $(link).attr('href')
+                                                })
+                                            })
+                                            deal.pictures = pictures
+                                            deal.price = {
+                                                discount: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .discount-price').text(),
+                                                regular: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .regular-price').text(),
+                                                benefit: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .econ').text()
+                                            }
+                                            deal.exposed = ''
+                                            deal.end = ''
+
+                                            deal.title = {
+                                                full: $('#container .c-main .inner.clearfix2 h1').text(),
+                                                short: $('#container .c-main .inner.clearfix2 h2').text()
+                                            };
+
+                                            deal.seller = {
+                                                info: $('#seller-info .content').html()
+                                            }
+
+                                            $('#container .c-info .inner .form-item .photos').remove()
+                                            $('#seller-info').remove()
+                                            deal.description = {
+                                                full: $('#container .c-info .inner .form-item').html(),
+                                                map: $('#container .c-info .inner .form-item .Gmap').attr('src')
+                                            }
+                                        }
                                     });
                                 }
                                 else {
-                                    console.log('Error: ', err);
+                                    console.log('Error: ', err, deal.origin);
                                 }
 
-                                if (counter === 0) {
-                                    res.json(result);
+                                if (dealsCounter === 0) {
+                                    siteCounter--
+                                }
+                                if (dealsCounter === 0 && siteCounter === 0) {
+                                    callback(null, 'two');
                                 }
                             });
-                        }
+
+                        }, 1000);
+
+
+                    }, function(err1){
+                        // if any of the saves produced an error, err would equal that error
                     });
-                }
-                else {
-                    console.log('Error: ', err, deal.href);
-                }
+
+                }, function(err){
+                    // if any of the saves produced an error, err would equal that error
+                });
+
+                console.log('perform second iteration')
+            },
+            function (callback) {
+                res.json(result)
+                callback(null, 'free');
+
+                console.log('perform third iteration')
+            }
+        ],
+// optional callback
+            function (err, results) {
+                // results is now equal to ['one', 'two']
             });
-        });
+
+
     });
 
 });
