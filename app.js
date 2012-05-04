@@ -48,7 +48,7 @@ app.get('/deals', function (req, res) {
         async.series([
             function (callback) {
 
-                $deals.each(function (i, item) {
+                async.forEachSeries($deals, function (item, callback) {
                     var $title = $(item).find('h3'),
                         $a = $title.children('a'),
                         $img = $(item).children('a').children('img'),
@@ -61,145 +61,186 @@ app.get('/deals', function (req, res) {
                         site: $site
                     };
 
-                    setTimeout(function(){
-                        console.log('waiting to request', deal.href)
+                    console.log('waiting to request', deal.href)
 
-                        request({
-                            uri: deal.href,
-                            timeout: 30000
-                        }, function (err, response, body) {
-                            counter--;
+                    request({
+                        uri: deal.href
+                    }, function (err, response, body) {
+                        counter--;
 
-                            console.log('counting: ', counter);
+                        console.log('counting: ', counter);
 
-                            if (!(err || response.statusCode !== 200) && body) {
-                                parsePage(body, function($) {
-                                    deal.origin = $('iframe.offerpage_content').attr('src');
+                        if (!(err || response.statusCode !== 200) && body) {
+                            parsePage(body, function($) {
+                                deal.origin = $('iframe.offerpage_content').attr('src');
 
-                                    if (deal.origin) {
-                                        if (!result.items[$site]) {
-                                            result.items[$site] = [];
-                                        }
+                                console.log(deal.origin)
 
-                                        result.items[$site].push(deal);
-
+                                if (deal.origin) {
+                                    if (!result.items[$site]) {
+                                        result.items[$site] = [];
                                     }
-                                });
-                            }
-                            else {
-                                console.log('Error: ', err, deal.href);
-                            }
 
-                            if (counter === 0) {
-                                callback(null, 'one');
-                            }
-                        });
-                    }, 1000);
+                                    result.items[$site].push(deal);
+                                }
 
+                                callback()
+                            });
+                        }
+                        else {
+                            console.log('Error: ', err, deal.href)
+                            callback()
+                        }
+                    });
 
-                });
+                }, function(err) {
+                    if (err) {
+                        console.log('error reading pakkumised.ee original links')
+                    }
+                    if (counter === 0) {
+                        callback(null, 'one');
+                    }
+                })
+
                 console.log('perform first iteration')
             },
             function (callback) {
-                var siteCounter = _.keys(result.items).length;
+                var sites = _.keys(result.items),
+                    siteCounter = sites.length;
 
-                async.forEach(_.keys(result.items), function($site) {
+                async.forEachSeries(sites, function($site, callback) {
                     var dealsCounter = result.items[$site].length
 
-                    console.log($site)
+                    console.log('processing', $site)
 
-                    async.forEach(result.items[$site], function(deal) {
+                    async.forEachSeries(result.items[$site], function(deal, callback) {
 
-                        setTimeout(function(){
-                            console.log('waiting to request', deal.origin)
+                        console.log('waiting to request', deal.origin)
 
-                            request({
-                                uri: deal.origin,
-                                timeout: 30000
-                            }, function (err, response, body) {
-                                dealsCounter--;
+                        request({
+                            uri: deal.origin,
+                            timeout: 30000
+                        }, function (err, response, body) {
+                            dealsCounter--;
 
-                                console.log('counting: ', dealsCounter);
+                            console.log('counting: ', dealsCounter);
 
-                                if (!(err || response.statusCode !== 200) && body) {
-                                    parsePage(body, function($) {
-                                        if ($site === 'www.super24.ee') {
-                                            var pictures = [];
+                            if (!(err || response.statusCode !== 200) && body) {
+                                parsePage(body, function($) {
+                                    if ($site === 'www.super24.ee') {
+                                        var pictures = [];
+                                        pictures.push({
+                                            url: $('#container .c-main .inner.clearfix2 .main-img-wrp img').attr('src'),
+                                            main: true
+                                        })
+
+                                        $('#container .c-info .inner .form-item .photos a').each(function (i, link) {
                                             pictures.push({
-                                                url: $('#container .c-main .inner.clearfix2 .main-img-wrp img').attr('src'),
-                                                main: true
+                                                url: $(link).attr('href')
                                             })
-
-                                            $('#container .c-info .inner .form-item .photos a').each(function (i, link) {
-                                                pictures.push({
-                                                    url: $(link).attr('href')
-                                                })
-                                            })
-                                            deal.pictures = pictures
-                                            deal.price = {
-                                                discount: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .discount-price').text(),
-                                                regular: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .regular-price').text(),
-                                                benefit: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .econ').text()
-                                            }
-                                            deal.exposed = ''
-                                            deal.end = ''
-
-                                            deal.title = {
-                                                full: $('#container .c-main .inner.clearfix2 h1').text(),
-                                                short: $('#container .c-main .inner.clearfix2 h2').text()
-                                            };
-
-                                            deal.seller = {
-                                                info: $('#seller-info .content').html()
-                                            }
-
-                                            $('#container .c-info .inner .form-item .photos').remove()
-                                            $('#seller-info').remove()
-                                            deal.description = {
-                                                full: $('#container .c-info .inner .form-item').html(),
-                                                map: $('#container .c-info .inner .form-item .Gmap').attr('src')
-                                            }
+                                        })
+                                        deal.pictures = pictures
+                                        deal.price = {
+                                            discount: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .discount-price').text(),
+                                            regular: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .regular-price').text(),
+                                            benefit: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .econ').text()
                                         }
-                                    });
-                                }
-                                else {
-                                    console.log('Error: ', err, deal.origin);
-                                }
+                                        deal.exposed = ''
+                                        deal.end = ''
 
-                                if (dealsCounter === 0) {
-                                    siteCounter--
-                                }
-                                if (dealsCounter === 0 && siteCounter === 0) {
-                                    callback(null, 'two');
-                                }
-                            });
+                                        deal.title = {
+                                            full: $('#container .c-main .inner.clearfix2 h1').text(),
+                                            short: $('#container .c-main .inner.clearfix2 h2').text()
+                                        }
 
-                        }, 1000);
+                                        deal.seller = {
+                                            info: $('#seller-info .content').html()
+                                        }
+
+                                        $('#container .c-info .inner .form-item .photos').remove()
+                                        $('#seller-info').remove()
+                                        deal.description = {
+                                            full: $('#container .c-info .inner .form-item').html(),
+                                            map: $('#container .c-info .inner .form-item .Gmap').attr('src')
+                                        }
+                                    }
+
+                                    if ($site === 'www.ostulaine.ee') {
+                                        deal.title = {
+                                            full: $('#body_left .main_deal_title').text(),
+                                            short: ''
+                                        }
+                                    }
+
+                                    if ($site === 'www.seiklused.ee') {
+                                        deal.title = {
+                                            full: $('#strip > b').text(),
+                                            short: $('#separator403 > b').text()
+                                        }
+                                    }
+
+                                    if ($site === 'www.headiil.ee') {
+                                        deal.title = {
+                                            full: $('#body_left > h1').text(),
+                                            short: ''
+                                        }
+                                    }
+
+                                    if ($site === 'www.chilli.ee') {
+                                        deal.title = {
+                                            full: $('#buy_box > h1 > a').text(),
+                                            short: ''
+                                        }
+                                    }
+
+                                    if ($site === 'www.ediilid.ee') {
+                                        $('.leftSide .box1 .mainOfferTitleArea > p > span').remove()
+
+                                        deal.title = {
+                                            full: $('.leftSide .box1 .mainOfferTitleArea > p').text(),
+                                            short: ''
+                                        }
+                                    }
+
+                                    console.log(deal.title)
+                                });
+                            }
+
+                            callback();
+                        });
 
 
-                    }, function(err1){
-                        // if any of the saves produced an error, err would equal that error
+                    }, function(err){
+                        if (err) {
+                            console.log('error reading deal', err)
+                        }
+
+                        if (dealsCounter === 0) {
+                            siteCounter--
+                            callback()
+                        }
+
                     });
 
                 }, function(err){
-                    // if any of the saves produced an error, err would equal that error
+                    if (err) {
+                        console.log('error reading deals', err)
+                    }
+
+                    if (siteCounter === 0) {
+                        callback(null, 'two');
+                    }
                 });
 
                 console.log('perform second iteration')
-            },
-            function (callback) {
-                res.json(result)
-                callback(null, 'free');
-
-                console.log('perform third iteration')
             }
         ],
-// optional callback
-            function (err, results) {
-                // results is now equal to ['one', 'two']
-            });
+        function (err) {
+            console.log('processing done')
+            console.log('parsed links:', result)
 
-
+            res.json({ user: 'tj' });
+        });
     });
 
 });
