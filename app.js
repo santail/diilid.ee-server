@@ -204,31 +204,6 @@ app.get('/deals', function (req, res) {
 
 });
 
-function sleep(milliSeconds) {
-    var startTime = new Date().getTime();
-    while (new Date().getTime() < startTime + milliSeconds);
-}
-
-var parseContent = function (site, body) {
-    var content = "";
-
-    if (site === 'www.zizu.ee') {
-        content = body.find('#content');
-
-        return {
-            'description':content.length
-        };
-    }
-
-    if (site === 'www.cherry.ee') {
-        content = body.find('#content');
-
-        return {
-            'description':content.find('div.split-content').html()
-        };
-    }
-};
-
 var parsePage = function (body, parser) {
     jsdom.env({
         html:body,
