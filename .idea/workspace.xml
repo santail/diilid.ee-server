@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="af209039-d50f-4fa5-bce5-52d0bad0b194" name="Default" comment="Remove not used functions">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/async.js" />
+    <list default="true" id="af209039-d50f-4fa5-bce5-52d0bad0b194" name="Default" comment="Add parsing rules for separate sites">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
     </list>
@@ -65,74 +64,38 @@
       <file leaf-file-name="app.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="64" column="29" selection-start="1866" selection-end="1866" vertical-scroll-proportion="0.25497288">
+            <state line="30" column="53" selection-start="749" selection-end="749" vertical-scroll-proportion="0.38860103">
               <folding>
-                <element signature="e#4349#6721#0" expanded="false" />
-                <element signature="e#6793#7074#0" expanded="false" />
-                <element signature="e#7146#7437#0" expanded="false" />
-                <element signature="e#7507#7776#0" expanded="false" />
-                <element signature="e#7845#8116#0" expanded="false" />
-                <element signature="e#8186#8581#0" expanded="false" />
+                <element signature="e#4670#7042#0" expanded="false" />
+                <element signature="e#7113#7394#0" expanded="false" />
+                <element signature="e#7465#7756#0" expanded="false" />
+                <element signature="e#7825#8094#0" expanded="false" />
+                <element signature="e#8162#8433#0" expanded="false" />
+                <element signature="e#8502#8897#0" expanded="false" />
+                <element signature="e#8968#9212#0" expanded="false" />
+                <element signature="e#9280#9524#0" expanded="false" />
+                <element signature="e#9590#9834#0" expanded="false" />
+                <element signature="e#9902#10146#0" expanded="false" />
+                <element signature="e#10219#10463#0" expanded="false" />
+                <element signature="e#10534#10778#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/async/index.js">
+      <file leaf-file-name="server.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/request/tests/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="async.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/async/lib/async.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="100" column="54" selection-start="2553" selection-end="2553" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="node_embedded_symbols.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$USER_HOME$/Library/Application Support/IntelliJIdea11/NodeJS/lib/NodeJS.jar!/com/jetbrains/nodejs/library/node_embedded_symbols.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="9" selection-start="9" selection-end="9" vertical-scroll-proportion="0.0">
+            <state line="1" column="6" selection-start="29" selection-end="29" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/request/main.js">
+      <file leaf-file-name="ServerShouldRespond.spec.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/spec/ServerShouldRespond.spec.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="104" column="21" selection-start="2514" selection-end="2514" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="async.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/async.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="50" selection-start="250" selection-end="283" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="data.json" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="365" column="82" selection-start="18460" selection-end="18520" vertical-scroll-proportion="0.0">
+            <state line="20" column="46" selection-start="517" selection-end="517" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -154,6 +117,10 @@
         <option value="$PROJECT_DIR$/data.json.js" />
         <option value="$PROJECT_DIR$/data.json" />
         <option value="$PROJECT_DIR$/async.js" />
+        <option value="$PROJECT_DIR$/views/hello.jade" />
+        <option value="$PROJECT_DIR$/test/specs.js" />
+        <option value="$PROJECT_DIR$/test/LocalRunner.js" />
+        <option value="$PROJECT_DIR$/spec/ServerShouldRespond.spec.js" />
         <option value="$PROJECT_DIR$/app.js" />
       </list>
     </option>
@@ -189,6 +156,9 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane">
+        <subPane />
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -207,83 +177,17 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
           <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="diilid.ee-server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="diilid.ee-server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="node_modules" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="diilid.ee-server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="diilid.ee-server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="node_modules" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="request" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="diilid.ee-server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="diilid.ee-server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="node_modules" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="async" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="diilid.ee-server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="diilid.ee-server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="node_modules" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="async" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
-      </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane">
-        <subPane />
       </pane>
     </panes>
   </component>
@@ -294,8 +198,15 @@
     <property name="recentsLimit" value="5" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/test" />
+    </key>
   </component>
   <component name="RunManager" selected="Node JS.app.js">
     <configuration default="false" name="app.js" type="NodeJSConfigurationType" factoryName="Node JS" temporary="true" path-to-node="/usr/local/bin/node" path-to-js-file="$PROJECT_DIR$/app.js" working-dir="$PROJECT_DIR$" coffeescript-run="false">
@@ -498,7 +409,35 @@
       <created>1336120943274</created>
       <updated>1336120943274</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Managed to read origin deals in queue">
+      <created>1336140944323</created>
+      <updated>1336140944323</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Remove async.js">
+      <created>1336985491947</created>
+      <updated>1336985491947</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Remove outdated data.json.js">
+      <created>1336985515644</created>
+      <updated>1336985515644</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Create mock data for test">
+      <created>1336985563333</created>
+      <updated>1336985563334</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Add parsing rules for separate sites">
+      <created>1336985630038</created>
+      <updated>1336985630038</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Express and jade modules update">
+      <created>1337008231421</created>
+      <updated>1337008231421</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Running server instance test added">
+      <created>1337008263635</created>
+      <updated>1337008263635</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -526,6 +465,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25490198" sideWeight="0.6710963" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32890365" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Thumbnails" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32890365" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -536,7 +476,7 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
+    <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="true" />
     <option name="myTodoPanelSettings">
@@ -569,7 +509,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add node modules" />
+    <option name="LAST_COMMIT_MESSAGE" value="Running server instance test added" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -586,69 +526,134 @@
     <MESSAGE value="Try to parse gathered links" />
     <MESSAGE value="Remove not used functions" />
     <MESSAGE value="Add node modules" />
+    <MESSAGE value="Managed to read origin deals in queue" />
+    <MESSAGE value="Remove async.js" />
+    <MESSAGE value="Remove outdated data.json.js" />
+    <MESSAGE value="Create mock data for test" />
+    <MESSAGE value="Add parsing rules for separate sites" />
+    <MESSAGE value="Express and jade modules update" />
+    <MESSAGE value="Running server instance test added" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
   </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/data.json">
+    <entry file="file://$PROJECT_DIR$/test/data.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="365" column="82" selection-start="18460" selection-end="18520" vertical-scroll-proportion="0.0">
+        <state line="365" column="82" selection-start="18460" selection-end="18520" vertical-scroll-proportion="0.7614841">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/async.js">
+    <entry file="file://$PROJECT_DIR$/node_modules/async/lib/async.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="50" selection-start="250" selection-end="283" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/request/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="104" column="21" selection-start="2514" selection-end="2514" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/Library/Application Support/IntelliJIdea11/NodeJS/lib/NodeJS.jar!/com/jetbrains/nodejs/library/node_embedded_symbols.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="9" selection-start="9" selection-end="9" vertical-scroll-proportion="0.0">
+        <state line="100" column="54" selection-start="2553" selection-end="2553" vertical-scroll-proportion="0.025906736">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/async/index.js">
       <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/layout.jade">
+      <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/async/lib/async.js">
+    <entry file="file://$PROJECT_DIR$/node_modules/jasmine-node/spec/async-callback_spec.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="100" column="54" selection-start="2553" selection-end="2553" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-1.7616581">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/jasmine-node/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="11" selection-start="32" selection-end="32" vertical-scroll-proportion="0.07772021">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/request/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="128" column="48" selection-start="3230" selection-end="3230" vertical-scroll-proportion="0.6476684">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/request/tests/test-toJSON.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="58" selection-start="276" selection-end="276" vertical-scroll-proportion="0.23316061">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/request/tests/test-redirect.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="9" selection-start="73" selection-end="73" vertical-scroll-proportion="-0.69948184">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="8" selection-start="35" selection-end="35" vertical-scroll-proportion="0.12953368">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.jade">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="31" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/jasmine-node/node_modules/jasmine-reporters/ext/jasmine.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1174" column="27" selection-start="30799" selection-end="30799" vertical-scroll-proportion="-2.5565372">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spec/ServerShouldRespond.spec.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="46" selection-start="517" selection-end="517" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/request/tests/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="6" selection-start="29" selection-end="29" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="29" selection-start="1866" selection-end="1866" vertical-scroll-proportion="0.25497288">
+        <state line="30" column="53" selection-start="749" selection-end="749" vertical-scroll-proportion="0.38860103">
           <folding>
-            <element signature="e#4349#6721#0" expanded="false" />
-            <element signature="e#6793#7074#0" expanded="false" />
-            <element signature="e#7146#7437#0" expanded="false" />
-            <element signature="e#7507#7776#0" expanded="false" />
-            <element signature="e#7845#8116#0" expanded="false" />
-            <element signature="e#8186#8581#0" expanded="false" />
+            <element signature="e#4670#7042#0" expanded="false" />
+            <element signature="e#7113#7394#0" expanded="false" />
+            <element signature="e#7465#7756#0" expanded="false" />
+            <element signature="e#7825#8094#0" expanded="false" />
+            <element signature="e#8162#8433#0" expanded="false" />
+            <element signature="e#8502#8897#0" expanded="false" />
+            <element signature="e#8968#9212#0" expanded="false" />
+            <element signature="e#9280#9524#0" expanded="false" />
+            <element signature="e#9590#9834#0" expanded="false" />
+            <element signature="e#9902#10146#0" expanded="false" />
+            <element signature="e#10219#10463#0" expanded="false" />
+            <element signature="e#10534#10778#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -34,8 +34,9 @@ app.configure('production', function(){
 
 app.get('/', routes.index);
 app.get('/deals', function (req, res) {
+    req.connection.setTimeout(600000);
 
-    var self = this, counter = 0, processed = 0, processing = 0, $deals = [], result = {}, items = [];
+    var counter = 0, processing = 0, $deals = [], result = {};
 
     fetchPage('http://pakkumised.ee', function ($) {
         $deals = $('body').find('.offers-list li');
@@ -270,9 +271,11 @@ app.get('/deals', function (req, res) {
         ],
         function (err) {
             console.log('processing done')
-            console.log('parsed links:', result)
+            if (err) {
+                console.log('error during process', err)
+            }
 
-            res.json({ user: 'tj' });
+            res.json(result);
         });
     });
 
