@@ -230,13 +230,45 @@ app.get('/deals', function (req, res) {
                                         }
                                     }
                                     if ($site === 'www.minuvalik.ee') {
+                                        var pictures = [];
+                                        pictures.push({
+                                            url: $('#form_block table').eq(1).find('td').eq(0).children('a').children('img').attr('src'),
+                                            main: true
+                                        })
+
+                                        $('#form_block > div').eq(2).children('div').eq(0).children('img').each(function (i, image) {
+                                            pictures.push({
+                                                url: $(image).attr('src')
+                                            })
+                                            $(image).remove()
+                                        })
+                                        deal.pictures = pictures
+
+                                        deal.price = {
+                                            discount: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(0).text(),
+                                            regular: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(6).text(),
+                                            percent: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(7).text(),
+                                            benefit: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(8).text()
+                                        }
+                                        deal.exposed = ''
+                                        deal.end = ''
+
                                         deal.title = {
-                                            full: '',
+                                            full: $('#form_block > div').eq(0).text(),
                                             short: ''
+                                        }
+
+                                        deal.seller = {
+                                            info: $('#form_block > div').eq(1).html()
+                                        }
+
+                                        deal.description = {
+                                            full: $('#form_block > div').eq(2).children('div').eq(0).html(),
+                                            map: $('#show_map > a > img').attr('src')
                                         }
                                     }
 
-                                    console.log(deal.title)
+                                    console.log(deal.title.full)
                                 });
                             }
 

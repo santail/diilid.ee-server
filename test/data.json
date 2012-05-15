@@ -1,369 +1,1865 @@
-{"total":188, "items":{
-    "www.cherry.ee":[
+{"total":165, "items":{
+    "www.chilli.ee":[
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21813",
-            "title":"Pille toidukott - 3 õhtusööki kahele või neljale einestajale kuni -50%",
-            "thumbnail":"img/055/055351.jpg",
-            "site":"www.cherry.ee",
-            "origin":"https://cherry.ee/pille-toidukott-3-ohtusooki-kahele-voi-neljale-einestajale-kuni"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22643",
+            "title":{
+                "full":"Restoran BabyBack mahlane BBQ lihavalik ja pudel veini!",
+                "short":""
+            },
+            "thumbnail":"img/057/057918.jpg",
+            "site":"www.chilli.ee",
+            "origin":"http://www.chilli.ee/vaata-pakkumist/bbq-babyback"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21864",
-            "title":"Mõnus puhkus kahele Leedus hotellis Meduna*** -47%",
-            "thumbnail":"img/055/055504.jpg",
-            "site":"www.cherry.ee",
-            "origin":"https://cherry.ee/monus-puhkus-kahele-leedus-hotellis-meduna"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22651",
+            "title":{
+                "full":"Luksuslik pediküür «Piparmündi Pai» eestimaise looduskosmeetikaga -50%",
+                "short":""
+            },
+            "thumbnail":"img/057/057941.jpg",
+            "site":"www.chilli.ee",
+            "origin":"http://www.chilli.ee/vaata-pakkumist/piparmundi-pai"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21856",
-            "title":"Hõrgutavalt mitmekesine pizzamenüü restoranis Limoncello -50%",
-            "thumbnail":"img/055/055480.jpg",
-            "site":"www.cherry.ee",
-            "origin":"https://cherry.ee/horgutavalt-mitmekesine-pizzamenuu-restoranis-limoncello"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22650",
+            "title":{
+                "full":"Trendikas juukselõikus naistele või meestele -50%",
+                "short":""
+            },
+            "thumbnail":"img/057/057938.jpg",
+            "site":"www.chilli.ee",
+            "origin":"http://www.chilli.ee/vaata-pakkumist/juukseloikus"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21865",
-            "title":"Baltimaade suurim talikompleks Druskininkai Snow Arena kuni -41%",
-            "thumbnail":"img/055/055507.jpg",
-            "site":"www.cherry.ee",
-            "origin":"https://cherry.ee/baltimaade-suurim-talikompleks-druskininkai-snow-arena-leedus"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22653",
+            "title":{
+                "full":"Jalgade depileerimine täispikkuses -45%",
+                "short":""
+            },
+            "thumbnail":"img/057/057947.jpg",
+            "site":"www.chilli.ee",
+            "origin":"http://www.chilli.ee/vaata-pakkumist/jalgade-depilatsioon"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21861",
-            "title":"Kauakestvalt kaunis tulemus Dependi ülikiire kulmu- ja ripsmevärviga -35%",
-            "thumbnail":"img/055/055495.jpg",
-            "site":"www.cherry.ee",
-            "origin":"https://cherry.ee/dependi-ulikiired-kulmu-ja-ripsmevarvid"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22649",
+            "title":{
+                "full":"Parimad 1-kuused kontaktläätsed LensExpressist -40%",
+                "short":""
+            },
+            "thumbnail":"img/057/057935.jpg",
+            "site":"www.chilli.ee",
+            "origin":"http://www.chilli.ee/vaata-pakkumist/kuused-kontaktlaatsed"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21551",
-            "title":"Suveks tselluliidist priiks! Tõhusad kehahoolitsused kuni -50%",
-            "thumbnail":"img/054/054574.jpg",
-            "site":"www.cherry.ee",
-            "origin":"https://cherry.ee/suveks-tselluliidist-priiks-tohusad-kehahoolitsused"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22645",
+            "title":{
+                "full":"Digitaliseeri vana video mugava USB-adapteri abil -50%",
+                "short":""
+            },
+            "thumbnail":"img/057/057923.jpg",
+            "site":"www.chilli.ee",
+            "origin":"http://www.chilli.ee/vaata-pakkumist/USB-adapter"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21020",
-            "title":"Puhka päikeselises Portugalis! Nädal Villas Barrocal apartmentis kuni -60%",
-            "thumbnail":"img/052/052936.jpg",
-            "site":"www.cherry.ee",
-            "origin":"https://cherry.ee/villas-barrocal-apartment-portugalis"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22647",
+            "title":{
+                "full":"Personaalne kingitus – käsitööna valminud nimeline rahakassa -40%",
+                "short":""
+            },
+            "thumbnail":"img/057/057929.jpg",
+            "site":"www.chilli.ee",
+            "origin":"http://www.chilli.ee/vaata-pakkumist/rswood-rahakassa"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21694",
-            "title":"Viie suure A4 foto väljatrükk Photopointis -40%",
-            "thumbnail":"img/054/054992.jpg",
-            "site":"www.cherry.ee",
-            "origin":"https://cherry.ee/viie-suure-a4-foto-valjatrukk-photopointis"
-        }
-    ],
-    "www.minuvalik.ee":[
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21822",
-            "title":"Puhasta oma auto suveks! Autopesu nii seest, kui väljast ainult 10.50 euro eest (tavahind 25 eurot)!",
-            "thumbnail":"img/055/055379.jpg",
-            "site":"www.minuvalik.ee",
-            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/0880287428"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22648",
+            "title":{
+                "full":"Tee oma esimesed suvised golfilöögid CityGolfis -60%",
+                "short":""
+            },
+            "thumbnail":"img/057/057932.jpg",
+            "site":"www.chilli.ee",
+            "origin":"http://www.chilli.ee/vaata-pakkumist/citygolf-1405"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21741",
-            "title":"Maitsva ja rikkaliku toidu harrastajatele! Rikkalik kanašašlõkk friikartuliga (riisi või küpstetatud kartuliga), adžika ja värske salatiga baaris «Bakinski dvorik» - kõigest 3.75 eurot (tavahind 7.50 eurot)!",
-            "thumbnail":"img/055/055135.jpg",
-            "site":"www.minuvalik.ee",
-            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/0309683456"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22646",
+            "title":{
+                "full":"Kvaliteetne Tigi S Factor Color Savvy šampoon ja niisutav palsam -45%",
+                "short":""
+            },
+            "thumbnail":"img/057/057926.jpg",
+            "site":"www.chilli.ee",
+            "origin":"http://www.chilli.ee/vaata-pakkumist/tigi-s-factor-sampoon-niisutav-konditsioneer"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21823",
-            "title":"9 juunil klubis Parlament esineb üks Venemaa  kõige  tantsuliseim  bänd «Virus»! VIP piletid ainult 8 eurot (tavahind 15 eurot)!",
-            "thumbnail":"img/055/055381.jpg",
-            "site":"www.minuvalik.ee",
-            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/3214853984"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22652",
+            "title":{
+                "full":"RF-lifting noorendav ja taastav protseduur Charmstudio's -50%",
+                "short":""
+            },
+            "thumbnail":"img/057/057944.jpg",
+            "site":"www.chilli.ee",
+            "origin":"http://www.chilli.ee/vaata-pakkumist/RF-lifting-0905"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21664",
-            "title":"Restoran Funduk kutsub Teid taas! Eripakkumine – sütel valmistatud grill-assortii Funduk, mis on valmistatud kolmest erinevast lihast (enam kui 1 kg), lisaks värsked köögiviljad ja muidugi peakoka eriretsepti järgi valmistatud kaste. Täna vaid 9 euro eest (tavahind on 18 eurot)!",
-            "thumbnail":"img/054/054902.jpg",
-            "site":"www.minuvalik.ee",
-            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/3272256261"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21370",
-            "title":"Tallinna kõige maitsvaim pizza Verona pizzabaarilt + jook  täna ainult 3.90 eurot (komplekti tavahind 6.50 euro)!",
-            "thumbnail":"img/054/054011.jpg",
-            "site":"www.minuvalik.ee",
-            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/0595335621"
-        }
-    ],
-    "www.hotelliveeb.ee":[
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21820",
-            "title":"Lõõgastav lühipuhkus kahele Pühajärve Spa hotellis!",
-            "thumbnail":"img/055/055372.jpg",
-            "site":"www.hotelliveeb.ee",
-            "origin":"http://www.hotelliveeb.ee/et/puhajarve-spa-ja-puhkekeskus/spaa-ja-loogastuspaketid-8/pakett"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21819",
-            "title":"Puhkus Meresuu Spaa & Hotellis 39 eur/in!",
-            "thumbnail":"img/055/055369.jpg",
-            "site":"www.hotelliveeb.ee",
-            "origin":"http://www.hotelliveeb.ee/et/meresuu-spaa-hotell/puhkus-kahele-meresuu-spaa-hotellis/pakett"
-        }
-    ],
-    "www.zizu.ee":[
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21846",
-            "title":"Naiselikuks, ilusaks ja tugevaks idamaise kõhutantsuga! 8 korda kesklinnas Artmond Stuudios -50% vaid 10 €",
-            "thumbnail":"img/055/055450.jpg",
-            "site":"www.zizu.ee",
-            "origin":"http://www.zizu.ee/p/576363/deal/kohutants0504?nocache=3175"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21762",
-            "title":"Too koju hubasust ja veidike loodust! Hooldusvabad dekoratiivpuud -50%",
-            "thumbnail":"img/055/055198.jpg",
-            "site":"www.zizu.ee",
-            "origin":"http://www.zizu.ee/p/576363/deal/dekoratiivpuu0503?nocache=3160"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21845",
-            "title":"Trendikad Philips nööpkõrvaklapid kvaliteetse heliga -40% vaid 11.90 €",
-            "thumbnail":"img/055/055447.jpg",
-            "site":"www.zizu.ee",
-            "origin":"http://www.zizu.ee/p/576363/deal/philips0504?nocache=3184"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21848",
-            "title":"Ehe Euroopa metropolipuhkus kahele! Barcelona 4* hotellis 3 ööd vaid 169 €",
-            "thumbnail":"img/055/055456.jpg",
-            "site":"www.zizu.ee",
-            "origin":"http://www.zizu.ee/p/576363/deal/Barcelona0504?nocache=3181"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21849",
-            "title":"Põnev paintball ExtremePark'is -50%",
-            "thumbnail":"img/055/055459.jpg",
-            "site":"www.zizu.ee",
-            "origin":"http://www.zizu.ee/p/576363/deal/paintball0504?nocache=3172"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21870",
-            "title":"Jalad ilusaks! Täispediküür Kiired Käärid salongis 50% soodsamalt",
-            "thumbnail":"img/055/055522.jpg",
-            "site":"www.zizu.ee",
-            "origin":"http://www.zizu.ee/p/576363/deal/pedikuur0502?nocache=3115"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21847",
-            "title":"Värske jume näo ultraheli- või raviprotseduuriga probleemsele nahale -53%",
-            "thumbnail":"img/055/055453.jpg",
-            "site":"www.zizu.ee",
-            "origin":"http://www.zizu.ee/p/576363/deal/naopuhastus0504?nocache=3178"
-        }
-    ],
-    "www.ostulaine.ee":[
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21816",
-            "title":"Vabane tselluliidist ja lõtvunud nahast ilma kirurgilise abita! Keha miostimulatsioon ilukeskuses Royal Esthetic",
-            "thumbnail":"img/055/055360.jpg",
-            "site":"www.ostulaine.ee",
-            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/466"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21854",
-            "title":"Professionaalne Brasiilia bikiinipiirkonna depilatsioon ilusalongis RUSH",
-            "thumbnail":"img/055/055474.jpg",
-            "site":"www.ostulaine.ee",
-            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/451"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21804",
-            "title":"Juuste express-lamineerimine + juukselõikus Mistral Ilukeskuses",
-            "thumbnail":"img/055/055321.jpg",
-            "site":"www.ostulaine.ee",
-            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/462"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21650",
-            "title":"SUPERHIND! 5 liiki massaaži salongis RUSH",
-            "thumbnail":"img/054/054860.jpg",
-            "site":"www.ostulaine.ee",
-            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/467"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21734",
-            "title":"Näo ultrahelipuhastus ja GUINOT mask Mistral Ilukeskuses",
-            "thumbnail":"img/055/055114.jpg",
-            "site":"www.ostulaine.ee",
-            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/465"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21852",
-            "title":"Jalgade ja käte vahadepilatsioon ilusalongis Dolcezza",
-            "thumbnail":"img/055/055468.jpg",
-            "site":"www.ostulaine.ee",
-            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/488"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21805",
-            "title":"Professionaalne hammaste fotovalgendus ilusalongis Charmstudio",
-            "thumbnail":"img/055/055324.jpg",
-            "site":"www.ostulaine.ee",
-            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/456"
-        }
-    ],
-    "www.headiil.ee":[
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21633",
-            "title":"50 minutit päevituskrediiti solaariumis Šokolaad -50%",
-            "thumbnail":"img/054/054806.jpg",
-            "site":"www.headiil.ee",
-            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/641"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21726",
-            "title":"Uudne, valutu ja tõhus ELOS-epilatsioon valitud piirkonnale ilusalongis Royal Esthetic kuni -51%",
-            "thumbnail":"img/055/055089.jpg",
-            "site":"www.headiil.ee",
-            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/649"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21601",
-            "title":"Ripsmepikenduste paigaldus või hooldus ripsmestuudios NAISEILU kuni -68%",
-            "thumbnail":"img/054/054710.jpg",
-            "site":"www.headiil.ee",
-            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/642"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22644",
+            "title":{
+                "full":"Naiselikkust õhkav Lacoste Pour Femme -37%",
+                "short":""
+            },
+            "thumbnail":"img/057/057920.jpg",
+            "site":"www.chilli.ee",
+            "origin":"http://www.chilli.ee/vaata-pakkumist/lacoste-pour-femme"
         }
     ],
     "www.ediilid.ee":[
         {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22670",
+            "title":{
+                "full":" Originaalsed ehted, šefid küüned ja stiilsed rõivad taskukohase hinnaga! Kvaliteetsed DMC-kristallid ja ehted e-poest Cristallid -40%",
+                "short":""
+            },
+            "thumbnail":"img/057/057998.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/644&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22346",
+            "title":{
+                "full":" Kaunis kiirmaniküür koos 4 nädalat püsiva kauni Gelish püsilakiga! Gelish kaitseb küüsi välismõjude, kulumise ja murenemise eest ning on laitmatu kuni 5 nädalat!",
+                "short":""
+            },
+            "thumbnail":"img/056/056967.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/647&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22442",
+            "title":{
+                "full":" Püsiripsmete paigaldus ja hooldus Astelia Ilusalongist -50%! Kaunid püsiripsmed püsivad laitmatult kuni 4 nädalat! ",
+                "short":""
+            },
+            "thumbnail":"img/057/057260.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/646&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22249",
+            "title":{
+                "full":" Kaunid rõivad poistele ja tüdrukutele, beebidele ja suurematele lastele -40% soodsamalt! ",
+                "short":""
+            },
+            "thumbnail":"img/056/056672.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/642&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22345",
+            "title":{
+                "full":" Brazilian Keratin Treatment - tervemad ja sirgemad juuksed kuni 4 kuuks Astelia Ilusalongist -66%. Keratin ravib juukseid sügavuti!",
+                "short":""
+            },
+            "thumbnail":"img/056/056964.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/645&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21793",
+            "title":{
+                "full":" Juuste värvimine/triibutamine, toitev juuksemask, stiilne juukselõikus ning kaunis föönisoeng -52% soodsamalt salongist Studio L",
+                "short":""
+            },
+            "thumbnail":"img/055/055291.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/616&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21795",
+            "title":{
+                "full":" Saavuta siidiselt särav siluett Silkyway´lt! Imeline salenemine - see on mittekirurgiline rasvaimu -55%! ",
+                "short":""
+            },
+            "thumbnail":"img/055/055297.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/605&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22434",
+            "title":{
+                "full":" Nõutud ja tõhus kuumakääri lõikus koos zguttimisega Ilu Butiigist -50%! Kuumakääri lõikus tagab kõige parema ja tervema tulemuse!",
+                "short":""
+            },
+            "thumbnail":"img/057/057236.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/648&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22250",
+            "title":{
+                "full":" Kaunista end kauni glitter tattooga -50%! Glitter tattoo - ilusa kaunistus kooli lõpetamiseks, mõneks tähtpäevaks või lihtsalt kehakaunistamiseks!",
+                "short":""
+            },
+            "thumbnail":"img/056/056675.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/636&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22192",
+            "title":{
+                "full":" Tõhus tselluliidimassaaž -57% soodsamalt, vaid 12,80€ (tavahind 30€)",
+                "short":""
+            },
+            "thumbnail":"img/056/056499.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/635&lang=est"
+        },
+        {
             "href":"http://pakkumised.ee/index.php?act=offers.view&id=21851",
-            "title":"Vabane vistrikest kiiresti ja jäädavalt! Tõeliselt tõhus relv akne vastu - DANA-A -58%!",
+            "title":{
+                "full":" Vabane vistrikest kiiresti ja jäädavalt! Tõeliselt tõhus relv akne vastu - DANA-A -58%!",
+                "short":""
+            },
             "thumbnail":"img/055/055465.jpg",
             "site":"www.ediilid.ee",
             "origin":"http://ediilid.ee/Offers/offer/619&lang=est"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21614",
-            "title":"Allahindlus -40%! Siidisall on tõeliselt armas kingitus emadepäevaks, kooli lõpetamiseks või mõneks muuks kevad-suviseks tähtpäevaks",
-            "thumbnail":"img/054/054749.jpg",
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21792",
+            "title":{
+                "full":" Professionnalne ja meeleolukas fotosessioon Pildilaborilt -50%! Osta soodusvautšer 5€, mille ettenäitamisel saate 50% hinnaalandust. Vautšer on võimalik vahetada ka kinkekaardi vastu!",
+                "short":""
+            },
+            "thumbnail":"img/055/055288.jpg",
             "site":"www.ediilid.ee",
-            "origin":"http://ediilid.ee/Offers/offer/626&lang=est"
+            "origin":"http://ediilid.ee/Offers/offer/590&lang=est"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=20990",
-            "title":"Luksuslik Thai Spa jalgade hoolitsus koos pediküüriga Studio L ilusalongilt -61% soodsamalt! Thai Spa on eksootiline segu soojusest, tekstuurist ja aroomist, mis kannab Sinu meeled ja keha taevalikule lõdvestusele",
-            "thumbnail":"img/052/052846.jpg",
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21796",
+            "title":{
+                "full":" Imeline ultraheli näohooldus -56% soodsamalt, vaid 19,9€ (tavahind 45€). Ultraheli näohooldus ravib suurepäraselt aknet ja stressis ning vanusega lõtvunud näonahka ",
+                "short":""
+            },
+            "thumbnail":"img/055/055300.jpg",
             "site":"www.ediilid.ee",
-            "origin":"http://ediilid.ee/Offers/offer/608&lang=est"
+            "origin":"http://ediilid.ee/Offers/offer/611&lang=est"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21799",
-            "title":"Kaunid ja ainulaadselt ilusad ehted ! Tule ja leia endale kaunid ehted Vanaturu Kalliskivide e-poest -33%",
-            "thumbnail":"img/055/055309.jpg",
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21397",
+            "title":{
+                "full":" Kaunid liblikakujulised kõrvarõngad -48%! Särtsakad kõrvarõngad romantikutele!",
+                "short":""
+            },
+            "thumbnail":"img/054/054092.jpg",
             "site":"www.ediilid.ee",
-            "origin":"http://ediilid.ee/Offers/offer/613&lang=est"
+            "origin":"http://ediilid.ee/Offers/offer/622&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21535",
+            "title":{
+                "full":" Nauding kehale ja meelele! Unustamatu Bodymassaaz -50%!",
+                "short":""
+            },
+            "thumbnail":"img/054/054511.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/623&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=19995",
+            "title":{
+                "full":" Kaunis püsimeik -45% Studio L Ilusalongist",
+                "short":""
+            },
+            "thumbnail":"img/049/049768.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/585&lang=est"
         },
         {
             "href":"http://pakkumised.ee/index.php?act=offers.view&id=21797",
-            "title":"Dekoratiivsed  pärlid taimede kasvatamiseks -40%! Pärlid sisaldavad vajalikke mineraale ja väetist taimede paremaks kasvamiseks",
+            "title":{
+                "full":" Dekoratiivsed  pärlid taimede kasvatamiseks -40%! Pärlid sisaldavad vajalikke mineraale ja väetist taimede paremaks kasvamiseks ",
+                "short":""
+            },
             "thumbnail":"img/055/055303.jpg",
             "site":"www.ediilid.ee",
             "origin":"http://ediilid.ee/Offers/offer/621&lang=est"
-        }
-    ],
-    "www.osta.ee":[
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21277",
-            "title":"Beebidele Carter´si pikakäiseliste bodyde 5-pakk",
-            "thumbnail":"img/053/053731.jpg",
-            "site":"www.osta.ee",
-            "origin":"https://www.osta.ee/cartersi-pikakaiseliste-bodyde-5-pakk-26338188.html"
-        }
-    ],
-    "www.chilli.ee":[
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21833",
-            "title":"Mugavad ühekuused kontaktläätsed Lensnet`ist -40%",
-            "thumbnail":"img/055/055411.jpg",
-            "site":"www.chilli.ee",
-            "origin":"http://www.chilli.ee/vaata-pakkumist/kontaktlaatsed"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21829",
-            "title":"Ekstreemne Tondi Lasketiiru pakett -76%",
-            "thumbnail":"img/055/055399.jpg",
-            "site":"www.chilli.ee",
-            "origin":"http://www.chilli.ee/vaata-pakkumist/tondi-lasketiiru-pakett0105"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21688",
+            "title":{
+                "full":" Ole nutikas ja säästa raha prindikuludelt toonereid täites! Samsung musta trükiga tahmakassettide täitmine 60% soodsamalt, vaid 12€ (tavahind 30€) IT Kiirabilt!",
+                "short":""
+            },
+            "thumbnail":"img/054/054974.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/597&lang=est"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21842",
-            "title":"Turgutav lümfi- või klassikaline massaaž hubases Massaažikeskuses -51%",
-            "thumbnail":"img/055/055438.jpg",
-            "site":"www.chilli.ee",
-            "origin":"http://www.chilli.ee/vaata-pakkumist/massaaz-massaazikeskuses-0405"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21556",
+            "title":{
+                "full":" SilkyWay Laserkliiniku laserepilatsiooni kinkekaart -60% soodsamalt! Vautšer kehtib kõikidele laserepilatsiooni protseduuridele! Ilus on olla siidiselt sile! ",
+                "short":""
+            },
+            "thumbnail":"img/054/054571.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/615&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21794",
+            "title":{
+                "full":" Imeline lõõgastav selja-turja massaaž -50% soodsamalt, vaid 8€ (tavahind 16€)",
+                "short":""
+            },
+            "thumbnail":"img/055/055294.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/617&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22160",
+            "title":{
+                "full":" Noorukite naha, rasuse naha ja aknega rasuse (vinnilööbega) naha hooldus koos näonaha mehaanilise puhastusega vaid 14,90€",
+                "short":""
+            },
+            "thumbnail":"img/056/056401.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/643&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22103",
+            "title":{
+                "full":" Parim kingitus kallile inimesele - germaanium käevõru -50%! Käevõru sobib stressi, üldise   väsimuse ja valude korral või kui soovid parandada elukvaliteeti. Käevõru sobib nii naistele kui meestele!",
+                "short":""
+            },
+            "thumbnail":"img/056/056229.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/640&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21248",
+            "title":{
+                "full":" Dekoratiivne Murumees -50%! Armas kingitus endale koju, kontorisse või sõbrale",
+                "short":""
+            },
+            "thumbnail":"img/053/053643.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/620&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21186",
+            "title":{
+                "full":" TÄNA TARTUS! Bio-orgaaniline rohelise savi, merevaigu ja mee rikastav näohooldus -50% soodsamalt, vaid 10€ (tavahind 20€)!",
+                "short":""
+            },
+            "thumbnail":"img/053/053448.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/618&lang=est"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21798",
+            "title":{
+                "full":" TÄNA RAPLAS! Suviselt kaunis jume! 5x10 minutit päevitamist ilusalongist AN Studio -50% ehk vaid 10€ eest (tavahind 20€)!",
+                "short":""
+            },
+            "thumbnail":"img/055/055306.jpg",
+            "site":"www.ediilid.ee",
+            "origin":"http://ediilid.ee/Offers/offer/612&lang=est"
         }
     ],
-    "www.seiklused.ee":[
+    "www.iluveeb.ee":[
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21812",
-            "title":"Kõrgusesse kuumaõhupallil!",
-            "thumbnail":"img/055/055347.jpg",
-            "site":"www.seiklused.ee",
-            "origin":"http://www.seiklused.ee/et/Detailid/546"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22617",
+            "title":"Parfüüm Beyonce Heat 100ml",
+            "thumbnail":"img/057/057838.jpg",
+            "site":"www.iluveeb.ee",
+            "origin":"http://www.iluveeb.ee/naiste-parfuumid/beyonce-heat-edp-100ml.html"
+        }
+    ],
+    "www.zizu.ee":[
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22664",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057980.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/fotokapa0515?nocache=3307"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21811",
-            "title":"Lennuki roolis?! Instruktaaž ja testlend kerge mootorlennukiga.",
-            "thumbnail":"img/055/055343.jpg",
-            "site":"www.seiklused.ee",
-            "origin":"http://www.seiklused.ee/et/Detailid/511"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22580",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057704.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/pariis0514?nocache=3292"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22665",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057983.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/shaun0515?nocache=3310"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22688",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058052.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/kleidid0511?nocache=3256"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22666",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057986.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/raseerija0515?nocache=3313"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22696",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058076.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/rattahooldus0512?nocache=3283"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22586",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057722.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/paintball0504?nocache=3172"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22578",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057698.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/depilatsioon0514?nocache=3304"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22579",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057701.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/vibrotrenn0514?nocache=3289"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22592",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057740.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/bikiinid0510?nocache=3244"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22596",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057752.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/berliin0510?nocache=3268"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22689",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058055.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/fotograaf0511?nocache=3277"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22593",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057743.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/juuksur0510?nocache=3247"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22691",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058061.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/autopesu0509?nocache=3232"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22692",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058064.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/jooga0509?nocache=3235"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22690",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058058.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/ricci0511?nocache=3280"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22595",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057749.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/ISportsPro0510?nocache=3253"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22697",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058079.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/himalaya0511?nocache=3271"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22591",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057737.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/dermanew0512?nocache=3286"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22594",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057746.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/padjad0510?nocache=3250"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22694",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058070.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/meestejuuksur0509?nocache=3241"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22695",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058073.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/avancia0508?nocache=3220"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22582",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057710.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/kumblustunn0514?nocache=3301"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22693",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058067.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/massaaz0509?nocache=3238"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22581",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057707.jpg",
+            "site":"www.zizu.ee",
+            "origin":"http://www.zizu.ee/p/576363/deal/poleerimine0514?nocache=3298"
+        }
+    ],
+    "www.minuvalik.ee":[
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22632",
+            "title":{
+                "full":"Allahindlus -50%! Esmakordselt Mustakivi Spodiklubis spetsiaalne trenn ülekaalulistele «Kaalukate trenn». Täna kampaania hind 22.50 eurot (tavahind on 45 eurot)!",
+                "short":""
+            },
+            "thumbnail":"img/057/057884.jpg",
+            "site":"www.minuvalik.ee",
+            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/1762945052",
+            "pictures":[
+                {
+                    "url":"/banners/actions/1762945052/ee_dd.gif",
+                    "main":true
+                },
+                {
+                    "url":"/banners/actions/1762945052/1.jpg"
+                },
+                {
+                    "url":"/banners/actions/1762945052/2.jpg"
+                },
+                {
+                    "url":"/banners/actions/1762945052/3.jpg"
+                },
+                {
+                    "url":"/banners/actions/1762945052/4.jpg"
+                },
+                {
+                    "url":"/banners/actions/1762945052/5.jpg"
+                },
+                {
+                    "url":"/banners/actions/1762945052/6.jpg"
+                },
+                {
+                    "url":"/banners/actions/1762945052/7.jpg"
+                },
+                {
+                    "url":"/banners/actions/1762945052/8.jpg"
+                },
+                {
+                    "url":"/banners/actions/1762945052/9.jpg"
+                },
+                {
+                    "url":"/banners/actions/1762945052/10.jpg"
+                },
+                {
+                    "url":"/banners/actions/1762945052/11.jpg"
+                },
+                {
+                    "url":"/banners/actions/1762945052/12.jpg"
+                }
+            ],
+            "price":{
+                "discount":"22.50",
+                "regular":"45.-",
+                "percent":"-50%",
+                "benefit":"22.50"
+            },
+            "exposed":"",
+            "end":"",
+            "seller":{
+                "info":"\n\t<div class=\"bl_035\">\t\n\t\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n\t<tr>\n\t<td valign=\"top\">\t\n\t\n\t<span class=\"t12\">Müüja:\t<img src=\"/img/partner.gif\" border=\"0\" width=\"14\" align=\"absmiddle\" /> <a href=\"/ee/profile/1415780521\" onclick=\"load_ajax_script('ajax_get_profile?id=1415780521');\" class=\"hint_text\" onmousemove=\"showhint(this,event)\" onmouseout=\"hidehint(this)\">kadrioru.ee<span>Vajutage lingile, et saada ammendavat infot sellest partnerist.</span></a></span>\n\t\n\t<div class=\"bl_space\"></div>\n\t\n\t<u>Firma, organisatsioon:</u> POWERSTAR OÜ\t\n\t\n\t\n\t<br />\n\t<u>www-aadress:</u> <a href=\"http://www.kadrioru.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=1415780521&amp;url=www.kadrioru.ee');\">www.kadrioru.ee</a>\n\t\n\t\n\t<br /><br />\n\t<a href=\"/ee/send_mail?id=1415780521\" class=\"iframe_forms\"><img src=\"/img/mail_small.gif\" border=\"0\" align=\"absmiddle\" style=\"margin-right: 7px;\" />Saata kiri e-maili teel</a>\n\n\n\t<br /><br />\n\tMahtra 1, Tallinn<br />\r\nTel: 6024611<br />\r\nTööaeg: E - R  07:30 - 22:30<br />\r\n               L, P    10:00 - 21:00 \r\n\n\n\t</td>\n\n\t\t\n\t<td align=\"right\" valign=\"top\">\n\t<a href=\"http://www.kadrioru.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=1415780521&amp;url=www.kadrioru.ee');\"><img src=\"/partners/1415780521/profile/logo.jpg\" align=\"center\" border=\"0\" /></a>\t</td>\n\t\t\n\t\t\n\t</tr>\n</table>\t\n\t\n\t</div>\n\t"
+            },
+            "description":{
+                "full":"\n\t\t\n\tKampaania läbiviimise tingimused:\r\n<ul style=\"margin-bottom: 20px;\">\r\n<li> Esmakordselt <b>Mustakivi Spodiklubis</b> spetsiaalne trenn ülekaalulistele <b>«Kaalukate trenn»</b> (ajavahemikul 22.05.2012 - 01.07.2012). </li>\r\n<li>Esimene treening toimub <b>22. mail 2012</b>.</li>\r\n<li> Voucheri hinna sisse kuulub 8 treeningu külastamine. Trennid toimuvad kaks korda nädalas - <b>teispäeval ja neljapäeval kell 8:45</b>. </li>\r\n<li>Ühe treeningu pikkus on 55 minutit. Treenigut viib läbi suurte kogemustega Galina Põrh.</li> \r\n<li>Treening toimub nii eesti kui vene keeles.</li>\r\n<li> Peale treeningut on võimalik lõdvestuda spordiklubi saunas.</li>\r\n<li> Parkimine tasuta!</li>\r\n<li>Müügis on piiratud arv vouchereid.</li>\r\n<li>Vouchereid ei saa summeerida.</li>\r\n<li class=\"red\">Lisainfo ja broneerimine telefonil  <b>6024611</b> või e-posti <a href=\"mailto:info@mustakivi.ee\">info@mustakivi.ee</a> vahendusel.\r\n<li class=\"red\">Voucherite kehtivusaeg alates 22.05.2012 - 01.07.2012.</li></li></ul>\r\n<ul style=\"margin-bottom: 20px;\">\r\n<b>Treeningu kirjeldus</b>:<br />\r\n Treening on mõeldud nii naistele kui ka meestele, kel on probleeme kaaluga.\r\nTreening aitab vähendada kehakaalu, südamehaiguste riski, taandub kõrge vererõhk ja valud liigestes. \r\nSuureneb aeroobne võimekus, vastupidavus, tasakaal, kiirus.<br />\r\nTrenn algab soojendusega, mis sisaldab kerget võimlemist ja ettevalmistust kehaliseks koormuseks. \r\nEt organism kulutaks energia saamiseks rohkem rasvu, siis hoitakse kogu treeningu vältel pulss madalal tasemel.<br />\r\nLihtsad sammude kombinatsioonid, kaasatakse suuremad lihasgrupid.<br />\r\nTrenni keskel tehakse harjutusi tuharatele, reitele ja taljele. Lisanduvad spetsiaalsed harjutused rasvumise vähendamiseks ja tselluliidile.<br />\r\nTrenni lõpus on venitused, mille käigus töötatakse läbi kõik lihasrühmad.<br /><br />\r\n<b>Meie spordiklubisse on oodatud kõik spordihuvilised lastest kuni eakateni!</b><br /><br />\r\n\r\nIgas eas spordihuvilisi ootab kogenud treenerite juhendamisel jõusaal ning kõikvõimalikud rühmatreeningud – aeroobika, jooga, tantsud jne.<br /><br />\r\n\r\nLastele on mõeldud spordiklubis läbiviidavad judo treeningud Dmitri Budõlini vedamisel ning laste fitness.</ul>\r\n\r\n\r\n\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n\r\n\t\n\n\t",
+                "map":"/banners/actions/1762945052/map.jpg"
+            }
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22633",
+            "title":{
+                "full":"Allahindlus -67%! Luksuslik ja stiilne välimus iga peo jaoks! Pidulik patside punumine või punutud juuste põhjal tehtud soengud - soengute uus moesuund! Täna  juuste punumine ilusalongis «Alice» ainult 10 eurot (tavahind 20 - 30 eurot)!",
+                "short":""
+            },
+            "thumbnail":"img/057/057887.jpg",
+            "site":"www.minuvalik.ee",
+            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/2361796698",
+            "pictures":[
+                {
+                    "url":"/banners/actions/2361796698/ee_dd.gif",
+                    "main":true
+                },
+                {
+                    "url":"/banners/actions/2361796698/1.jpg"
+                },
+                {
+                    "url":"/banners/actions/2361796698/2.jpg"
+                },
+                {
+                    "url":"/banners/actions/2361796698/3.jpg"
+                },
+                {
+                    "url":"/banners/actions/2361796698/4.jpg"
+                },
+                {
+                    "url":"/banners/actions/2361796698/5.jpg"
+                },
+                {
+                    "url":"/banners/actions/2361796698/6.jpg"
+                }
+            ],
+            "price":{
+                "discount":"10.-",
+                "regular":"30.-",
+                "percent":"-67%",
+                "benefit":"20.-"
+            },
+            "exposed":"",
+            "end":"",
+            "seller":{
+                "info":"\n\t<div class=\"bl_035\">\t\n\t\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n\t<tr>\n\t<td valign=\"top\">\t\n\t\n\t<span class=\"t12\">Müüja:\t<img src=\"/img/partner.gif\" border=\"0\" width=\"14\" align=\"absmiddle\" /> <a href=\"/ee/profile/1412840804\" onclick=\"load_ajax_script('ajax_get_profile?id=1412840804');\" class=\"hint_text\" onmousemove=\"showhint(this,event)\" onmouseout=\"hidehint(this)\">aliceilusalong.ee<span>Vajutage lingile, et saada ammendavat infot sellest partnerist.</span></a></span>\n\t\n\t<div class=\"bl_space\"></div>\n\t\n\t<u>Firma, organisatsioon:</u> ALICE ILUSALONG OÜ\t\n\t\n\t\n\t<br />\n\t<u>www-aadress:</u> <a href=\"http://aliceilusalong.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=1412840804&amp;url=aliceilusalong.ee');\">aliceilusalong.ee</a>\n\t\n\t\n\t<br /><br />\n\t<a href=\"/ee/send_mail?id=1412840804\" class=\"iframe_forms\"><img src=\"/img/mail_small.gif\" border=\"0\" align=\"absmiddle\" style=\"margin-right: 7px;\" />Saata kiri e-maili teel</a>\n\n\n\t<br /><br />\n\tLiivalaia 32, Tallinn<br />\r\nTel: 6485055<br />\r\nЕ - R: 9:00 - 17:00<br />\r\nL: 10:00 - 17:00\r\n\n\n\t</td>\n\n\t\t\n\t<td align=\"right\" valign=\"top\">\n\t<a href=\"http://aliceilusalong.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=1412840804&amp;url=aliceilusalong.ee');\"><img src=\"/partners/1412840804/profile/logo.jpg\" align=\"center\" border=\"0\" /></a>\t</td>\n\t\t\n\t\t\n\t</tr>\n</table>\t\n\t\n\t</div>\n\t"
+            },
+            "description":{
+                "full":"\n\t\t\n\tKampaania läbiviimise tingimused:\r\n<ul style=\"margin-bottom: 20px;\">\r\n<li>Voucheri hinna sees on juuste punumine ilusalongis «Alice»:<br />\r\n- pidulikud 1 või kaks patsi;<br />\r\n- juustelakk;<br />\r\n-  vajadusel juustekummid ja klambrid.</li>\r\n<li>Kohale tuleks tulla eelmisel õhtul  pestud juustega.</li>\r\n<li>Meie meistrid punuvad teile erinevaid  pidulikke patse vastavalt teie näokujule. </li>\r\n<li> Selliste patsidega võite julgelt minna erinavatele üritustele: pulma, lõpupeole, tüdrukute õhtule või restorani.</li>\r\n<li>Neid patse saab kanda kuni 3 päeva.</li>\r\n<li>Pidulikud  patsid sobivad   erinevas vanuses neidude ja naistele. </li>\r\n<li>Tööaeg: E - R: 9:00 - 17:00, L: 10:00 - 17:00.</li>\r\n<li class=\"red\"> Palume aeg eelnevalt broneerida telefonil: <b>6485055</b>.</li>\r\n<li class=\"red\"> Omandatud voucherit saab kasutada kuni 10.09.2012.</li></ul>\r\n\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n\r\n\t\n\n\t",
+                "map":"/banners/actions/2361796698/map.jpg"
+            }
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22631",
+            "title":{
+                "full":"Allahindlus -50%! Auto välispesu F1 Autohoolduses täna vaid 3 euro eest (tavahind on 6 eurot)!",
+                "short":""
+            },
+            "thumbnail":"img/057/057881.jpg",
+            "site":"www.minuvalik.ee",
+            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/0994261778",
+            "pictures":[
+                {
+                    "url":"/banners/actions/0994261778/ee_dd.gif",
+                    "main":true
+                },
+                {
+                    "url":"/banners/actions/0994261778/1.jpg"
+                },
+                {
+                    "url":"/banners/actions/0994261778/2.jpg"
+                },
+                {
+                    "url":"/banners/actions/0994261778/3.jpg"
+                },
+                {
+                    "url":"/banners/actions/0994261778/4.jpg"
+                }
+            ],
+            "price":{
+                "discount":"3.-",
+                "regular":"6.-",
+                "percent":"-50%",
+                "benefit":"3.-"
+            },
+            "exposed":"",
+            "end":"",
+            "seller":{
+                "info":"\n\t<div class=\"bl_035\">\t\n\t\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n\t<tr>\n\t<td valign=\"top\">\t\n\t\n\t<span class=\"t12\">Müüja:\t<img src=\"/img/partner.gif\" border=\"0\" width=\"14\" align=\"absmiddle\" /> <a href=\"/ee/profile/3651483784\" onclick=\"load_ajax_script('ajax_get_profile?id=3651483784');\" class=\"hint_text\" onmousemove=\"showhint(this,event)\" onmouseout=\"hidehint(this)\">f1auto.ee<span>Vajutage lingile, et saada ammendavat infot sellest partnerist.</span></a></span>\n\t\n\t<div class=\"bl_space\"></div>\n\t\n\t<u>Firma, organisatsioon:</u> A KLASS EHITUS OÜ\t\n\t\n\t\n\t<br />\n\t<u>www-aadress:</u> <a href=\"http://f1auto.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=3651483784&amp;url=f1auto.ee');\">f1auto.ee</a>\n\t\n\t\n\t<br /><br />\n\t<a href=\"/ee/send_mail?id=3651483784\" class=\"iframe_forms\"><img src=\"/img/mail_small.gif\" border=\"0\" align=\"absmiddle\" style=\"margin-right: 7px;\" />Saata kiri e-maili teel</a>\n\n\n\t<br /><br />\n\tPaldiski mnt.231b, Tallinn<br />\r\nTel: 58444468 (est)<br />\r\nTel: 58039088 (rus)<br />\r\nE – P: 9:00 – 21:00<br />\r\ninfo@f1auto.ee\r\n\n\n\t</td>\n\n\t\t\n\t<td align=\"right\" valign=\"top\">\n\t<a href=\"http://f1auto.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=3651483784&amp;url=f1auto.ee');\"><img src=\"/partners/3651483784/profile/logo.jpg\" align=\"center\" border=\"0\" /></a>\t</td>\n\t\t\n\t\t\n\t</tr>\n</table>\t\n\t\n\t</div>\n\t"
+            },
+            "description":{
+                "full":"\n\t\t\n\tKampaania läbiviimise tingimused.\r\n<ul style=\"margin-bottom: 20px;\">\r\n<li> Hind sisaldab auto välispesu (tavahind 6 eurot).</li>\r\n<li>Teenus sisaldab:<br />\r\n- mustuse leotus;<br />\r\n- kõrgsurve pesu;<br />\r\n- kummimattide pesu.</li>\r\n<li>Maasturite ja bussidele pesemisel lisandub voucheri hinnale 2 eurot. </li>\r\n<li>Kõik teised pakutavad teenused Minuvalik.ee voucheri omanik saab saada soodustusega\r\n20%!</li>\r\n<li> Lisainfo <a href=\" http://www.f1auto.ee/index.php?lang=et \"> www.f1auto.ee </a></li>\r\n<li>Asume aadressil  Paldiski mnt.231b, Tallinn.</li>\r\n<li> Oleme avatud: E – P: 9:00 – 21:00.</li>\r\n<li class=\"red\">Lisainfo telefonil <b>58039088</b> (rus),  <b>58444468</b> (est) või <a href=\"mailto: info@f1auto.ee \"> info@f1auto.ee</a>.</li>\r\n<li class=\"red\">Omandatud voucherit võib kasutada kuni 15.06.2012. </li>\r\n</ul>\r\n\r\n<br />\r\n<br />\r\n<br />\r\n\r\n\t\n\n\t",
+                "map":"/banners/actions/0994261778/map.jpg"
+            }
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22483",
+            "title":{
+                "full":"Allahindlus -45%! Restoran Han kutsub kulla! Ülimaitsev govurma teie valikul kalkuni-, kana- või sealihaga  ja kook Idamaine kupsetis ainult 3.85 eurot (tavahind 7.80 eurot)!     ",
+                "short":""
+            },
+            "thumbnail":"img/057/057407.jpg",
+            "site":"www.minuvalik.ee",
+            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/3576407800",
+            "pictures":[
+                {
+                    "url":"/banners/actions/3576407800/ee_dd.gif",
+                    "main":true
+                },
+                {
+                    "url":"/banners/actions/3576407800/1.jpg"
+                },
+                {
+                    "url":"/banners/actions/3576407800/2.jpg"
+                },
+                {
+                    "url":"/banners/actions/3576407800/3.jpg"
+                },
+                {
+                    "url":"/banners/actions/0209798531/3.jpg"
+                },
+                {
+                    "url":"/banners/actions/0209798531/4.jpg"
+                },
+                {
+                    "url":"/banners/actions/3885091040/1.jpg"
+                },
+                {
+                    "url":"/banners/actions/3885091040/2.jpg"
+                },
+                {
+                    "url":"/banners/actions/3885091040/3.jpg"
+                },
+                {
+                    "url":"/banners/actions/3885091040/4.jpg"
+                },
+                {
+                    "url":"/banners/actions/3885091040/5.jpg"
+                }
+            ],
+            "price":{
+                "discount":"3.85",
+                "regular":"7.-",
+                "percent":"-45%",
+                "benefit":"3.15"
+            },
+            "exposed":"",
+            "end":"",
+            "seller":{
+                "info":"\n\t<div class=\"bl_035\">\t\n\t\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n\t<tr>\n\t<td valign=\"top\">\t\n\t\n\t<span class=\"t12\">Müüja:\t<img src=\"/img/partner.gif\" border=\"0\" width=\"14\" align=\"absmiddle\" /> <a href=\"/ee/profile/1897517191\" onclick=\"load_ajax_script('ajax_get_profile?id=1897517191');\" class=\"hint_text\" onmousemove=\"showhint(this,event)\" onmouseout=\"hidehint(this)\">han.ee<span>Vajutage lingile, et saada ammendavat infot sellest partnerist.</span></a></span>\n\t\n\t<div class=\"bl_space\"></div>\n\t\n\t<u>Firma, organisatsioon:</u> AZÄR-HAN OÜ\t\n\t\n\t\n\t<br />\n\t<u>www-aadress:</u> <a href=\"http://han.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=1897517191&amp;url=han.ee');\">han.ee</a>\n\t\n\t\n\t<br /><br />\n\t<a href=\"/ee/send_mail?id=1897517191\" class=\"iframe_forms\"><img src=\"/img/mail_small.gif\" border=\"0\" align=\"absmiddle\" style=\"margin-right: 7px;\" />Saata kiri e-maili teel</a>\n\n\n\t<br /><br />\n\tKotzebue 13A, Tallinn<br />\r\nTel: 6412828<br />\r\nE – R: 11:00 - 23:00<br />\r\nL – P: 12:00 - 23:00<br />\r\nhan@han.ee\r\n\n\n\t</td>\n\n\t\t\n\t</tr>\n</table>\t\n\t\n\t</div>\n\t"
+            },
+            "description":{
+                "full":"\n\t\t\n\tKampaania läbiviimise tingimused.\r\n<ul style=\"margin-bottom: 20px;\">\r\n <li>Voucheri hinna seesgovurma teie valikul kalkuni-, kana- või sealihaga  ja kook Idamaine kupsetis.</li>\r\n<li>Voucher kehtib ainult antud pakkumisele.</li>\r\n<li> Võimalus tellida söök kaasa, kuid karp on lisatasu eest.</li>\r\n<li>Vanalinna lähedal on tasuta parkla.</li>\r\n<li>Suurepärane koht ürituste läbiviimiseks.</li>\r\n<li>Lisainfo meie koduleheküljel  <a href=\"http://www.han.ee/ru/\">www.han.ee</a>.</li>\r\n<li class=\"red\"> Palume teil laud ette broneerida! Täiendav informatsioon ja broneerimine Tel. <b>6412828</b>.</li>\r\n<li class=\"red\"> Voucherit saab kasutada kuni 15.06.2012.</li></ul>\r\n\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n\r\n\t\n\n\t",
+                "map":"/banners/actions/3576407800/map.jpg"
+            }
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22486",
+            "title":{
+                "full":"Allahindlus -56%! Lõbus sünnipäevapidu teie lapsele ja tema sõpradele! Täna mäbgutoa rent ainult 37.50 eurot (tavahind 85 eurot)!",
+                "short":""
+            },
+            "thumbnail":"img/057/057416.jpg",
+            "site":"www.minuvalik.ee",
+            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/3681950138",
+            "pictures":[
+                {
+                    "url":"/banners/actions/3681950138/ee_dd.gif",
+                    "main":true
+                },
+                {
+                    "url":"/banners/actions/3681950138/1.jpg"
+                },
+                {
+                    "url":"/banners/actions/3681950138/2.jpg"
+                },
+                {
+                    "url":"/banners/actions/3681950138/3.jpg"
+                },
+                {
+                    "url":"/banners/actions/3681950138/4.jpg"
+                },
+                {
+                    "url":"/banners/actions/3681950138/5.jpg"
+                },
+                {
+                    "url":"/banners/actions/3681950138/6.jpg"
+                },
+                {
+                    "url":"/banners/actions/3681950138/7.jpg"
+                }
+            ],
+            "price":{
+                "discount":"37.50",
+                "regular":"85.-",
+                "percent":"-56%",
+                "benefit":"47.50"
+            },
+            "exposed":"",
+            "end":"",
+            "seller":{
+                "info":"\n\t<div class=\"bl_035\">\t\n\t\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n\t<tr>\n\t<td valign=\"top\">\t\n\t\n\t<span class=\"t12\">Müüja:\t<img src=\"/img/partner.gif\" border=\"0\" width=\"14\" align=\"absmiddle\" /> <a href=\"/ee/profile/0982590048\" onclick=\"load_ajax_script('ajax_get_profile?id=0982590048');\" class=\"hint_text\" onmousemove=\"showhint(this,event)\" onmouseout=\"hidehint(this)\">pilveke.eu<span>Vajutage lingile, et saada ammendavat infot sellest partnerist.</span></a></span>\n\t\n\t<div class=\"bl_space\"></div>\n\t\n\t<u>Firma, organisatsioon:</u> ANLAINE OÜ\t\n\t\n\t\n\t<br />\n\t<u>www-aadress:</u> <a href=\"http://pilveke.eu\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=0982590048&amp;url=pilveke.eu');\">pilveke.eu</a>\n\t\n\t\n\t<br /><br />\n\t<a href=\"/ee/send_mail?id=0982590048\" class=\"iframe_forms\"><img src=\"/img/mail_small.gif\" border=\"0\" align=\"absmiddle\" style=\"margin-right: 7px;\" />Saata kiri e-maili teel</a>\n\n\n\t<br /><br />\n\tPunane 1, Tallinn (2 korrus)<br />\r\nTel: 58032270\n\n\t</td>\n\n\t\t\n\t</tr>\n</table>\t\n\t\n\t</div>\n\t"
+            },
+            "description":{
+                "full":"\n\t\t\n\tKampaania läbiviimise tinguimused:\r\n<ul style=\"margin-bottom: 20px;\">\r\n<li> Hinna sees on mängutoa rentimine 3 tunniks. Mängutuba on mõeldud lastele vanuses 0-13 aastat.</li>\r\n<li>Peo ajal on tuba ainult teie kasutuses.</li>\r\n<li> Võite oma toidu kaasa  võtta või tellida peolaua  meilt. Kohapeal on olemas veekeetja, kohvikeetja, mikrolaineahi ja külmkapp.</li>\r\n<li>Tasuta parkla.</li>\r\n<li> Peole võib tulla 15 min enne, et valmistuda külaliste saabumiseks.</li>\r\n<li>Meilt on võimalus tellida näitlejate teenust, täpsemalt saate tutvuda meie koduleheküljel <a href=\"http://www.pilveke.eu/rumain1.php\">www.pilveke.eu</a>.</li>\r\n<li> Voucheri omanikule pakutakse lisaallahindlust fotograafi teenusele 40 eurot tunnis (tavahind 50 eurot tunnis) ja soodustust  teenuse korraldajale 30 eurot tunnis (tavahind 37 eurot ).</li>\r\n<li> Kui mingil põhjusel üritus jääb ära, on vajalik teatada sellest 2 päeva ette. Siis on võimalus  muuta aega. Aja muutmist saab paluda ainult  üks kord.</li>\r\n<li class=\"red\">Lisainfo ja broneerimine tel <b>58032270</b>.</li>\r\n<li class=\"red\">Omandatud voucherit saab kasutada kuni  31.08.2012</li></ul>\r\n\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n\r\n\t\n\n\t",
+                "map":"/banners/actions/3681950138/map.jpg"
+            }
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22636",
+            "title":{
+                "full":"Allahindlus -50%! Pai Pagari pakkumine: mahlane kohupiima-puuviljatort on rikkalikult täidetud naturaalse Esko talukohupiimaga, ricotta ja maasikatega ning kaunistatud puuviljadega! Ainult täna on 2 kg kohupiima-puuviljatorti 12 eurot (tavahind on 24 eurot)!   ",
+                "short":""
+            },
+            "thumbnail":"img/057/057896.jpg",
+            "site":"www.minuvalik.ee",
+            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/1737870716",
+            "pictures":[
+                {
+                    "url":"/banners/actions/1737870716/ee_dd.gif",
+                    "main":true
+                },
+                {
+                    "url":"/banners/actions/3560626098/1.jpg"
+                }
+            ],
+            "price":{
+                "discount":"12.-",
+                "regular":"24.-",
+                "percent":"-50%",
+                "benefit":"12.-"
+            },
+            "exposed":"",
+            "end":"",
+            "seller":{
+                "info":"\n\t<div class=\"bl_035\">\t\n\t\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n\t<tr>\n\t<td valign=\"top\">\t\n\t\n\t<span class=\"t12\">Müüja:\t<img src=\"/img/partner.gif\" border=\"0\" width=\"14\" align=\"absmiddle\" /> <a href=\"/ee/profile/0299069122\" onclick=\"load_ajax_script('ajax_get_profile?id=0299069122');\" class=\"hint_text\" onmousemove=\"showhint(this,event)\" onmouseout=\"hidehint(this)\">paipagar.ee<span>Vajutage lingile, et saada ammendavat infot sellest partnerist.</span></a></span>\n\t\n\t<div class=\"bl_space\"></div>\n\t\n\t<u>Firma, organisatsioon:</u> ŠEIKER TÜ\t\n\t\n\t\n\t<br />\n\t<u>www-aadress:</u> <a href=\"http://paipagar.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=0299069122&amp;url=paipagar.ee');\">paipagar.ee</a>\n\t\n\t\n\t<br /><br />\n\t<a href=\"/ee/send_mail?id=0299069122\" class=\"iframe_forms\"><img src=\"/img/mail_small.gif\" border=\"0\" align=\"absmiddle\" style=\"margin-right: 7px;\" />Saata kiri e-maili teel</a>\n\n\n\t<br /><br />\n\tPai kohvik Estonia – Estonia pst.3 Tallinn<br />\r\nTel: 5022302<br />\r\ninfo@paipagar.ee<br />\r\n\n\n\t</td>\n\n\t\t\n\t</tr>\n</table>\t\n\t\n\t</div>\n\t"
+            },
+            "description":{
+                "full":"\n\t\t\n\tSöö ja sära!<br />\r\nPai Pagari kondiitrid valmistavad kordumatud fantaasiatordid - pulmadeks, lapse sünnipäevaks, lihtsalt toredateks tähtpäevadeks, firma olulisteks sündmusteks.<br /><br />\r\nKampaania läbiviimise tingimused.\r\n<ul style=\"margin-bottom: 20px;\">\r\n<li>Ühe voucheri eest saab tellida ühe mahlase kohupiima-puuviljatordi - 2 kg. </li>\r\n<li>Üks klient võib korraga soetada piiramatul hulgal vouchereid.</li>\r\n<li> Tellitud tordi saab kätte Pai Pagari Estonia kohvikust, aadressil Estonia Pst 3. Tööpäeviti E – R: 11:00 – 17:00.</li>\r\n<li class=\"red\">Tee oma tellimus 3 tööpäeva ette tel: <b>5022302</b>.</li>\r\n<li class=\"red\">Omandatud voucherit võib kasutada  kuni 21.06.2012. </li>\r\n</ul>\r\n\r\n\r\n\r\n\r\n\t\n\n\t",
+                "map":"/banners/actions/1737870716/map.jpg"
+            }
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22639",
+            "title":{
+                "full":"Allahindlus -50%! Suvised värvid ja eksootiline ülipehme meriangerjanahk – see on nahabutiigi 4Steps tooted!  Täna internetipoe 4Steps.ee kinkekaart kõigest 10 eurot (tavahind on 20 eurot)!",
+                "short":""
+            },
+            "thumbnail":"img/057/057905.jpg",
+            "site":"www.minuvalik.ee",
+            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/3491395399",
+            "pictures":[
+                {
+                    "url":"/banners/actions/3491395399/ee_dd.gif",
+                    "main":true
+                },
+                {
+                    "url":"/banners/actions/3491395399/1.jpg"
+                },
+                {
+                    "url":"/banners/actions/3491395399/2.jpg"
+                },
+                {
+                    "url":"/banners/actions/3491395399/3.jpg"
+                },
+                {
+                    "url":"/banners/actions/3491395399/4.jpg"
+                }
+            ],
+            "price":{
+                "discount":"10.-",
+                "regular":"20.-",
+                "percent":"-50%",
+                "benefit":"10.-"
+            },
+            "exposed":"",
+            "end":"",
+            "seller":{
+                "info":"\n\t<div class=\"bl_035\">\t\n\t\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n\t<tr>\n\t<td valign=\"top\">\t\n\t\n\t<span class=\"t12\">Müüja:\t<img src=\"/img/partner.gif\" border=\"0\" width=\"14\" align=\"absmiddle\" /> <a href=\"/ee/profile/2940384062\" onclick=\"load_ajax_script('ajax_get_profile?id=2940384062');\" class=\"hint_text\" onmousemove=\"showhint(this,event)\" onmouseout=\"hidehint(this)\">4steps.ee<span>Vajutage lingile, et saada ammendavat infot sellest partnerist.</span></a></span>\n\t\n\t<div class=\"bl_space\"></div>\n\t\n\t<u>Firma, organisatsioon:</u> 4STEPS GROUP OÜ\t\n\t\n\t\n\t<br />\n\t<u>www-aadress:</u> <a href=\"http://4steps.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=2940384062&amp;url=4steps.ee');\">4steps.ee</a>\n\t\n\t\n\t<br /><br />\n\t<a href=\"/ee/send_mail?id=2940384062\" class=\"iframe_forms\"><img src=\"/img/mail_small.gif\" border=\"0\" align=\"absmiddle\" style=\"margin-right: 7px;\" />Saata kiri e-maili teel</a>\n\n\n\t<br /><br />\n\tAiandi tee 3, Tallinn<br />\r\ninfo@4steps.ee\n\n\t</td>\n\n\t\t\n\t<td align=\"right\" valign=\"top\">\n\t<a href=\"http://4steps.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=2940384062&amp;url=4steps.ee');\"><img src=\"/partners/2940384062/profile/logo.jpg\" align=\"center\" border=\"0\" /></a>\t</td>\n\t\t\n\t\t\n\t</tr>\n</table>\t\n\t\n\t</div>\n\t"
+            },
+            "description":{
+                "full":"\n\t\t\n\tKampaania läbiviimise tingimused.\r\n<ul style=\"margin-bottom: 20px;\">\r\n<li>Voucher sisaldab internetipoe 4Steps.ee kinkekaarti väärtuses 20 eurot. </li>\r\n<li>Kinkekaarti saab kasutada internetipoes kõikide toodete soetamisel, välja arvatud tooted, millel on allahindlus.</li>\r\n<li>Vouchereid ei saa summeerida. Ühe ostuga võib kasutada ainult ühte voucherit.</li>\r\n<li>Tellimuse saab esitada e-posti teel <a href=\"mailto: order@4steps.ee \"> order@4steps.ee </a>. \r\n Palume märkida kataloogist valitud toote vaucheri number, Art. Nr. ja soovitud värvi nimetus ning tellitava kauba kogus. <br />\r\nNäiteks:<br />\r\n Voucher nr: 0000000000, PIN: 0000, Nimi, Aadress, Art Nr.: EW030, Red, 1tk. </li>\r\n<li>Kauba edastamine saajani toimub Eestis posti teel ja <b>maksab 2 eurot</b>.</li>\r\n<li>Kohale toimetamise aeg üks kuni kolm päevat eeldusel, et tellitud kaup on laos olemas.</li>\r\n<li>Enamus kaupa erinevates värvides, mis on internetilehel <a href=\" http://4steps.ee/ \"> 4Steps.ee </a>  esindatud, on Tallinna laos olemas. Teie poolt ostetud kauba puudumisel Tallinna laos, on tellimuse tähtaeg kaks kuni kuus nädalat.</li>\r\n<li>Kõik küsimused palume edastada e-posti teel  <a href=\"mailto: info@4steps.ee\">info@4steps.ee</a> märkides pealkirjaks \"kampaania\".</li>\r\n<li class=\"red\">Omandatud voucherit võib kasutada kuni 7.07.2012. </li>\r\n</ul>\r\n<ul style=\"margin-bottom: 20px;\">\r\n4Steps Group on Eesti turul ainuke üle aasta tegutsenud firma, kes pakub oma klientidele tooteid angerja nahast ja on võitnud tuhandeid kliente nii eraisikute kui erinevate firmade töötajate seast.<br />\r\n Väljavõte naha kirjeldamisest:<br />\r\n- Õhukest, elegantset ja vastupidavat angerjanahka on hinnatud selle ebatavalise faktuuri, pehmuse ja õhususe poolest. <br />\r\n- Eredad, laia värvigammaga tooted toovad esile Teie maitse ja individuaalsuse, ei jää kunagi märkamatuks teiste pilku. <br />\r\n- Paljud muistendid jutustavad meile angerjanaha võlust. Usutakse, et see kaitseb meid kurja eest, toob õnne.<br />\r\n Lisainformatsiooni leiate interneti leheküljel <a href=\" http://4steps.ee/ \">www.4Steps.ee </a>valikus info.<br />\r\n Usume, et jääte ostuga rahule !<br />\r\nVastasel juhul saate raha tagasi, maksate ainult postikulud.<br />\r\nMõistame muidugi, et angerja nahk on eksootiline ja hiljuti Eestisse jõudnud.<br />\r\nNautige ostu!\r\n</ul>\r\n\r\n \r\n\r\n<br />\r\n<br />\r\n<br />\r\n\r\n\t\n\n\t"
+            }
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22638",
+            "title":{
+                "full":"Allahindlus -50%! Samsung musta trükiga toonerite täitmine täna vaid 15 eurot (tavahind on 30 eurot)!",
+                "short":""
+            },
+            "thumbnail":"img/057/057902.jpg",
+            "site":"www.minuvalik.ee",
+            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/1057656964",
+            "pictures":[
+                {
+                    "url":"/banners/actions/1057656964/ee_dd.gif",
+                    "main":true
+                },
+                {
+                    "url":"/banners/actions/1057656964/1.jpg"
+                },
+                {
+                    "url":"/banners/actions/1057656964/2.jpg"
+                },
+                {
+                    "url":"/banners/actions/1057656964/3.jpg"
+                }
+            ],
+            "price":{
+                "discount":"15.-",
+                "regular":"30.-",
+                "percent":"-50%",
+                "benefit":"15.-"
+            },
+            "exposed":"",
+            "end":"",
+            "seller":{
+                "info":"\n\t<div class=\"bl_035\">\t\n\t\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n\t<tr>\n\t<td valign=\"top\">\t\n\t\n\t<span class=\"t12\">Müüja:\t<img src=\"/img/partner.gif\" border=\"0\" width=\"14\" align=\"absmiddle\" /> <a href=\"/ee/profile/1393263793\" onclick=\"load_ajax_script('ajax_get_profile?id=1393263793');\" class=\"hint_text\" onmousemove=\"showhint(this,event)\" onmouseout=\"hidehint(this)\">edukad.ee<span>Vajutage lingile, et saada ammendavat infot sellest partnerist.</span></a></span>\n\t\n\t<div class=\"bl_space\"></div>\n\t\n\t<u>Firma, organisatsioon:</u> EDUTEENUSED OÜ\t\n\t\n\t\n\t<br />\n\t<u>www-aadress:</u> <a href=\"http://edukad.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=1393263793&amp;url=edukad.ee');\">edukad.ee</a>\n\t\n\t\n\t<br /><br />\n\t<a href=\"/ee/send_mail?id=1393263793\" class=\"iframe_forms\"><img src=\"/img/mail_small.gif\" border=\"0\" align=\"absmiddle\" style=\"margin-right: 7px;\" />Saata kiri e-maili teel</a>\n\n\n\t<br /><br />\n\tTel: 5043459\n\n\t</td>\n\n\t\t\n\t</tr>\n</table>\t\n\t\n\t</div>\n\t"
+            },
+            "description":{
+                "full":"\n\t\t\n\tKampaania läbiviimise tingimused:\r\n<ul style=\"margin-bottom: 20px;\">\r\n<li> Voucher sisaldab 30 € väärtuses musta trükiga Samsung laserprinterite toonerite täitmist uue ja kvaliteetse trükitahmaga.\r\n<li>  Tutvu kindlasti printerite nimekirjaga <a href=\"http://www.edukad.ee/site/index.php/samsung/ \">siin</a>.</li>\r\n<li>Kui Sa ei leia oma laserprinterit nimekirjast, siis küsi julgelt  lisainfot <b>504 3459</b>.</li>\r\n<li> Lisaks saab soodsate lisatasude eest voucheriga:<br />\r\n- vajadusel lisada kassetile kiibi 6 €;<br />\r\n- täita teisi mustade ja värviliste laserprinterite toonereid, lisatasu vastavalt hinnakirjale;<br />\r\n- vajadusel vahetada tooneri trumlit ehk laserkassetti renoveerida, lisatasu 7.67 €;<br />\r\n- vajadusel printer ümberprogrammeerida 15,98 €.</li>\r\n<li> Printerikiirabi tuleb ise tasuta Tartus kassettidele järele ja pärast toob täidetud tagasi E - P: 8:00 - 20:00. Tellimiseks palume helistada <b>5043459</b>.</li>\r\n<li>Soovi korral võib saata tühja kasseti ka  <a href=\" http://www.smartpost.ee/pakiautomaatide-asukohad\">SmartPostiga</a> Tartu Zeppelini pakiautomaati (kõik postikulud maksab ostja).</li>\r\n<li>Korraga võib soetada ja kasutada mitut voucherit.</li>\r\n<li>Ületades voucheri väärtuse (30 €) tuleb esitada mitu voucheri või maksta juurde puuduv summa.</li>\r\n<li class=\"red\">Voucher kehtib alates 15.05.2012 kuni 31.07.2012.</li></li></ul>\r\n\r\n<ul style=\"margin-bottom: 20px;\">\r\nOle nutikas ja säästa prindikuludelt toonerid täites!<br /><br />\r\nOlles kindel oma teenuse kvaliteedis, annab Printerikiirabi kõigile täidetud tooneritele garantii!</ul>\r\n\r\n\r\n\r\n<br />\r\n<br />\r\n\r\n\t\n\n\t"
+            }
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22640",
+            "title":{
+                "full":" Meeliülendav õlledegustatsioon \"Brewery\" õlleklubis, mille käigus pakutakse 5 erinevat pastöriseerimata õllesorti ja pealekauba rikkalik õlleampsuvaagen! Täna tutvumishind 16.50 eurot!",
+                "short":""
+            },
+            "thumbnail":"img/057/057908.jpg",
+            "site":"www.minuvalik.ee",
+            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/2568927408",
+            "pictures":[
+                {
+                    "url":"/banners/actions/2568927408/ee_dd.gif",
+                    "main":true
+                },
+                {
+                    "url":"/banners/actions/2568927408/1.jpg"
+                },
+                {
+                    "url":"/banners/actions/2568927408/2.jpg"
+                },
+                {
+                    "url":"/banners/actions/2568927408/3.jpg"
+                },
+                {
+                    "url":"/banners/actions/2568927408/4.jpg"
+                },
+                {
+                    "url":"/banners/actions/2568927408/5.jpg"
+                },
+                {
+                    "url":"/banners/actions/2568927408/6.jpg"
+                }
+            ],
+            "price":{
+                "discount":"16.50",
+                "regular":"",
+                "percent":"",
+                "benefit":""
+            },
+            "exposed":"",
+            "end":"",
+            "seller":{
+                "info":"\n\t<div class=\"bl_035\">\t\n\t\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n\t<tr>\n\t<td valign=\"top\">\t\n\t\n\t<span class=\"t12\">Müüja:\t<img src=\"/img/partner.gif\" border=\"0\" width=\"14\" align=\"absmiddle\" /> <a href=\"/ee/profile/1001898385\" onclick=\"load_ajax_script('ajax_get_profile?id=1001898385');\" class=\"hint_text\" onmousemove=\"showhint(this,event)\" onmouseout=\"hidehint(this)\">brewery.ee<span>Vajutage lingile, et saada ammendavat infot sellest partnerist.</span></a></span>\n\t\n\t<div class=\"bl_space\"></div>\n\t\n\t<u>Firma, organisatsioon:</u> HANSA BREWERS RESIDENCE OÜ\t\n\t\n\t\n\t<br />\n\t<u>www-aadress:</u> <a href=\"http://brewery.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=1001898385&amp;url=brewery.ee');\">brewery.ee</a>\n\t\n\t\n\t<br /><br />\n\t<a href=\"/ee/send_mail?id=1001898385\" class=\"iframe_forms\"><img src=\"/img/mail_small.gif\" border=\"0\" align=\"absmiddle\" style=\"margin-right: 7px;\" />Saata kiri e-maili teel</a>\n\n\n\t<br /><br />\n\tPikk 1, Tallinn<br />\r\nTel: 6313631<br />\r\nTööaeg: P - K: 12:00 – 01:00<br />\r\n             N - L:    09:00 – 05:00\r\n\n\n\t</td>\n\n\t\t\n\t</tr>\n</table>\t\n\t\n\t</div>\n\t"
+            },
+            "description":{
+                "full":"\n\t\t\n\tKampaania läbiviimise tingimused:\r\n<ul style=\"margin-bottom: 20px;\">\r\n<li>Voucer hind sisaldab endas meeliülendavat õlledegustatsiooni, mille käigus pakutakse Teile 5 erinevat sorti pastöriseeritimata ehk «elusat» õlut:<br />\r\n-  Hansa Eerste Velvet 4,6% 40cl;<br />\r\n-  Hansa Vandaag Honey 4,5% 40cl;<br />\r\n- Hansa Zeldzaam Design Pilsner 5,2% 40cl;<br />\r\n-  Voor Sterke Dark Beer 7,0% 40cl;<br />\r\n- Oude Smaak Wheat Beer 4,5% 40cl.</li>\r\n<li>Lisaks on voucheri hinna sees «BREWERY ÕLLEAMPSUVAAGEN», milles on:<br />\r\n- Brewery kanatiivad teie valitud kastmega.<br />\r\n- Kalmaar soola ja pipraga teie valitud kastmega (Tatari või magus tšillikaste).<br />\r\n- Eesti küüslauguleivad  küüslaugu-murulaugu-hapukoorekastmega.<br />\r\n- Brewery kartulisektorid Hansa Vandaagi meeõlle kastmes.<br />\r\n- Brewery soolased šokolaadi-seesamiseemne-juustupallid.</li>\r\n<li>Juhul, kui soovite maitsta ja proovida teisi \"Brewery\" õlleklubi jooke või roogasid, tuleb tasuda vastavalt hinnakirjale.</li>\r\n<li>Vouchereid ei saa summeerida. </li>\r\n<li> Voucher ei piira külastajate arvu, kuid kasutatavate voucherite arv ei tohi ületada laudkonnas istuvate inimeste arvu.</li>\r\n<li class=\"red\">Sekelduste vätimiseks palume enne külastust laud eelbroneerida telefonil <b>6313631</b>.</li>\r\n<li class=\"red\">Tähelepanu! Tegemist on alkoholiga. Alkohol võib kahjustada teie tervist!</li>\r\n<li class=\"red\">Voucher kehtib alates 15.05.2012 kuni 01.07.2012.</li></ul>\r\n<ul style=\"margin-bottom: 20px;\">\r\n \r\nTallinna vanalinnas, Pikk tänaval on end sisse seadnud \"Brewery\" õlleklubi, mis peidab endas tõelist kvaliteetõllede oaasi, hõrkude roogade ja kauni miljööga restorani, väikest vinoteeki ning pisikest pruulikoda. Muistse arhitektuuri ning moodsa disaini hurmava kombinatsiooniga Brewery on lisaks väärt toidu- ja joogikohale ka paik, kus saad nautida lummavaid jazzi- ja bluesinoote. Külaliste käsutuses on ühtekokku kaks saali, kuhu mahuvad lahedasti nii erinevad firmaüritused kui ka suuremad õhtusöögid.<br /><br />\r\nTõeliselt uhke on \"Brewery\" õlleklubi pruulikojas meisterdatud vaadiõllede osas:<br />\r\n<b>Hansa Eerste-Velvet õlu</b>. Selle õlle valmistamisel kasutatakse kergelt linnaseid ja pilzensky mõrudat humalat. Väga Hästi kustutab joogijanu.<br />\r\n<b>Hansa vandaag-mee õlu</b>. Mahe, meeldiva mee maitse ja aroomiga lager õlu. Selle õlle valmistamisel kasutatakse kergelt linnaseid ja mahedat humalat. Klassikaline elav õlu, pruulitud vanade retseptide järgi. Väga Hästi kustutab joogijanu, nii suvel kui talvel. Sobib ka õrnemale soole joomiseks.<br />\r\n<b>Hansa zeldzaam-pilsner õlu</b>. Selle Õlle  valmistamiseks kasutatakse heledat pilzeni linnased ja kibedat humalat.<br />\r\n<b>Oude Smaak-nisu õlu</b>. Selle elusa õlle valmistamisel kasutatakse heledaid pilzenski klassi odra ja nisu linnaseid. Õlle pärmi fermenteeritakse välja spetsiaalne kääritamise tee. See annab õllele magushapuka esialgse maitse ja suurepärase järelmaitse. Õlu ei ole filtreeritud. Hea janukustutaja. <br />\r\n<b>Voor Sterke-must õlu</b>. Õlu on tihke kibeda maitse ja suurepärase viimistlusega. Kange väga tume elav õlu. Selle õlusordi valmistamiseks kasutatakse spetsiaalset kõrvetatud linnaseid ja ingverit. </ul>\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n<br />\r\n\r\n\t\n\n\t"
+            }
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22635",
+            "title":{
+                "full":"Allahindlus -65%! Pakkumine LuxLine ilusalongilt: «Dermalife Spa Jet» energiakapsel + aurusaun + solaarium ainult 5 euro eest (tavahind on 14.20 eurot)!",
+                "short":""
+            },
+            "thumbnail":"img/057/057893.jpg",
+            "site":"www.minuvalik.ee",
+            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/0668979532",
+            "pictures":[
+                {
+                    "url":"/banners/actions/0668979532/ee_dd.gif",
+                    "main":true
+                },
+                {
+                    "url":"/banners/actions/1753530616/1.jpg"
+                },
+                {
+                    "url":"/banners/actions/1753530616/2.jpg"
+                }
+            ],
+            "price":{
+                "discount":"5.-",
+                "regular":"14.20",
+                "percent":"-65%",
+                "benefit":"9.20"
+            },
+            "exposed":"",
+            "end":"",
+            "seller":{
+                "info":"\n\t<div class=\"bl_035\">\t\n\t\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n\t<tr>\n\t<td valign=\"top\">\t\n\t\n\t<span class=\"t12\">Müüja:\t<img src=\"/img/partner.gif\" border=\"0\" width=\"14\" align=\"absmiddle\" /> <a href=\"/ee/profile/3815091174\" onclick=\"load_ajax_script('ajax_get_profile?id=3815091174');\" class=\"hint_text\" onmousemove=\"showhint(this,event)\" onmouseout=\"hidehint(this)\">tasmo.ee<span>Vajutage lingile, et saada ammendavat infot sellest partnerist.</span></a></span>\n\t\n\t<div class=\"bl_space\"></div>\n\t\n\t<u>Firma, organisatsioon:</u> TASMO ÄRIGRUPI AS\t\n\t\n\t\n\t<br />\n\t<u>www-aadress:</u> <a href=\"http://luxline.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=3815091174&amp;url=luxline.ee');\">luxline.ee</a>\n\t\n\t\n\t<br /><br />\n\t<a href=\"/ee/send_mail?id=3815091174\" class=\"iframe_forms\"><img src=\"/img/mail_small.gif\" border=\"0\" align=\"absmiddle\" style=\"margin-right: 7px;\" />Saata kiri e-maili teel</a>\n\n\n\t<br /><br />\n\tPunane 16, Tallinn<br />\r\nE – R:\t 09:00 – 21:00<br />\r\nL:\t 10:00 – 19:00<br />\r\nP:\t 10:00 – 18:00\r\n           \r\n\n\n\t</td>\n\n\t\t\n\t</tr>\n</table>\t\n\t\n\t</div>\n\t"
+            },
+            "description":{
+                "full":"\n\t\t\n\tKampaania läbiviimise tingimused.\r\n<ul style=\"margin-bottom: 20px;\">\r\n<li>Hinna sisse kuulub pakett maksumusega 14.20 eurot mis sisaldab:<br />\r\n- seanssi «Dermalife Spa Jet» energiakapselis - 35 minutit;<br />\r\n- horisontaalse solaariumi külastust 7 minutit (NB! kõik lambid on uued);<br />\r\n - aurusauna külastust - 20 minutit.</li> \r\n<li>Teenus kehtib ainult naistele!</li> \r\n<li>Teenuseid osutab ilusalong «LuxLine Studio», <a href=\" http://www.luxline.ee/\"> www.luxline.ee</a> </li>\r\n<li class=\"red\">Salongi külastuseks on vaja aeg eelnevalt ette broneerida telefonil <b>6990210</b>. </li>\r\n<li class=\"red\">Aktsia aega ei pikendatata. Palume broneerida aeg õigel ajal.</li> \r\n<li class=\"red\">Voucherit saab kasutada kuni 15.07.2012.</li>\r\n</ul>\r\n\r\n\r\n\r\n<br />\r\n\r\n\t\n\n\t",
+                "map":"/banners/actions/0668979532/map.jpg"
+            }
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22637",
+            "title":{
+                "full":"Allahindlus -62%! Külma talve jooksul on meie nahk väsinud kuivast õhust ja vitamiinide puudusest, saabus aeg valmistuda suvehooajaks! Vitamiinid + vetikatega niisutamine + spetsiaalne modelleriv näomassaaž ilusalongis Cindirella täna ainult  19 eurot (tavahind 50 eurot)!",
+                "short":""
+            },
+            "thumbnail":"img/057/057899.jpg",
+            "site":"www.minuvalik.ee",
+            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/1002562044",
+            "pictures":[
+                {
+                    "url":"/banners/actions/1002562044/ee_dd.gif",
+                    "main":true
+                },
+                {
+                    "url":"/banners/actions/3140138471/3.jpg"
+                },
+                {
+                    "url":"/banners/actions/3140138471/4.jpg"
+                },
+                {
+                    "url":"/banners/actions/3140138471/6.jpg"
+                }
+            ],
+            "price":{
+                "discount":"19.-",
+                "regular":"50.-",
+                "percent":"-62%",
+                "benefit":"31.-"
+            },
+            "exposed":"",
+            "end":"",
+            "seller":{
+                "info":"\n\t<div class=\"bl_035\">\t\n\t\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n\t<tr>\n\t<td valign=\"top\">\t\n\t\n\t<span class=\"t12\">Müüja:\t<img src=\"/img/partner.gif\" border=\"0\" width=\"14\" align=\"absmiddle\" /> <a href=\"/ee/profile/3919693785\" onclick=\"load_ajax_script('ajax_get_profile?id=3919693785');\" class=\"hint_text\" onmousemove=\"showhint(this,event)\" onmouseout=\"hidehint(this)\">salong-cinderella.ee<span>Vajutage lingile, et saada ammendavat infot sellest partnerist.</span></a></span>\n\t\n\t<div class=\"bl_space\"></div>\n\t\n\t<u>Firma, organisatsioon:</u> VHL SERVICE OÜ\t\n\t\n\t\n\t<br />\n\t<u>www-aadress:</u> <a href=\"http://salong-cinderella.ee\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=3919693785&amp;url=salong-cinderella.ee');\">salong-cinderella.ee</a>\n\t\n\t\n\t<br /><br />\n\t<a href=\"/ee/send_mail?id=3919693785\" class=\"iframe_forms\"><img src=\"/img/mail_small.gif\" border=\"0\" align=\"absmiddle\" style=\"margin-right: 7px;\" />Saata kiri e-maili teel</a>\n\n\n\t<br /><br />\n\tAia 10/ Inseneri 1, Tallinn<br />\r\nTel: 6273606\n\n\t</td>\n\n\t\t\n\t</tr>\n</table>\t\n\t\n\t</div>\n\t"
+            },
+            "description":{
+                "full":"\n\t\t\n\tKampaania läbiviimise tingimused.\r\n<ul style=\"margin-bottom: 20px;\">\r\n<li> Hinna sees on:<br /> \r\n- hollywoodi puhastamine;<br />\r\n- toniseerimine;<br />\r\n- merevetikate baasil mask mere kollageeniga;<br />\r\n - modelleriv Jim massaaž.</li>\r\n<li>Näomassaaž  Jim-intensiivne süva  ja pindmiste näolihaste massaaž. Tuues lihased toonusesse, te korrigeerite näo-ovaali, vabanete väikestest kortsudest. Parandate verevarustust  ja tänu   maskist  saadud aminohappetele ja vitamiinidele  nahk särab ilust ja tervisest.</li>\r\n<li>Keerata aeg tagasi ja  välja näha  sellisena , nagu soovite!</li>\r\n<li>Voucherite arv ei ole piiratud.</li>\r\n<li> Salongi lahtioleku ajad: E - R 9:00 - 19:00; L\t9:00 - 16:00; P 10:00 - 16:00.</li>\r\n<li class=\"red\"> Täiendav informatsioon ja broneerimine telefonil <b>6273606</b>.</li>\r\n<li class=\"red\"> Omandatud voucherit võib kasutada kuni 14.07.2012.</li>\r\n</ul>\r\n\r\n\r\n\r\n\r\n\r\n<br />\r\n<br />\r\n\t\n\n\t",
+                "map":"/banners/actions/1002562044/map.jpg"
+            }
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22634",
+            "title":{
+                "full":"Allahindlus -50%! Meeldiv ja tervendav protseduur teie valikul - jalataldade SPA hooldus või selja  ja kaela massaaž täna ainult 8 euro eest (tavahind 16 eurot)!",
+                "short":""
+            },
+            "thumbnail":"img/057/057890.jpg",
+            "site":"www.minuvalik.ee",
+            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/3712473659",
+            "pictures":[
+                {
+                    "url":"/banners/actions/3712473659/ee_dd.gif",
+                    "main":true
+                },
+                {
+                    "url":"/banners/actions/1941980409/1.jpg"
+                },
+                {
+                    "url":"/banners/actions/1941980409/2.jpg"
+                },
+                {
+                    "url":"/banners/actions/1941980409/3.jpg"
+                }
+            ],
+            "price":{
+                "discount":"8.-",
+                "regular":"16.-",
+                "percent":"-50%",
+                "benefit":"8.-"
+            },
+            "exposed":"",
+            "end":"",
+            "seller":{
+                "info":"\n\t<div class=\"bl_035\">\t\n\t\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n\t<tr>\n\t<td valign=\"top\">\t\n\t\n\t<span class=\"t12\">Müüja:\t<img src=\"/img/partner.gif\" border=\"0\" width=\"14\" align=\"absmiddle\" /> <a href=\"/ee/profile/1275921208\" onclick=\"load_ajax_script('ajax_get_profile?id=1275921208');\" class=\"hint_text\" onmousemove=\"showhint(this,event)\" onmouseout=\"hidehint(this)\">viktoria.3dn.ru<span>Vajutage lingile, et saada ammendavat infot sellest partnerist.</span></a></span>\n\t\n\t<div class=\"bl_space\"></div>\n\t\n\t<u>Firma, organisatsioon:</u> BEAUTY TIME OÜ\t\n\t\n\t\n\t<br />\n\t<u>www-aadress:</u> <a href=\"http://viktoria.3dn.ru\" target=\"_blank\" onclick=\"load_ajax_script('ajax_get_url?id=1275921208&amp;url=viktoria.3dn.ru');\">viktoria.3dn.ru</a>\n\t\n\t\n\t<br /><br />\n\t<a href=\"/ee/send_mail?id=1275921208\" class=\"iframe_forms\"><img src=\"/img/mail_small.gif\" border=\"0\" align=\"absmiddle\" style=\"margin-right: 7px;\" />Saata kiri e-maili teel</a>\n\n\n\t<br /><br />\n\tLasnamae, Virbi 4, kab. 8, Tallinn<br />\r\n\"Virbi Tervisekeskus\"<br />\r\nE - R: 10:00 - 20:00<br />\r\nL: 10:00 - 16:00<br />\r\nTel: 58180267<br />\r\nviky62@mail.ru\r\n\n\n\t</td>\n\n\t\t\n\t</tr>\n</table>\t\n\t\n\t</div>\n\t"
+            },
+            "description":{
+                "full":"\n\t\t\n\tKampaania läbiviimise tingimused.\r\n<ul style=\"margin-bottom: 20px;\">\r\n<li>Voucheri hinna sees on üks protseduur teie valikul: jalataldade hooldus (lõõgastav, rahustav ja värskendav või soojendav (tšilli ja apelsiin) ja selja ja kaela massaaž.</li>\r\n<li><b>Jalataldade SPA hooldus valikul</b> (30 min):<br />\r\n- <b>Lõõgastav, rahustav ja värskendav</b> - tänu taimsete koostisosadele toob kergenduse ja mugavuse väsinud jalgadele, samuti jalataldade kuiva naha toitmise ja taastumise.Toimeained sisaldavad puhastavaid, pehmendavaid, toitvaid ja antiseptilisi toimeid.<br />\r\nProtseduuri käigud:<br />\r\n- soola piiling liiliaga;<br />\r\n- jalataldade pehmendav mask.<br />\r\n- <b>Soojendav (tšilli ja apelsiin)</b> - hästi valitud koostisosad toites ja stimuleerides mõjuvad  parandavalt verevarustust, soojendavad, lõõgastavad ja siluva. Aroomkompositsioon, apelsiin, kaneel, nelk ja tšilli stimuleerivad tundeid ja kindlustavd suurepärase enesetunde. Ideaalne pakkumine halva verevarustuise ja külmetavete jalgade sündroomiga inimestele.<br />\r\nProtseduuri käik:<br />\r\n- jalataldade piilingmask tšilli ja massaažiga;<br />\r\n- kerge massaaž tšilli soojendava kreemiga.</li>\r\n<li>Selja ja kaela massaaž: protseduuri kestvus 30 min.</li>\r\n<li>Avatud: E - R: 10:00 - 20:00; L: 10:00 - 16:00.</li>\r\n<li> Asume aadressil: Lasnamae, Virbi 4, kab. 8, Tallinn. </li>\r\n<li>Kui Te ei saa tulla kokkulepitud ajaks, siis palume Teil teatada sellest salongile mitte hiljem kui 1 päev enne kokkulepitud aega. Salongil on õigus annulleerida voucher, kui klient broneeris aja, kuid jättis tulemata.</li>\r\n<li class=\"red\">Lisainfo telefonil <b>58180267</b>.</li>\r\n<li class=\"red\">Omandatud voucherit võib kasutada kuni 30.06.2012. </li>\r\n</ul> \t\r\n\r\n<br />\r\n<br />\r\n\r\n\t\n\n\t",
+                "map":"/banners/actions/3712473659/map.jpg"
+            }
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22313",
+            "title":{
+                "full":"Allahindlus -40%! Kaunis lillebukett ja kullerteenus täna kõigest 15 euro eest tavahind 25 eurot! Kui ees on emadepäev, sünnipäev või mõni tähtpäev - «Anderson Äri» aitab muuta selle  päeva meeldejäävaks  Teie lähedastele inimestele!",
+                "short":""
+            },
+            "thumbnail":"img/056/056868.jpg",
+            "site":"www.minuvalik.ee",
+            "origin":"http://www.minuvalik.ee/ee/hot/2935319403/1757567090",
+            "pictures":[
+                {
+                    "main":true
+                },
+                {
+                    "url":"/banners/actions/1757567090/2.jpg"
+                },
+                {
+                    "url":"/banners/actions/1757567090/3.jpg"
+                },
+                {
+                    "url":"/banners/actions/1757567090/1.jpg"
+                }
+            ],
+            "price":{
+                "discount":"15.-",
+                "regular":"25.-",
+                "percent":"-40%",
+                "benefit":"10.-"
+            },
+            "exposed":"",
+            "end":"",
+            "seller":{
+                "info":"\n\t<div class=\"bl_035\">\t\n\t\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n\t<tr>\n\t<td valign=\"top\">\t\n\t\n\t<span class=\"t12\">Müüja:\t<img src=\"/img/partner.gif\" border=\"0\" width=\"14\" align=\"absmiddle\" /> <a href=\"/ee/profile/1349206040\" onclick=\"load_ajax_script('ajax_get_profile?id=1349206040');\" class=\"hint_text\" onmousemove=\"showhint(this,event)\" onmouseout=\"hidehint(this)\">ANDERSON ÄRI OÜ<span>Vajutage lingile, et saada ammendavat infot sellest partnerist.</span></a></span>\n\t\n\t<div class=\"bl_space\"></div>\n\t\n\t<u>Firma, organisatsioon:</u> ANDERSON ÄRI OÜ\t\n\t\n\t<br /><br />\n\t<a href=\"/ee/send_mail?id=1349206040\" class=\"iframe_forms\"><img src=\"/img/mail_small.gif\" border=\"0\" align=\"absmiddle\" style=\"margin-right: 7px;\" />Saata kiri e-maili teel</a>\n\n\n\t<br /><br />\n\tKalevi 13, Kohtla-Järve<br />\r\nTel: 5177597<br />\r\nTööaeg: E – R: 7:00 – 18:00<br />\r\n L: 8:00 – 17:00\r\nP: 8:00 – 15:00<br />\r\nKullerteenus:  E – P: 8:00 – 20:00\r\n\n\n\t</td>\n\n\t\t\n\t</tr>\n</table>\t\n\t\n\t</div>\n\t"
+            },
+            "description":{
+                "full":"\n\t\t\n\tKampaania läbiviimise tingimused.\r\n<ul style=\"margin-bottom: 20px;\">\r\n<li> Voucher sisaldab endas ühte alljärgnevast lillebuketist ja tasuta kullerteenusest Kohtla-Järve (Järve, Iidla, Puru, Ahtme linnaosad) ja Jõhvi linnas.</li>\r\n<li> Kui soovite saata lillekimbu mõnda teise kohta Ida-Virumaal, siis see toimub eritellimuse alusel ja hinnale lisandub lisatasu kullerteenuse eest 0,35EUR/km. Lisainfo telefonil <b>5177597</b>.</li>\r\n<li> Tellimus lillekimbu valmistamiseks ja kullerteenusega edasitoimetamiseks palume edastada ajavahemikul kella 8-st kuni 20-ni- vähemalt 24 tundi varem.</li>\r\n<li> Lisatellimusena on võimalik lillebuketile lisada meeleolukas kaart, mänguasi või maiustus.</li>\r\n<li class=\"red\">Lisainfo ja tellimine telefonil <b>5177597</b>.</li>\r\n<li class=\"red\">Voucher kehtib alates 09.05.2012 kuni 01.09.2012.</li></ul>\r\n<ul style=\"margin-bottom: 20px;\">\r\nTooteinfo:<br />\r\nBukett nr 1: 3 roosi, 2 krüsanteemi, 1 gerbera ja vaheroheline.<br />\r\nBukett nr 2: Bukett kommidest. Võimalus valmistada bukett vastavalt maitse eelistustele ja kasutada selleks on 3 erinevat kommisorti-võimalust: kommidest Ferrero Rocher,  kommidest Rafaello, kommid ja lilled.<br />\r\n Bukett nr 3: 9 gerberat ja vaheroheline.<br />\r\n Bukett nr 4: 3 gerberat, 3 roosi, vaheroheline ja dekoor.</ul>\r\n\r\n \r\n\r\n\r\n\r\n<br />\r\n<br />\r\n\r\n\t\n\n\t",
+                "map":"/banners/actions/1757567090/map.jpg"
+            }
+        }
+    ],
+    "www.headiil.ee":[
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22654",
+            "title":{
+                "full":"Naartitsaripsmete paigaldus või hooldus kuni jaanipäevani vaid 15 EUR!",
+                "short":""
+            },
+            "thumbnail":"img/057/057950.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/669"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22676",
+            "title":{
+                "full":"Kaunis püsimeik kulmudele, huultele või silmadele ilustuudios Velvet -40%",
+                "short":""
+            },
+            "thumbnail":"img/058/058016.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/630"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22606",
+            "title":{
+                "full":"50 minutit päevituskrediiti solaariumis Šokolaad -50%",
+                "short":""
+            },
+            "thumbnail":"img/057/057782.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/641"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22673",
+            "title":{
+                "full":"Kevade pakkumine! Triibutamine/värvimine + puuviljamask + juuste lõikus + föönisoeng või sirgendamine -50%",
+                "short":""
+            },
+            "thumbnail":"img/058/058007.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/611"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22698",
+            "title":{
+                "full":"SUPERHIND! 6 x 30 minutit tõhusat infrapunasauna seanssi Ilusalongis Ilukroon -60%",
+                "short":""
+            },
+            "thumbnail":"img/058/058082.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/672"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22656",
+            "title":{
+                "full":"Uudne, valutu ja tõhus ELOS-epilatsioon valitud piirkonnale ilusalongis Royal Esthetic kuni -51%",
+                "short":""
+            },
+            "thumbnail":"img/057/057956.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/649"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22675",
+            "title":{
+                "full":"TARTUS! Brazilia bikiini depilatsioon Tsikiita Ilustuudios -45%",
+                "short":""
+            },
+            "thumbnail":"img/058/058013.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/635"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22280",
+            "title":{
+                "full":"Mõnusad massaažid Eliisa massaažisalongilt kuni -52%",
+                "short":""
+            },
+            "thumbnail":"img/056/056765.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/662"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22052",
+            "title":{
+                "full":"Suveks supervormi! ZlimLine Transion lokaalne kiirsalenemine ja lihaste toniseerimine -50%",
+                "short":""
+            },
+            "thumbnail":"img/056/056070.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/653"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22602",
+            "title":{
+                "full":"Geelküünte paigaldus kauni disainiga NEONNAILS stuudios -62%",
+                "short":""
+            },
+            "thumbnail":"img/057/057770.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/643"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22455",
+            "title":{
+                "full":"Kaunis 86-osaline Royalty Line söögiriistade komplekt -60%",
+                "short":""
+            },
+            "thumbnail":"img/057/057300.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/663"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22674",
+            "title":{
+                "full":"Hambad säravvalgeks fotovalgendamise protseduuriga -51%",
+                "short":""
+            },
+            "thumbnail":"img/058/058010.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/604"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22608",
+            "title":{
+                "full":"Brasiilia bikiini depilatsioon Ilusalongis Dolcezza -50%",
+                "short":""
+            },
+            "thumbnail":"img/057/057788.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/654"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22655",
+            "title":{
+                "full":"Unusta ilukirurgia! RF-termolifting näo piirkonnale Royal Esthetic ilukeskuses -50%",
+                "short":""
+            },
+            "thumbnail":"img/057/057953.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/651"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22589",
+            "title":{
+                "full":"Otsid tööd, aga teadmistest jääb puudu? Juhiabi e-kursus -80%",
+                "short":""
+            },
+            "thumbnail":"img/057/057731.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/640"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22601",
+            "title":{
+                "full":"Suveks vormi! Tervisliku toitumise kava -50%",
+                "short":""
+            },
+            "thumbnail":"img/057/057767.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/623"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22677",
+            "title":{
+                "full":"Vabane tselluliidist! GMT Beauty Modelleeriv kehahooldus infrapunasoojus tekiga ilusalongis Lootus -52%",
+                "short":""
+            },
+            "thumbnail":"img/058/058019.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/636"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22678",
+            "title":{
+                "full":"Mõnus seljamassaaž ilusalongis Iluter -43%",
+                "short":""
+            },
+            "thumbnail":"img/058/058022.jpg",
+            "site":"www.headiil.ee",
+            "origin":"http://headiil.ee/ee/7/action/show_deal/deal_id/627"
         }
     ],
     "www.niihea.ee":[
         {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22641",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057911.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/844-4_osaline_lahtikaeiv_madrats_tumba_Textellelt_41"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22520",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057520.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/841-Huberti_Juures_pakub_ahvatlevaid_pizzasid_45"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22130",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/056/056311.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/831-Klassikaline_pedikueuer_koorimisega_40"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22564",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057656.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/842-Auto_vahatamine_puesivahaga_ja_salongi_pohjalik_puhastus_60"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22565",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057659.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/843-Tee_ise_leiba_3_kg_leivakuepsetussegu_50"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22413",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057173.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/840-Kavitatsiooni_protseduur_koos_vaakumluemfidrenaaziga_63"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22316",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/056/056877.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/837-Vaeikelaeva_kapteni_load_30"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22220",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/056/056585.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/833-24_osaline_koeoegiriistade_kohver_Royalty_Line_50"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22221",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/056/056588.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/835-Geelkueuente_paigaldus_Divine_Studio_lt_55"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22128",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/056/056305.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/828-Infrapuna_soojuskiirgur_Bestairilt_35"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22315",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/056/056874.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/838-Kvaliteetne_allergiavaba_pesupulber_SPAR_Rootsist_50"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22642",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057914.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/825-4_liiki_massaazi_salongis_ILUX_50"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22129",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/056/056308.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/829-Infrapuna_soojuskiirgur_Bestairilt_40"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22219",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/056/056582.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/834-1_kg_Verona_Espresso_kohviube_40"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21593",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/054/054686.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/820-Kaunid_juuksepikendused_Astelia_Ilusalongist_50"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21827",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/055/055393.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/826-Koolikotikomplekt_Fairy_tuedrukutele_67"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22317",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/056/056880.jpg",
+            "site":"www.niihea.ee",
+            "origin":"http://www.niihea.ee/pakkumised/839-4_erinevat_60_minutilist_massaazi_54_hinnatud_Indigo_Therapy_Roomilt"
+        },
+        {
             "href":"http://pakkumised.ee/index.php?act=offers.view&id=21828",
-            "title":"Ilus, moekas ja kvaliteetne koolikotikomplekt Pirate poistele - 67%",
+            "title":{
+                "full":"",
+                "short":""
+            },
             "thumbnail":"img/055/055396.jpg",
             "site":"www.niihea.ee",
             "origin":"http://www.niihea.ee/pakkumised/827-Koolikotikomplekt_Pirate_poistele_67"
         },
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21668",
-            "title":"Kõrgelt hinnatud ja tõestatud toimega LPG tselluliidiravi Ilusalongilt Benessere - 40%",
-            "thumbnail":"img/054/054914.jpg",
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22699",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058085.jpg",
             "site":"www.niihea.ee",
-            "origin":"http://www.niihea.ee/pakkumised/821-Korgelt_hinnatud_LPG_tselluliidiravi_40"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21486",
-            "title":"Tule tutvu uuenenud menüüga! Mõnus ja mahlane kõhutäis Nõmme Pubis - 40%",
-            "thumbnail":"img/054/054364.jpg",
-            "site":"www.niihea.ee",
-            "origin":"http://www.niihea.ee/pakkumised/811-Monus_ja_mahlane_kohutaeis_Nomme_Pubis_40"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21743",
-            "title":"Laitmatult säravad juuksed! Juuste lamineerimine -50%",
-            "thumbnail":"img/055/055141.jpg",
-            "site":"www.niihea.ee",
-            "origin":"http://www.niihea.ee/pakkumised/822-Laitmatult_saeravad_juuksed_Juuste_lamineerimine_50"
-        },
-        {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21593",
-            "title":"Kaunid ja veetlevad juuksepikendused Astelia Ilusalongist - 50% soodsamalt!",
-            "thumbnail":"img/054/054686.jpg",
-            "site":"www.niihea.ee",
-            "origin":"http://www.niihea.ee/pakkumised/820-Kaunid_juuksepikendused_Astelia_Ilusalongist_50"
+            "origin":"http://www.niihea.ee/pakkumised/824-Lohekoolitus_Fan_Surfilt_40"
         }
     ],
-    "www.shoppa.ee":[
+    "www.ostulaine.ee":[
         {
-            "href":"http://pakkumised.ee/index.php?act=offers.view&id=21649",
-            "title":"Laste ATV 70cc   Osta täna, maksa hiljem",
-            "thumbnail":"img/054/054856.jpg",
-            "site":"www.shoppa.ee",
-            "origin":"http://www.shoppa.ee/p/laste_atv_junior_kollane_70cc/1210842"
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22443",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057263.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22686",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058046.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/327"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22444",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057266.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/492"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22681",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058031.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/370"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22622",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057854.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/474"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22099",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/056/056215.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/486"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22074",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/056/056136.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/485"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22687",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058049.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/494"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22684",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058040.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/351"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22682",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058034.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/365"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22683",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058037.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/364"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22299",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/056/056826.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/466"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22587",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057725.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/493"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22685",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058043.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/350"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22679",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058025.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/423"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22672",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058004.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/456"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22671",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058001.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/495"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22680",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/058/058028.jpg",
+            "site":"www.ostulaine.ee",
+            "origin":"http://www.ostulaine.ee/et/104/action/show_deal/deal_id/382"
+        }
+    ],
+    "www.hotelliveeb.ee":[
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22629",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057875.jpg",
+            "site":"www.hotelliveeb.ee",
+            "origin":"http://www.hotelliveeb.ee/et/spaa-tervis/spaa-ja-loogastuspaketid-4/pakett"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22630",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057878.jpg",
+            "site":"www.hotelliveeb.ee",
+            "origin":"http://www.hotelliveeb.ee/et/kubija-hotell-loodusspaa/romantikapaketid/pakett"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22628",
+            "title":{
+                "full":"",
+                "short":""
+            },
+            "thumbnail":"img/057/057872.jpg",
+            "site":"www.hotelliveeb.ee",
+            "origin":"http://www.hotelliveeb.ee/et/dikli-palace-hotell/romantikapaketid-3/pakett"
+        }
+    ],
+    "hansashop.eu":[
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22612",
+            "title":"Roheline seep - hindamatu abimees!",
+            "thumbnail":"img/057/057822.jpg",
+            "site":"hansashop.eu",
+            "origin":"http://www.hansashop.eu/vedel-roheline-seep-kaaliumseep-varvaineta-500ml.html"
+        }
+    ],
+    "www.seiklused.ee":[
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22550",
+            "title":{
+                "full":"Kõrgusesse kuumaõhupallil",
+                "short":"Kuumaõhupalli korvis"
+            },
+            "thumbnail":"img/057/057613.jpg",
+            "site":"www.seiklused.ee",
+            "origin":"http://www.seiklused.ee/et/Detailid/546"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22549",
+            "title":{
+                "full":"Instruktaaž ja testlend kerge mootorlennukiga.",
+                "short":"Tahan lenduriks!"
+            },
+            "thumbnail":"img/057/057609.jpg",
+            "site":"www.seiklused.ee",
+            "origin":"http://www.seiklused.ee/et/Detailid/511"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22548",
+            "title":{
+                "full":"Terve meri unustamatuid elamusi valgete purjede all",
+                "short":"Purjetamine Tallinna lahel suure avamerejahiga!"
+            },
+            "thumbnail":"img/057/057605.jpg",
+            "site":"www.seiklused.ee",
+            "origin":"http://www.seiklused.ee/et/Detailid/548"
+        }
+    ],
+    "parimadpakkumised.ee":[
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22707",
+            "title":"Uneabitooted beebile - kõik lohutajad -25%! Hinnad alates 2.90€.",
+            "thumbnail":"img/058/058129.jpg",
+            "site":"parimadpakkumised.ee",
+            "origin":"http://www.parimadpakkumised.ee/campaign/look/id/194"
+        },
+        {
+            "href":"http://pakkumised.ee/index.php?act=offers.view&id=22708",
+            "title":"Pulmafotograaf sinu tähtsaks päevaks -40% soodsamalt",
+            "thumbnail":"img/058/058133.jpg",
+            "site":"parimadpakkumised.ee",
+            "origin":"http://www.parimadpakkumised.ee/campaign/look/id/197"
         }
     ]
 }}
