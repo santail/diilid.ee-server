@@ -1,0 +1,6 @@
+# Idea configs
+*.idea
+.idea/*
+*.iml
+*.ipr
+*.iws
