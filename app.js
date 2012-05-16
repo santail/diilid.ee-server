@@ -58,25 +58,22 @@ app.get('/deals', function (req, res) {
 
                 async.series([
                     function (callback) {
-
                         async.forEachSeries($deals, function (item, callback) {
-
-                            var $title = $(item).find('h3'),
-                                $a = $title.children('a'),
-                                $img = $(item).children('a').children('img'),
-                                $site = $(item).children('span.site-name').text();
+                            var site = $(item).children('span.site-name').text()
+                                , title = $(item).find('h3').attr('title').trim()
+                                , link = $(item).find('h3').children('a').attr('href');
 
                             var deal = {
-                                href:$a.attr('href'),
-                                title:$title.attr('title').trim(),
-                                thumbnail:$img.attr('src'),
-                                site: $site
+                                title: {
+                                    full: title
+                                },
+                                site: site
                             };
 
-                            console.log('waiting to pakkumised.ee source request', deal.href)
+                            console.log('waiting to pakkumised.ee source request', link)
 
                             request({
-                                uri: deal.href
+                                uri: link
                             }, function (err, response, body) {
                                 console.log('counting pakkumised.ee link: ', counter);
 
@@ -87,7 +84,6 @@ app.get('/deals', function (req, res) {
                                         console.log('pakkumised.ee deal origin link', deal.origin)
 
                                         if (deal.origin) {
-
                                             console.log('waiting request to original deal', deal.origin)
 
                                             request({
@@ -100,7 +96,7 @@ app.get('/deals', function (req, res) {
 
                                                 if (!(err || response.statusCode !== 200) && body) {
                                                     parsePage(body, function($) {
-                                                        if ($site === 'www.super24.ee') {
+                                                        if (site === 'www.super24.ee') {
                                                             var pictures = [];
                                                             pictures.push({
                                                                 url: $('#container .c-main .inner.clearfix2 .main-img-wrp img').attr('src'),
@@ -109,7 +105,7 @@ app.get('/deals', function (req, res) {
 
                                                             $('#container .c-info .inner .form-item .photos a').each(function (i, link) {
                                                                 pictures.push({
-                                                                    url: $(link).attr('href')
+                                                                    url: $(link).attr('link')
                                                                 })
                                                             })
                                                             deal.pictures = pictures
@@ -137,25 +133,25 @@ app.get('/deals', function (req, res) {
                                                                 map: $('#container .c-info .inner .form-item .Gmap').attr('src')
                                                             }
                                                         }
-                                                        if ($site === 'www.seiklused.ee') {
+                                                        if (site === 'www.seiklused.ee') {
                                                             deal.title = {
                                                                 full: $('#strip > b').text(),
                                                                 short: $('#separator403 > b').text()
                                                             }
                                                         }
-                                                        if ($site === 'www.headiil.ee') {
+                                                        if (site === 'www.headiil.ee') {
                                                             deal.title = {
                                                                 full: $('#body_left > h1').text(),
                                                                 short: ''
                                                             }
                                                         }
-                                                        if ($site === 'www.chilli.ee') {
+                                                        if (site === 'www.chilli.ee') {
                                                             deal.title = {
                                                                 full: $('#buy_box > h1 > a').text(),
                                                                 short: ''
                                                             }
                                                         }
-                                                        if ($site === 'www.ediilid.ee') {
+                                                        if (site === 'www.ediilid.ee') {
                                                             $('.leftSide .box1 .mainOfferTitleArea > p > span').remove()
 
                                                             deal.title = {
@@ -163,7 +159,7 @@ app.get('/deals', function (req, res) {
                                                                 short: ''
                                                             }
                                                         }
-                                                        if ($site === 'www.ostulaine.ee') {
+                                                        if (site === 'www.ostulaine.ee') {
                                                             var pictures = [];
                                                             pictures.push({
                                                                 url: $('#content').children('.b-content-white-i').eq(0).children('p').children('img').attr('src'),
@@ -202,13 +198,13 @@ app.get('/deals', function (req, res) {
                                                                 map: $('#content').children('.b-content-white-i').eq(1).children('table').eq(1).find('td').eq(0).find('img').attr('src')
                                                             }
                                                         }
-                                                        if ($site === 'www.niihea.ee') {
+                                                        if (site === 'www.niihea.ee') {
                                                             deal.title = {
                                                                 full: '',
                                                                 short: ''
                                                             }
                                                         }
-                                                        if ($site === 'www.zizu.ee') {
+                                                        if (site === 'www.zizu.ee') {
 
                                                             var pictures = [];
                                                             pictures.push({
@@ -248,19 +244,19 @@ app.get('/deals', function (req, res) {
                                                                 map: $('#content').children('.b-content-white-i').eq(1).children('table').eq(1).find('td').eq(0).find('img').attr('src')
                                                             }
                                                         }
-                                                        if ($site === 'www.cherry.ee') {
+                                                        if (site === 'www.cherry.ee') {
                                                             deal.title = {
                                                                 full: '',
                                                                 short: ''
                                                             }
                                                         }
-                                                        if ($site === 'www.hotelliveeb.ee') {
+                                                        if (site === 'www.hotelliveeb.ee') {
                                                             deal.title = {
                                                                 full: '',
                                                                 short: ''
                                                             }
                                                         }
-                                                        if ($site === 'www.minuvalik.ee') {
+                                                        if (site === 'www.minuvalik.ee') {
                                                             var pictures = [];
                                                             pictures.push({
                                                                 url: $('#form_block table').eq(1).find('td').eq(0).children('a').children('img').attr('src'),
@@ -307,26 +303,26 @@ app.get('/deals', function (req, res) {
 
                                                         result.items.push(deal);
 
-                                                        console.log('parsing pakkumised.ee link finished successfully', deal.href)
+                                                        console.log('parsing pakkumised.ee link finished successfully', link)
                                                         callback()
                                                     });
                                                 }
                                                 else {
-                                                    console.log('parsing pakkumised.ee link failed', deal.href)
+                                                    console.log('parsing pakkumised.ee link failed', link)
                                                     callback()
                                                 }
                                             });
                                         }
                                         else {
                                             counter--
-                                            console.log('item has no origin url: ', deal.href)
+                                            console.log('item has no origin url: ', link)
                                             callback()
                                         }
                                     });
                                 }
                                 else {
                                     counter--
-                                    console.log('parsing pakkumised.ee link finished with error', deal.href, err)
+                                    console.log('parsing pakkumised.ee link finished with error', link, err)
                                     callback()
                                 }
                             });
@@ -384,8 +380,6 @@ var parsePage = function (body, parser) {
         else {
             console.log('Error: ', err);
         }
-
-//        window.close()
     });
 };
 
