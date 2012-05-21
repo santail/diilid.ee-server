@@ -271,86 +271,184 @@ app.get('/refresh', function (req, res) {
                                                                 map: $('#content').children('.b-content-white-i').eq(1).children('table').eq(1).find('td').eq(0).find('img').attr('src')
                                                             }
                                                         }
-                                                        if (site === 'www.cherry.ee') {
+                                                        if (site === 'www.seiklused.ee') {
                                                             deal.title = {
-                                                                full: '',
-                                                                short: ''
+                                                                full: $('#strip > b').text(),
+                                                                short: $('#separator403 > b').text()
                                                             }
                                                         }
-                                                        if (site === 'www.hotelliveeb.ee') {
-                                                            deal.title = {
-                                                                full: '',
-                                                                short: ''
-                                                            }
-                                                        }
-                                                        if (site === 'www.minuvalik.ee') {
-                                                            var pictures = [];
+                                                        if (site === 'www.super24.ee') {
                                                             pictures.push({
-                                                                url: $('#form_block table').eq(1).find('td').eq(0).children('a').children('img').attr('src'),
+                                                                url: $('#container .c-main .inner.clearfix2 .main-img-wrp img').attr('src'),
                                                                 main: true
                                                             })
 
-                                                            $('#form_block > div').eq(2).children('div').eq(0).children('img').each(function (i, image) {
+                                                            $('#container .c-info .inner .form-item .photos a').each(function (i, link) {
+                                                                pictures.push({
+                                                                    url: $(link).attr('link')
+                                                                })
+                                                            })
+
+                                                            _.extend(price, {
+                                                                discount: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .discount-price').text(),
+                                                                regular: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .regular-price').text(),
+                                                                benefit: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .econ').text()
+                                                            })
+
+                                                            _.extend(title, {
+                                                                full: $('#container .c-main .inner.clearfix2 h1').text(),
+                                                                short: $('#container .c-main .inner.clearfix2 h2').text()
+                                                            })
+
+                                                            deal.seller = {
+                                                                info: $('#seller-info .content').html()
+                                                            }
+
+                                                            $('#container .c-info .inner .form-item .photos').remove()
+                                                            $('#seller-info').remove()
+
+                                                            _.extend(description, {
+                                                                full: $('#container .c-info .inner .form-item').html()
+                                                                , map: $('#container .c-info .inner .form-item .Gmap').attr('src')
+                                                            })
+                                                        }
+                                                        if (site === 'www.zizu.ee') {
+                                                            pictures.push({
+                                                                url: $('#content').children('.b-content-white-i').eq(0).children('p').children('img').attr('src'),
+                                                                main: true
+                                                            })
+
+                                                            $('#content').children('.b-content-white-i').eq(1).find('p.rtecenter img').each(function (i, image) {
                                                                 pictures.push({
                                                                     url: $(image).attr('src')
                                                                 })
                                                                 $(image).remove()
                                                             })
-                                                            deal.pictures = pictures
 
                                                             deal.price = {
-                                                                discount: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(0).text(),
-                                                                regular: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(6).text(),
-                                                                percent: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(7).text(),
-                                                                benefit: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(8).text()
+                                                                discount: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('h2').eq(0).text(),
+                                                                regular: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('p').eq(0).text(),
+                                                                percent: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('h2').eq(1).text(),
+                                                                benefit: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('p').eq(1).text()
                                                             }
                                                             deal.exposed = ''
                                                             deal.end = ''
 
                                                             deal.title = {
-                                                                full: $('#form_block > div').eq(0).text(),
+                                                                full: $('#content').children('.b-content-white-i').eq(0).children('h1').text(),
                                                                 short: ''
                                                             }
 
                                                             deal.seller = {
-                                                                info: $('#form_block > div').eq(1).html()
+                                                                info: $('#content').children('.b-content-white-i').eq(1).children('table').eq(1).find('td').eq(1).html()
                                                             }
 
                                                             deal.description = {
-                                                                full: $('#form_block > div').eq(2).children('div').eq(0).html(),
-                                                                map: $('#show_map > a > img').attr('src')
+                                                                full: $('#content').children('.b-content-white-i').eq(1).children('table').eq(0).find('td').eq(0).html(),
+                                                                short: $('#content').children('.b-content-white-i').eq(1).children('table').eq(0).find('td').eq(1).html(),
+                                                                map: $('#content').children('.b-content-white-i').eq(1).children('table').eq(1).find('td').eq(0).find('img').attr('src')
                                                             }
                                                         }
 
-                                                        deal.parsed = runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
+                                                        _.extend(deal, {
+                                                            pictures: pictures
+                                                            , parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
+                                                            , price: price
+                                                            , description: description
+                                                            , title: title
+                                                        })
 
                                                         db.offers.save(deal)
 
-                                                        console.log(deal.title.full)
+                                                        console.log('Deal saved:', deal.title.full)
+                                                        console.log('Fetching images:', deal.pictures.length)
 
-                                                        result.items.push(deal);
+                                                        var DOWNLOAD_DIR = __dirname + '/public/images/' + deal._id + '/';
 
-                                                        console.log('parsing pakkumised.ee link finished successfully', link)
-                                                        callback()
+                                                        var imageProcessor = function (picture, finishImageProcessing) {
+                                                            console.log('processing image: ', picture)
+                                                            if (picture.url !== undefined) {
+                                                                var imageHostName = deal.url.hostname
+                                                                var imagePathName = picture.url.replace(deal.url.hostname, '');
+
+                                                                var imageFullPath = imageHostName + imagePathName;
+                                                                console.log('image: ', imageFullPath)
+
+                                                                var filename = url.parse(imageFullPath).pathname.split("/").pop()
+                                                                console.log('filename: ', filename)
+
+                                                                var http_client = http.createClient(80, imageHostName);
+                                                                var image_get_request = http_client.request('GET', imageFullPath, {"host": imageHostName});
+
+                                                                console.log('performing request for image: ', imageFullPath)
+
+                                                                var options = {
+                                                                    host: imageHostName,
+                                                                    port: 80,
+                                                                    path: imagePathName
+                                                                };
+
+                                                                var file = fs.createWriteStream(DOWNLOAD_DIR + filename, {'flags':'a'});
+
+                                                                http.get(options, function (res) {
+                                                                    console.log("File size " + filename + ": " + res.headers['content-length'] + " bytes.");
+
+                                                                    res
+                                                                        .on('data',function (data) {
+                                                                            file.write(data);
+                                                                        })
+                                                                        .on('end', function () {
+                                                                            file.end();
+                                                                            console.log(filename + ' downloaded to ' + DOWNLOAD_DIR);
+
+                                                                            ///... store images, make thumbnails... do more stuff
+                                                                            finishImageProcessing()
+                                                                        });
+                                                                });
+                                                            }
+                                                            else {
+                                                                console.log('error reading image');
+                                                                finishImageProcessing()
+                                                            }
+                                                        };
+
+                                                        // We will be downloading the files to a directory, so make sure it's there
+                                                        // This step is not required if you have manually created the directory
+                                                        var child = exec('mkdir -p ' + DOWNLOAD_DIR, function (err, stdout, stderr) {
+                                                            if (err) throw err;
+                                                            else {
+                                                                console.log('directory created: ', DOWNLOAD_DIR);
+
+                                                                async.forEachSeries(deal.pictures, imageProcessor, function(err) {
+                                                                    result.items.push(deal);
+
+                                                                    console.log('fetching images finished successfully', link)
+                                                                    finishItemProcessing()
+                                                                })
+                                                            }
+                                                        });
+
+
+
                                                     });
                                                 }
                                                 else {
                                                     console.log('parsing pakkumised.ee link failed', link)
-                                                    callback()
+                                                    finishItemProcessing()
                                                 }
                                             });
                                         }
                                         else {
                                             counter--
                                             console.log('item has no origin url: ', link)
-                                            callback()
+                                            finishItemProcessing()
                                         }
                                     });
                                 }
                                 else {
                                     counter--
                                     console.log('parsing pakkumised.ee link finished with error', link, err)
-                                    callback()
+                                    finishItemProcessing()
                                 }
                             });
 
