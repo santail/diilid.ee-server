@@ -41,31 +41,51 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', routes.index);
-app.get('/deals', function (req, res) {
-    req.connection.setTimeout(600000);
+app.get('/deals', function(req, res) {
 
-    var counter = 0, processing = 0, $deals = [], result = {}, runningTime = new Date();
-
+    var runningTime = new Date();
     console.log('checking fresh parsed links exist')
     db.offers.find({
-      parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
+        parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
     }, function(err, offers) {
+        if (err || !offers) {
+            console.log('fresh links missing', err)
+        }
+        else {
+            console.log('fresh links exist')
 
-        if (err || !offers || offers.length == 0) {
-            console.log('fresh links missed')
+            var list = []
+
+            offers.forEach(function (offer) {
+                delete offer.href
+                list.push(offer)
+            });
+
+            res.json({
+                total: list.length,
+                items: list
+            })
+        }
+    });
+})
+app.get('/refresh', function (req, res) {
+    req.connection.setTimeout(600000);
+
+    var counter = 0, processing = 0, deals = [], result = {}, runningTime = new Date();
+
             console.log('harvesting...')
 
             fetchPage('http://pakkumised.ee', function ($) {
-                $deals = $('body').find('.offers-list li');
+                deals = $('body').find('.offers-list li');
 
-                result.total = counter = $deals.length;
+                result.total = counter = deals.length;
                 result.items = [];
 
-                console.log('Deals total: ', $deals.length);
+                console.log('Deals total: ', deals.length);
 
                 async.series([
-                    function (callback) {
-                        async.forEachSeries($deals, function (item, callback) {
+                    function (finishFirstStep) {
+                        async.forEachSeries(deals, function (item, finishItemProcessing) {
                             var site = $(item).children('span.site-name').text()
                                 , title = $(item).find('h3').attr('title').trim()
                                 , link = $(item).find('h3').children('a').attr('href');
