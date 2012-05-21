@@ -432,11 +432,6 @@ app.get('/refresh', function (req, res) {
                                                         var filename = url.parse(imageFullPath).pathname.split("/").pop()
                                                         console.log('filename: ', filename)
 
-                                                        var http_client = http.createClient(80, imageHostName);
-                                                        var image_get_request = http_client.request('GET', imageFullPath, {"host": imageHostName});
-
-                                                        console.log('performing request for image: ', imageFullPath)
-
                                                         var options = {
                                                             host: imageHostName,
                                                             port: 80,
@@ -481,6 +476,9 @@ app.get('/refresh', function (req, res) {
                                                             })
                                                         }
                                                     });
+                                                }
+                                                else {
+                                                    finishItemProcessing()
                                                 }
                                             });
                                         }
