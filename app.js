@@ -1,3 +1,4 @@
+var jitsuDb = "mongodb://nodejitsu:350c51a0cffb3a650f7113bd18a48e9e@flame.mongohq.com:27050/nodejitsudb122637634597";
 
 /**
  * Module dependencies.
@@ -106,15 +107,13 @@ app.get('/refresh', function (req, res) {
 
                                 if (!(err || response.statusCode !== 200) && body) {
                                     parsePage(body, function($) {
-                                        deal.origin = $('iframe.offerpage_content').attr('src');
+                                        var originalUrl = $('iframe.offerpage_content').attr('src');
 
-                                        console.log('pakkumised.ee deal origin link', deal.origin)
-
-                                        if (deal.origin) {
-                                            console.log('waiting request to original deal', deal.origin)
+                                        if (originalUrl) {
+                                            console.log('waiting request to original deal', originalUrl)
 
                                             request({
-                                                uri: deal.origin,
+                                                uri: originalUrl,
                                                 timeout: 30000
                                             }, function (err, response, body) {
                                                 counter--;
@@ -123,71 +122,174 @@ app.get('/refresh', function (req, res) {
 
                                                 if (!(err || response.statusCode !== 200) && body) {
                                                     parsePage(body, function($) {
-                                                        if (site === 'www.super24.ee') {
-                                                            var pictures = [];
-                                                            pictures.push({
-                                                                url: $('#container .c-main .inner.clearfix2 .main-img-wrp img').attr('src'),
-                                                                main: true
-                                                            })
 
-                                                            $('#container .c-info .inner .form-item .photos a').each(function (i, link) {
-                                                                pictures.push({
-                                                                    url: $(link).attr('link')
-                                                                })
-                                                            })
-                                                            deal.pictures = pictures
-                                                            deal.price = {
-                                                                discount: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .discount-price').text(),
-                                                                regular: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .regular-price').text(),
-                                                                benefit: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .econ').text()
-                                                            }
-                                                            deal.exposed = ''
-                                                            deal.end = ''
-
-                                                            deal.title = {
-                                                                full: $('#container .c-main .inner.clearfix2 h1').text(),
-                                                                short: $('#container .c-main .inner.clearfix2 h2').text()
-                                                            }
-
-                                                            deal.seller = {
-                                                                info: $('#seller-info .content').html()
-                                                            }
-
-                                                            $('#container .c-info .inner .form-item .photos').remove()
-                                                            $('#seller-info').remove()
-                                                            deal.description = {
-                                                                full: $('#container .c-info .inner .form-item').html(),
-                                                                map: $('#container .c-info .inner .form-item .Gmap').attr('src')
-                                                            }
+                                                        var parsedUrl = url.parse(originalUrl);
+                                                        deal.url = {
+                                                            href: parsedUrl.href
+                                                            , host: parsedUrl.host
+                                                            , hostname: parsedUrl.hostname
+                                                            , pathname: parsedUrl.pathname
                                                         }
-                                                        if (site === 'www.seiklused.ee') {
-                                                            deal.title = {
-                                                                full: $('#strip > b').text(),
-                                                                short: $('#separator403 > b').text()
+
+                                                        var pictures = []
+                                                            , price = {
+                                                                discount: false
+                                                                , regular: false
+                                                                , benefit: false
+                                                                , percent: false
                                                             }
-                                                        }
+                                                            , description = {
+                                                                full: false
+                                                                , short: false
+                                                                , map: false
+                                                            }
+                                                            , title = {
+                                                                full: false
+                                                                , short: false
+                                                            }
+
                                                         if (site === 'www.headiil.ee') {
                                                             deal.title = {
                                                                 full: $('#body_left > h1').text(),
                                                                 short: ''
                                                             }
                                                         }
-                                                        if (site === 'www.chilli.ee') {
+                                                        if (site === 'www.hotelliveeb.ee') {
                                                             deal.title = {
-                                                                full: $('#buy_box > h1 > a').text(),
+                                                                full: '',
                                                                 short: ''
                                                             }
+                                                        }
+                                                        if (site === 'www.cherry.ee') {
+                                                            deal.title = {
+                                                                full: '',
+                                                                short: ''
+                                                            }
+                                                        }
+                                                        if (site === 'www.chilli.ee') {
+                                                            $('#slider img').each(function (i, image) {
+                                                                pictures.push({
+                                                                    url: $(image).attr('src')
+                                                                    , main: true
+                                                                })
+                                                            })
+
+                                                            $('#description img').each(function (i, image) {
+                                                                pictures.push({
+                                                                    url: $(image).attr('src')
+                                                                })
+                                                                $(image).remove()
+                                                            })
+
+                                                            _.extend(price, {
+                                                                discount: $('#buy_box div.osta h2').text()
+                                                                , regular: $('#buy_box p.little_box span.little_box_nr').eq(0).text()
+                                                                , percent: $('#buy_box p.little_box span.little_box_nr').eq(1).text()
+                                                            })
+
+                                                            _.extend(title, {
+                                                                full: $('#buy_box h1').text()
+                                                            })
+
+                                                            deal.seller = {
+                                                                info: $('#asukoht').html()
+                                                            }
+
+                                                            _.extend(description, {
+                                                                full: $('#description div.desc_left').html()
+                                                                , short: $('#description div.desc_right').html()
+                                                                , map: $('#show_map > a > img').attr('src')
+                                                            })
                                                         }
                                                         if (site === 'www.ediilid.ee') {
                                                             $('.leftSide .box1 .mainOfferTitleArea > p > span').remove()
 
                                                             deal.title = {
-                                                                full: $('.leftSide .box1 .mainOfferTitleArea > p').text(),
+                                                                full: $('.leftSide .box1 .mainOfferTitleArea > p').text()
+                                                                , short: $('.leftSide .box1 .mainOfferTitleArea > p').text()
+                                                            }
+                                                        }
+                                                        if (site === 'www.iluveeb.ee') {
+                                                            deal.title = {
+                                                                full: $('#buy_box > h1 > a').text(),
                                                                 short: ''
                                                             }
                                                         }
+                                                        if (site === 'www.minuvalik.ee') {
+                                                            pictures.push({
+                                                                url: $('#form_block table').eq(1).find('td').eq(0).children('img').attr('src')
+                                                                , main: true
+                                                            })
+
+                                                            $('#form_block > div').eq(2).children('div').eq(0).children('img').each(function (i, image) {
+                                                                pictures.push({
+                                                                    url: $(image).attr('src')
+                                                                })
+                                                                $(image).remove()
+                                                            })
+
+                                                            _.extend(price, {
+                                                                discount: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(0).text(),
+                                                                regular: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(6).text(),
+                                                                percent: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(7).text(),
+                                                                benefit: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(8).text()
+                                                            })
+
+                                                            deal.exposed = ''
+                                                            deal.end = ''
+
+                                                            _.extend(title, {
+                                                                full: $('#form_block > div').eq(0).text(),
+                                                                short: $('#form_block > div').eq(0).text()
+                                                            })
+
+                                                            deal.seller = {
+                                                                info: $('#form_block > div').eq(1).html()
+                                                            }
+
+                                                            _.extend(description, {
+                                                                full: $('#form_block > div').eq(2).children('div').eq(0).html()
+                                                                , map: $('#show_map > a > img').attr('src')
+                                                            })
+                                                        }
+                                                        if (site === 'www.niihea.ee') {
+                                                            $('div.images img').each(function (i, image) {
+                                                                pictures.push({
+                                                                    url: $(image).attr('src')
+                                                                })
+                                                            })
+
+                                                            $('div.gallery a').each(function (i, link) {
+                                                                pictures.push({
+                                                                    url: $(link).attr('href')
+                                                                })
+                                                                $(link).remove()
+                                                            })
+
+                                                            _.extend(price, {
+                                                                discount: $('div.content.bigoffer div.pricetag > div.amount').text()
+                                                                , regular: $('div.content.bigoffer div.pricetag > div.savings').text()
+                                                            })
+
+                                                            deal.exposed = ''
+                                                            deal.end = ''
+
+                                                            _.extend(title, {
+                                                                full: $('div.content.bigoffer div.title > div.inner').text()
+                                                                , short: $('div.content.bigoffer div.title > div.inner').text()
+                                                            })
+
+                                                            deal.seller = {
+                                                                info: $('div.content.bigoffer div.col2').html()
+                                                            }
+
+                                                            _.extend(description, {
+                                                                full: $('div.content.bigoffer div.col3 div').eq(0).html()
+                                                                , map: $('#show_map > a > img').attr('src')
+                                                            })
+                                                        }
+                                                        if (site === 'www.osta.ee') {}
                                                         if (site === 'www.ostulaine.ee') {
-                                                            var pictures = [];
                                                             pictures.push({
                                                                 url: $('#content').children('.b-content-white-i').eq(0).children('p').children('img').attr('src'),
                                                                 main: true
@@ -199,7 +301,6 @@ app.get('/refresh', function (req, res) {
                                                                 })
                                                                 $(image).remove()
                                                             })
-                                                            deal.pictures = pictures
 
                                                             deal.price = {
                                                                 discount: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('h2').eq(0).text(),
@@ -212,52 +313,6 @@ app.get('/refresh', function (req, res) {
 
                                                             deal.title = {
                                                                 full: $('#body_left').children('div.main_deal_title').text(),
-                                                                short: ''
-                                                            }
-
-                                                            deal.seller = {
-                                                                info: $('#content').children('.b-content-white-i').eq(1).children('table').eq(1).find('td').eq(1).html()
-                                                            }
-
-                                                            deal.description = {
-                                                                full: $('#content').children('.b-content-white-i').eq(1).children('table').eq(0).find('td').eq(0).html(),
-                                                                short: $('#content').children('.b-content-white-i').eq(1).children('table').eq(0).find('td').eq(1).html(),
-                                                                map: $('#content').children('.b-content-white-i').eq(1).children('table').eq(1).find('td').eq(0).find('img').attr('src')
-                                                            }
-                                                        }
-                                                        if (site === 'www.niihea.ee') {
-                                                            deal.title = {
-                                                                full: '',
-                                                                short: ''
-                                                            }
-                                                        }
-                                                        if (site === 'www.zizu.ee') {
-
-                                                            var pictures = [];
-                                                            pictures.push({
-                                                                url: $('#content').children('.b-content-white-i').eq(0).children('p').children('img').attr('src'),
-                                                                main: true
-                                                            })
-
-                                                            $('#content').children('.b-content-white-i').eq(1).find('p.rtecenter img').each(function (i, image) {
-                                                                pictures.push({
-                                                                    url: $(image).attr('src')
-                                                                })
-                                                                $(image).remove()
-                                                            })
-                                                            deal.pictures = pictures
-
-                                                            deal.price = {
-                                                                discount: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('h2').eq(0).text(),
-                                                                regular: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('p').eq(0).text(),
-                                                                percent: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('h2').eq(1).text(),
-                                                                benefit: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('p').eq(1).text()
-                                                            }
-                                                            deal.exposed = ''
-                                                            deal.end = ''
-
-                                                            deal.title = {
-                                                                full: $('#content').children('.b-content-white-i').eq(0).children('h1').text(),
                                                                 short: ''
                                                             }
 
@@ -458,7 +513,7 @@ app.get('/refresh', function (req, res) {
                             }
                             if (counter === 0) {
                                 console.log('parsing pakkumised.ee finished successfully')
-                                callback(null, 'one');
+                                finishFirstStep(null, 'one');
                             }
                         })
 
@@ -474,23 +529,7 @@ app.get('/refresh', function (req, res) {
                         res.json(result);
                     });
             });
-        }
-        else {
-            console.log('fresh links exist')
 
-            var list = []
-
-            offers.forEach(function (offer) {
-                delete offer.href
-                list.push(offer)
-            });
-
-            res.json({
-                total: list.length,
-                items: list
-            })
-        }
-    });
 });
 
 var parsePage = function (body, parser) {
