@@ -467,24 +467,21 @@ app.get('/refresh', function (req, res) {
                                                             }
                                                         };
 
-                                                        // We will be downloading the files to a directory, so make sure it's there
-                                                        // This step is not required if you have manually created the directory
-                                                        var child = exec('mkdir -p ' + DOWNLOAD_DIR, function (err, stdout, stderr) {
-                                                            if (err) throw err;
-                                                            else {
-                                                                console.log('directory created: ', DOWNLOAD_DIR);
-
-                                                                async.forEachSeries(deal.pictures, imageProcessor, function(err) {
-                                                                    result.items.push(deal);
-
-                                                                    console.log('fetching images finished successfully', link)
-                                                                    finishItemProcessing()
-                                                                })
-                                                            }
-                                                        });
-
-
-
+                                                        if (deal.pictures.length > 0) {
+                                                            exec('mkdir -p ' + DOWNLOAD_DIR, function (err, stdout, stderr) {
+                                                                if (err) {
+                                                                  console.log('Error creating directory:', err)
+                                                                }
+                                                                else {
+                                                                    console.log('directory created: ', DOWNLOAD_DIR);
+                                                                    async.forEachSeries(deal.pictures, imageProcessor, function (err) {
+                                                                        result.items.push(deal);
+                                                                        console.log('fetching images finished successfully', link)
+                                                                        finishItemProcessing()
+                                                                    })
+                                                                }
+                                                            });
+                                                        }
                                                     });
                                                 }
                                                 else {
