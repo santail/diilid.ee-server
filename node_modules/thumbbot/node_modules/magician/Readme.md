@@ -1,7 +1,7 @@
 
 # magician
 
-  Library for image manipulation. Requires imagemagick.
+  Library for **easy** image manipulation. Requires ImageMagick.
 
 # Here it is!
 
@@ -70,14 +70,14 @@ This is very early release, so Magician does not have a lot of features.
 # Usage
 
 ```
-magician = require 'magician'
+Magician = require 'magician'
 
-image = new magician __dirname + '/source.jpg', __dirname + '/target.jpg'
+image = new Magician "#{ __dirname }/source.jpg", "#{ __dirname }/target.jpg"
 
-image.resizeTo 100, 100, (err) ->
+image.resize width: 100, height: 100, (err) ->
 	// done!
 	
-image.cropFrom 0, 0, 200, 100, (err) ->
+image.crop x: 0, y: 0, width: 200, height: 100, (err) ->
 	// done!
 
 image.convert (err) ->
@@ -86,15 +86,20 @@ image.convert (err) ->
 image.getDimensions (err, dimensions) ->
 	width = dimensions.width
 	height = dimensions.height
-
 ```
 
 # Tests
 
-You can run tests using zap:
+You can run tests using mocha:
 
 ```
-zap
+mocha
+```
+
+Don't forget to install development dependencies first:
+
+```
+npm install --development
 ```
 
 # TODO List
