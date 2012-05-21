@@ -1,6 +1,7 @@
 # Idea configs
 *.idea
 .idea/*
+public/images/*
 *.iml
 *.ipr
 *.iws
