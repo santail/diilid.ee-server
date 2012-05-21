@@ -5,9 +5,16 @@
 var express = require('express')
     , routes = require('./routes')
     , request = require('request')
+    , url = require('url')
+    , urlify = require('urlify').create({
+        trim: true
+    })
     , jsdom = require('jsdom')
     , async = require('async')
     , _ = require('underscore')._
+    , http = require('http')
+    , fs = require('fs')
+    , exec = require('child_process').exec
     , db = require("mongojs").connect("deals", ["offers"])
 
 var app = module.exports = express.createServer();
