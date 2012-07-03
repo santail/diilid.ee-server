@@ -132,338 +132,68 @@ app.get('/refresh', function (req, res) {
                                                     , pathname: parsedUrl.pathname
                                                 }
 
-                                                var pictures = []
-                                                    , price = {
-                                                        discount: false
-                                                        , regular: false
-                                                        , benefit: false
-                                                        , percent: false
-                                                    }
-                                                    , description = {
-                                                        full: false
-                                                        , short: false
-                                                        , map: false
-                                                    }
-                                                    , title = {
-                                                        full: false
-                                                        , short: false
-                                                    }
+                                                var template = require(__dirname + '/model/' + site + ".js");
 
-                                                if (site === 'www.headiil.ee') {
-                                                    deal.title = {
-                                                        full: $('#body_left > h1').text(),
-                                                        short: ''
-                                                    }
-                                                }
-                                                if (site === 'www.hotelliveeb.ee') {
-                                                    deal.title = {
-                                                        full: '',
-                                                        short: ''
-                                                    }
-                                                }
-                                                if (site === 'www.cherry.ee') {
-                                                    deal.title = {
-                                                        full: '',
-                                                        short: ''
-                                                    }
-                                                }
-                                                if (site === 'www.chilli.ee') {
-                                                    $('#slider img').each(function (i, image) {
-                                                        pictures.push({
-                                                            url: $(image).attr('src')
-                                                            , main: true
-                                                        })
-                                                    })
-
-                                                    $('#description img').each(function (i, image) {
-                                                        pictures.push({
-                                                            url: $(image).attr('src')
-                                                        })
-                                                        $(image).remove()
-                                                    })
-
-                                                    _.extend(price, {
-                                                        discount: $('#buy_box div.osta h2').text()
-                                                        , regular: $('#buy_box p.little_box span.little_box_nr').eq(0).text()
-                                                        , percent: $('#buy_box p.little_box span.little_box_nr').eq(1).text()
-                                                    })
-
-                                                    _.extend(title, {
-                                                        full: $('#buy_box h1').text()
-                                                    })
-
-                                                    deal.seller = {
-                                                        info: $('#asukoht').html()
-                                                    }
-
-                                                    _.extend(description, {
-                                                        full: $('#description div.desc_left').html()
-                                                        , short: $('#description div.desc_right').html()
-                                                        , map: $('#show_map > a > img').attr('src')
-                                                    })
-                                                }
-                                                if (site === 'www.ediilid.ee') {
-                                                    $('.leftSide .box1 .mainOfferTitleArea > p > span').remove()
-
-                                                    deal.title = {
-                                                        full: $('.leftSide .box1 .mainOfferTitleArea > p').text()
-                                                        , short: $('.leftSide .box1 .mainOfferTitleArea > p').text()
-                                                    }
-                                                }
-                                                if (site === 'www.iluveeb.ee') {
-                                                    deal.title = {
-                                                        full: $('#buy_box > h1 > a').text(),
-                                                        short: ''
-                                                    }
-                                                }
-                                                if (site === 'www.minuvalik.ee') {
-                                                    pictures.push({
-                                                        url: $('#form_block table').eq(1).find('td').eq(0).children('img').attr('src')
-                                                        , main: true
-                                                    })
-
-                                                    $('#form_block > div').eq(2).children('div').eq(0).children('img').each(function (i, image) {
-                                                        pictures.push({
-                                                            url: $(image).attr('src')
-                                                        })
-                                                        $(image).remove()
-                                                    })
-
-                                                    _.extend(price, {
-                                                        discount: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(0).text(),
-                                                        regular: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(6).text(),
-                                                        percent: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(7).text(),
-                                                        benefit: $('#form_block table').eq(1).find('td').eq(1).children('div').children('div').eq(8).text()
-                                                    })
-
-                                                    deal.exposed = ''
-                                                    deal.end = ''
-
-                                                    _.extend(title, {
-                                                        full: $('#form_block > div').eq(0).text(),
-                                                        short: $('#form_block > div').eq(0).text()
-                                                    })
-
-                                                    deal.seller = {
-                                                        info: $('#form_block > div').eq(1).html()
-                                                    }
-
-                                                    _.extend(description, {
-                                                        full: $('#form_block > div').eq(2).children('div').eq(0).html()
-                                                        , map: $('#show_map > a > img').attr('src')
-                                                    })
-                                                }
-                                                if (site === 'www.niihea.ee') {
-                                                    $('div.images img').each(function (i, image) {
-                                                        pictures.push({
-                                                            url: $(image).attr('src')
-                                                        })
-                                                    })
-
-                                                    $('div.gallery a').each(function (i, link) {
-                                                        pictures.push({
-                                                            url: $(link).attr('href')
-                                                        })
-                                                        $(link).remove()
-                                                    })
-
-                                                    _.extend(price, {
-                                                        discount: $('div.content.bigoffer div.pricetag > div.amount').text()
-                                                        , regular: $('div.content.bigoffer div.pricetag > div.savings').text()
-                                                    })
-
-                                                    deal.exposed = ''
-                                                    deal.end = ''
-
-                                                    _.extend(title, {
-                                                        full: $('div.content.bigoffer div.title > div.inner').text()
-                                                        , short: $('div.content.bigoffer div.title > div.inner').text()
-                                                    })
-
-                                                    deal.seller = {
-                                                        info: $('div.content.bigoffer div.col2').html()
-                                                    }
-
-                                                    _.extend(description, {
-                                                        full: $('div.content.bigoffer div.col3 div').eq(0).html()
-                                                        , map: $('#show_map > a > img').attr('src')
-                                                    })
-                                                }
-                                                if (site === 'www.osta.ee') {}
-                                                if (site === 'www.ostulaine.ee') {
-                                                    pictures.push({
-                                                        url: $('#content').children('.b-content-white-i').eq(0).children('p').children('img').attr('src'),
-                                                        main: true
-                                                    })
-
-                                                    $('#content').children('.b-content-white-i').eq(1).find('p.rtecenter img').each(function (i, image) {
-                                                        pictures.push({
-                                                            url: $(image).attr('src')
-                                                        })
-                                                        $(image).remove()
-                                                    })
-
-                                                    deal.price = {
-                                                        discount: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('h2').eq(0).text(),
-                                                        regular: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('p').eq(0).text(),
-                                                        percent: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('h2').eq(1).text(),
-                                                        benefit: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('p').eq(1).text()
-                                                    }
-                                                    deal.exposed = ''
-                                                    deal.end = ''
-
-                                                    deal.title = {
-                                                        full: $('#body_left').children('div.main_deal_title').text(),
-                                                        short: ''
-                                                    }
-
-                                                    deal.seller = {
-                                                        info: $('#content').children('.b-content-white-i').eq(1).children('table').eq(1).find('td').eq(1).html()
-                                                    }
-
-                                                    deal.description = {
-                                                        full: $('#content').children('.b-content-white-i').eq(1).children('table').eq(0).find('td').eq(0).html(),
-                                                        short: $('#content').children('.b-content-white-i').eq(1).children('table').eq(0).find('td').eq(1).html(),
-                                                        map: $('#content').children('.b-content-white-i').eq(1).children('table').eq(1).find('td').eq(0).find('img').attr('src')
-                                                    }
-                                                }
-                                                if (site === 'www.seiklused.ee') {
-                                                    deal.title = {
-                                                        full: $('#strip > b').text(),
-                                                        short: $('#separator403 > b').text()
-                                                    }
-                                                }
-                                                if (site === 'www.super24.ee') {
-                                                    pictures.push({
-                                                        url: $('#container .c-main .inner.clearfix2 .main-img-wrp img').attr('src'),
-                                                        main: true
-                                                    })
-
-                                                    $('#container .c-info .inner .form-item .photos a').each(function (i, link) {
-                                                        pictures.push({
-                                                            url: $(link).attr('link')
-                                                        })
-                                                    })
-
-                                                    _.extend(price, {
-                                                        discount: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .discount-price').text(),
-                                                        regular: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .regular-price').text(),
-                                                        benefit: $('#container .c-main .inner.clearfix2 .main-details-wrp .price .econ').text()
-                                                    })
-
-                                                    _.extend(title, {
-                                                        full: $('#container .c-main .inner.clearfix2 h1').text(),
-                                                        short: $('#container .c-main .inner.clearfix2 h2').text()
-                                                    })
-
-                                                    deal.seller = {
-                                                        info: $('#seller-info .content').html()
-                                                    }
-
-                                                    $('#container .c-info .inner .form-item .photos').remove()
-                                                    $('#seller-info').remove()
-
-                                                    _.extend(description, {
-                                                        full: $('#container .c-info .inner .form-item').html()
-                                                        , map: $('#container .c-info .inner .form-item .Gmap').attr('src')
-                                                    })
-                                                }
-                                                if (site === 'www.zizu.ee') {
-                                                    pictures.push({
-                                                        url: $('#content').children('.b-content-white-i').eq(0).children('p').children('img').attr('src'),
-                                                        main: true
-                                                    })
-
-                                                    $('#content').children('.b-content-white-i').eq(1).find('p.rtecenter img').each(function (i, image) {
-                                                        pictures.push({
-                                                            url: $(image).attr('src')
-                                                        })
-                                                        $(image).remove()
-                                                    })
-
-                                                    deal.price = {
-                                                        discount: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('h2').eq(0).text(),
-                                                        regular: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('p').eq(0).text(),
-                                                        percent: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('h2').eq(1).text(),
-                                                        benefit: $('#content').children('.b-content-white-i').eq(0).find('table td').eq(1).children('p').eq(1).text()
-                                                    }
-                                                    deal.exposed = ''
-                                                    deal.end = ''
-
-                                                    deal.title = {
-                                                        full: $('#content').children('.b-content-white-i').eq(0).children('h1').text(),
-                                                        short: ''
-                                                    }
-
-                                                    deal.seller = {
-                                                        info: $('#content').children('.b-content-white-i').eq(1).children('table').eq(1).find('td').eq(1).html()
-                                                    }
-
-                                                    deal.description = {
-                                                        full: $('#content').children('.b-content-white-i').eq(1).children('table').eq(0).find('td').eq(0).html(),
-                                                        short: $('#content').children('.b-content-white-i').eq(1).children('table').eq(0).find('td').eq(1).html(),
-                                                        map: $('#content').children('.b-content-white-i').eq(1).children('table').eq(1).find('td').eq(0).find('img').attr('src')
-                                                    }
-                                                }
-
+                                                console.log('template', template)
+                                                _.extend(deal, template)
                                                 _.extend(deal, {
-                                                    pictures: pictures
-                                                    , parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
-                                                    , price: price
-                                                    , description: description
-                                                    , title: title
+                                                    parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
                                                 })
 
                                                 db.offers.save(deal)
 
                                                 console.log('Deal saved:', deal.title.full)
-                                                console.log('Fetching images:', deal.pictures.length)
 
-                                                var DOWNLOAD_DIR = __dirname + '/public/images/' + deal._id + '/';
+                                                if (deal.pictures) {
+                                                    console.log('Fetching images:', deal.pictures.length)
 
-                                                var imageProcessor = function (picture, finishImageProcessing) {
-                                                    console.log('processing image: ', picture)
-                                                    if (picture.url !== undefined) {
-                                                        var imageHostName = deal.url.hostname
-                                                        var imagePathName = picture.url.replace(deal.url.hostname, '');
+                                                    var DOWNLOAD_DIR = __dirname + '/public/images/' + deal._id + '/';
 
-                                                        var imageFullPath = imageHostName + imagePathName;
-                                                        console.log('image: ', imageFullPath)
+                                                    var imageProcessor = function (picture, finishImageProcessing) {
+                                                        console.log('processing image: ', picture)
+                                                        if (picture.url !== undefined) {
+                                                            var imageHostName = deal.url.hostname
+                                                            var imagePathName = picture.url.replace(deal.url.hostname, '');
 
-                                                        var filename = url.parse(imageFullPath).pathname.split("/").pop()
-                                                        console.log('filename: ', filename)
+                                                            var imageFullPath = imageHostName + imagePathName;
+                                                            console.log('image: ', imageFullPath)
 
-                                                        var options = {
-                                                            host: imageHostName,
-                                                            port: 80,
-                                                            path: imagePathName
-                                                        };
+                                                            var filename = url.parse(imageFullPath).pathname.split("/").pop()
+                                                            console.log('filename: ', filename)
 
-                                                        var file = fs.createWriteStream(DOWNLOAD_DIR + filename, {'flags':'a'});
+                                                            var options = {
+                                                                host: imageHostName,
+                                                                port: 80,
+                                                                path: imagePathName
+                                                            };
 
-                                                        http.get(options, function (res) {
-                                                            console.log("File size " + filename + ": " + res.headers['content-length'] + " bytes.");
+                                                            var file = fs.createWriteStream(DOWNLOAD_DIR + filename, {'flags':'a'});
 
-                                                            res
-                                                                .on('data',function (data) {
-                                                                    file.write(data);
-                                                                })
-                                                                .on('end', function () {
-                                                                    file.end();
-                                                                    console.log(filename + ' downloaded to ' + DOWNLOAD_DIR);
+                                                            http.get(options, function (res) {
+                                                                console.log("File size " + filename + ": " + res.headers['content-length'] + " bytes.");
 
-                                                                    ///... store images, make thumbnails... do more stuff
-                                                                    finishImageProcessing()
-                                                                });
-                                                        });
-                                                    }
-                                                    else {
-                                                        console.log('error reading image');
-                                                        finishImageProcessing()
-                                                    }
-                                                };
+                                                                res
+                                                                    .on('data',function (data) {
+                                                                        file.write(data);
+                                                                    })
+                                                                    .on('end', function () {
+                                                                        file.end();
+                                                                        console.log(filename + ' downloaded to ' + DOWNLOAD_DIR);
 
-                                                if (deal.pictures.length > 0) {
+                                                                        new thumbbot(DOWNLOAD_DIR + filename, DOWNLOAD_DIR + filename + ".thumb", function() {
+                                                                            this.attributes
+                                                                        })
+
+                                                                        finishImageProcessing()
+                                                                    });
+                                                            });
+                                                        }
+                                                        else {
+                                                            console.log('error reading image');
+                                                            finishImageProcessing()
+                                                        }
+                                                    };
+
                                                     exec('mkdir -p ' + DOWNLOAD_DIR, function (err, stdout, stderr) {
                                                         if (err) {
                                                           console.log('Error creating directory:', err)
