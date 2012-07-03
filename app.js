@@ -10,6 +10,7 @@ var express = require('express')
     , urlify = require('urlify').create({
         trim: true
     })
+    , thumbbot = require('thumbbot')
     , jsdom = require('jsdom')
     , async = require('async')
     , _ = require('underscore')._
