@@ -6,6 +6,7 @@ var jitsuDb = "mongodb://nodejitsu:350c51a0cffb3a650f7113bd18a48e9e@flame.mongoh
 var express = require('express')
     , routes = require('./routes')
     , request = require('request')
+    , config
     , url = require('url')
     , urlify = require('urlify').create({
         trim: true
@@ -34,11 +35,15 @@ app.configure(function(){
 
 app.configure('development', function(){
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  config = require('./configs/conf.dev.js')
 });
 
 app.configure('production', function(){
   app.use(express.errorHandler());
+  config = require('./configs/conf.dev.js')
 });
+
+var db = require("mongojs").connect(config.db.url, config.db.collections)
 
 // Routes
 
