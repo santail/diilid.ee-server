@@ -132,7 +132,7 @@ app.get('/refresh', function (req, res) {
                                                     , pathname: parsedUrl.pathname
                                                 }
 
-                                                var template = require(__dirname + '/model/' + site + ".js");
+                                                var template = require(__dirname + '/models/' + site + ".js");
 
                                                 console.log('template', template)
                                                 _.extend(deal, template)
