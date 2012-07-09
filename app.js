@@ -18,7 +18,6 @@ var express = require('express')
     , http = require('http')
     , fs = require('fs')
     , exec = require('child_process').exec
-    , db = require("mongojs").connect("deals", ["offers"])
 
 var app = module.exports = express.createServer();
 
@@ -143,9 +142,10 @@ app.get('/refresh', function (req, res) {
                                                     parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
                                                 })
 
-                                                db.offers.save(deal)
-
-                                                console.log('Deal saved:', deal.title.full)
+                                                db.offers.save(deal, function(err, saved) {
+                                                    if( err || !saved ) console.log("Deal not saved", deal);
+                                                    else console.log('Deal saved:', deal);
+                                                });
 
                                                 if (deal.pictures) {
                                                     console.log('Fetching images:', deal.pictures.length)
