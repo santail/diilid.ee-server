@@ -1,10 +1,12 @@
 var config = {
     db: {
-      url: 'deals'
-      , collections: ["offers"]
+        url: 'deals'
+        , collections: ["offers"]
     }
-    ,images: {
+    , images: {
         dir: __dirname + '/public/images/'
         , thumbs: []
     }
 }
+
+module.exports = config
