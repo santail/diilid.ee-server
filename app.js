@@ -97,13 +97,6 @@ app.get('/refresh', function (req, res) {
                         , title = $(item).find('h3').attr('title').trim()
                         , link = $(item).find('h3').children('a').attr('href');
 
-                    var deal = {
-                        title: {
-                            full: title
-                        },
-                        site: site
-                    };
-
                     console.log('waiting to pakkumised.ee source request', link)
 
                     request({
@@ -128,6 +121,11 @@ app.get('/refresh', function (req, res) {
 
                                         if (!(err || response.statusCode !== 200) && body) {
                                             parsePage(body, function($) {
+
+                                                var deal = {
+                                                    url: url.parse(originalUrl)
+                                                    , site: site
+                                                };
 
                                                 var parsedUrl = url.parse(originalUrl);
                                                 deal.url = {
