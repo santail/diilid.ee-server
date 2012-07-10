@@ -16,6 +16,7 @@
         "express":"2.5.x",
         "jsdom":"0.2.x",
         "mongodb":">= 0.9.7-3-5",
-        "mongojs":"0.3.x"
+        "mongojs":"0.3.x",
+        "contextify":"0.1.3"
     }
 }
