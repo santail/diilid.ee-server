@@ -1,5 +1,8 @@
     var config = {
-        db: {
+        app: {
+            port: 19603
+        }
+        , db: {
             url: 'deals'
             , collections: ["offers"]
         }
