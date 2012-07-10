@@ -3,7 +3,7 @@
             port: 19603
         }
         , db: {
-            url: 'deals'
+            url: 'mongodb://deals:offers@staff.mongohq.com:10020/deals'
             , collections: ["offers"]
         }
         , images: {
