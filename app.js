@@ -46,9 +46,9 @@ var config = require('./configs/conf.' + app.settings.env + '.js')
 
 app.get('/', routes.index);
 app.get('/deals', function(req, res) {
-
     var runningTime = new Date();
     console.log('checking fresh parsed links exist')
+
     db.offers.find({
         parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
     }, function(err, offers) {
@@ -66,44 +66,48 @@ app.get('/deals', function(req, res) {
             });
 
             res.json({
-                total: list.length,
-                items: list
+                total: list.length
+                , items: list
             })
         }
-    });
+    })
 })
+
 app.get('/refresh', function (req, res) {
     req.connection.setTimeout(600000);
 
-    var counter = 0, processing = 0, deals = [], result = {}, runningTime = new Date();
+    var counter = 0
+        , deals = []
+        , result = {}
+        , runningTime = new Date()
 
     console.log('harvesting...')
 
     fetchPage('http://pakkumised.ee', function ($) {
-        deals = $('body').find('.offers-list li');
+        deals = $('body').find('.offers-list li')
 
-        result.total = counter = deals.length;
-        result.items = [];
+        result.total = counter = deals.length
+        result.items = []
 
-        console.log('Deals total: ', deals.length);
+        console.log('Deals total: ', deals.length)
 
         async.series([
             function (finishFirstStep) {
                 async.forEachSeries(deals, function (item, finishItemProcessing) {
                     var site = $(item).children('span.site-name').text()
                         , title = $(item).find('h3').attr('title').trim()
-                        , link = $(item).find('h3').children('a').attr('href');
+                        , link = $(item).find('h3').children('a').attr('href')
 
                     console.log('waiting to pakkumised.ee source request', link)
 
                     request({
                         uri: link
                     }, function (err, response, body) {
-                        console.log('counting pakkumised.ee link: ', counter);
+                        console.log('counting pakkumised.ee link: ', counter)
 
                         if (!(err || response.statusCode !== 200) && body) {
                             parsePage(body, function($) {
-                                var originalUrl = $('iframe.offerpage_content').attr('src');
+                                var originalUrl = $('iframe.offerpage_content').attr('src')
 
                                 if (originalUrl) {
                                     console.log('waiting request to original deal', originalUrl)
@@ -132,10 +136,7 @@ app.get('/refresh', function (req, res) {
                                                     , pathname: parsedUrl.pathname
                                                 }
 
-                                                var template = require(__dirname + '/models/' + site + ".js");
-
-                                                console.log('template', template)
-                                                _.extend(deal, template)
+                                                _.extend(deal, require(__dirname + '/models/' + site + ".js"))
                                                 _.extend(deal, {
                                                     parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
                                                 })
