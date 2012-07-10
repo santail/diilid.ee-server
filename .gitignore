@@ -2,6 +2,7 @@
 *.idea
 .idea/*
 public/images/*
+node_modules/*
 *.iml
 *.ipr
 *.iws
