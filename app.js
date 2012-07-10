@@ -141,9 +141,11 @@ app.get('/refresh', function (req, res) {
                                                 })
 
                                                 db.offers.save(deal, function(err, saved) {
-                                                    if( err || !saved ) console.log("Deal not saved", deal);
-                                                    else console.log('Deal saved:', deal);
+                                                    if( err || !saved ) console.log("Deal not saved", err);
+                                                    else console.log('Deal saved:', saved);
                                                 });
+
+                                                result.items.push(deal);
 
                                                 if (deal.pictures) {
                                                     console.log('Fetching images:', deal.pictures.length)
