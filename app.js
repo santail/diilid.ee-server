@@ -1,5 +1,3 @@
-var jitsuDb = "mongodb://nodejitsu:350c51a0cffb3a650f7113bd18a48e9e@flame.mongohq.com:27050/nodejitsudb122637634597";
-
 /**
  * Module dependencies.
  */
