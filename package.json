@@ -1,6 +1,7 @@
 {
-    "name":"diilid.ee-server",
-    "subdomain":"diilidmobile",
+    "name":"diilidee",
+    "node":"0.6.17",
+    "author":"santail",
     "scripts":{
         "start":"app.js"
     },
