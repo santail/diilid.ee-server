@@ -41,6 +41,7 @@ app.configure('production', function(){
 
 var config = require('./configs/conf.' + app.settings.env + '.js')
     , db = require("mongojs").connect(config.db.url, config.db.collections)
+    , imageProcessor = require('./services/ImageProcessor.service.js')
 
 // Routes
 
@@ -142,18 +143,23 @@ app.get('/refresh', function (req, res) {
                                                 })
 
                                                 db.offers.save(deal, function(err, saved) {
-                                                    if( err || !saved ) console.log("Deal not saved", err);
-                                                    else console.log('Deal saved:', saved);
+                                                    if( err || !saved ) {
+                                                        console.log("Deal not saved", err);
+                                                        finishItemProcessing()
+                                                    }
+                                                    else {
+                                                        console.log('Deal saved:', saved);
+                                                        result.items.push(saved);
+
+                                                        if (deal.pictures) {
+                                                            console.log('Fetching images:', deal.pictures.length)
+                                                            imageProcessor.process(config.images.dir + saved._id + '/', deal.pictures, finishItemProcessing)
+                                                        }
+                                                        else {
+                                                            finishItemProcessing()
+                                                        }
+                                                    }
                                                 });
-
-                                                result.items.push(deal);
-
-                                                if (deal.pictures) {
-                                                    console.log('Fetching images:', deal.pictures.length)
-                                                }
-                                                else {
-                                                    finishItemProcessing()
-                                                }
                                             });
                                         }
                                         else {
