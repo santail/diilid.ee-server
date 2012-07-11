@@ -10,7 +10,6 @@ var express = require('express')
         trim: true
     })
     , thumbbot = require('thumbbot')
-    , jsdom = require('jsdom')
     , async = require('async')
     , _ = require('underscore')._
     , http = require('http')
@@ -106,73 +105,72 @@ app.get('/refresh', function (req, res) {
                         console.log('counting pakkumised.ee link: ', counter)
 
                         if (!(err || response.statusCode !== 200) && body) {
-                            parsePage(body, function($) {
-                                var originalUrl = $('iframe.offerpage_content').attr('src')
+                            var $ = cheerio.load(body)
+                                , originalUrl = $('iframe.offerpage_content').attr('src')
 
-                                if (originalUrl) {
-                                    console.log('waiting request to original deal', originalUrl)
+                            console.log(originalUrl)
 
-                                    request({
-                                        uri: originalUrl,
-                                        timeout: 30000
-                                    }, function (err, response, body) {
-                                        counter--;
+                            if (originalUrl) {
+                                console.log('waiting request to original deal', originalUrl)
 
-                                        console.log('counting: ', counter);
+                                request({
+                                    uri: originalUrl,
+                                    timeout: 30000
+                                }, function (err, response, body) {
+                                    counter--;
 
-                                        if (!(err || response.statusCode !== 200) && body) {
-                                            parsePage(body, function($) {
+                                    console.log('counting: ', counter);
 
-                                                var deal = {
-                                                    url: url.parse(originalUrl)
-                                                    , site: site
-                                                };
+                                    if (!(err || response.statusCode !== 200) && body) {
+                                        var $ = cheerio.load(body)
+                                            , deal = {
+                                                url: url.parse(originalUrl)
+                                                , site: site
+                                            }
 
-                                                var parsedUrl = url.parse(originalUrl);
-                                                deal.url = {
-                                                    href: parsedUrl.href
-                                                    , host: parsedUrl.host
-                                                    , hostname: parsedUrl.hostname
-                                                    , pathname: parsedUrl.pathname
+                                        var parsedUrl = url.parse(originalUrl);
+                                        deal.url = {
+                                            href: parsedUrl.href
+                                            , host: parsedUrl.host
+                                            , hostname: parsedUrl.hostname
+                                            , pathname: parsedUrl.pathname
+                                        }
+
+                                        _.extend(deal, require(__dirname + '/models/' + site + ".js"))
+                                        _.extend(deal, {
+                                            parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
+                                        })
+
+                                        db.offers.save(deal, function(err, saved) {
+                                            if( err || !saved ) {
+                                                console.log("Deal not saved", err);
+                                                finishItemProcessing()
+                                            }
+                                            else {
+                                                console.log('Deal saved:', saved);
+                                                result.items.push(saved);
+
+                                                if (deal.pictures) {
+                                                    console.log('Fetching images:', deal.pictures.length)
+                                                    imageProcessor.process(config.images.dir + saved._id + '/', deal.pictures, finishItemProcessing)
                                                 }
-
-                                                _.extend(deal, require(__dirname + '/models/' + site + ".js"))
-                                                _.extend(deal, {
-                                                    parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
-                                                })
-
-                                                db.offers.save(deal, function(err, saved) {
-                                                    if( err || !saved ) {
-                                                        console.log("Deal not saved", err);
-                                                        finishItemProcessing()
-                                                    }
-                                                    else {
-                                                        console.log('Deal saved:', saved);
-                                                        result.items.push(saved);
-
-                                                        if (deal.pictures) {
-                                                            console.log('Fetching images:', deal.pictures.length)
-                                                            imageProcessor.process(config.images.dir + saved._id + '/', deal.pictures, finishItemProcessing)
-                                                        }
-                                                        else {
-                                                            finishItemProcessing()
-                                                        }
-                                                    }
-                                                });
-                                            });
-                                        }
-                                        else {
-                                            console.log('parsing pakkumised.ee link failed', link)
-                                            finishItemProcessing()
-                                        }
-                                    });
-                                }
-                                else {
-                                    counter--
-                                    console.log('item has no origin url: ', link)
-                                    finishItemProcessing()
-                                }
-                            });
+                                                else {
+                                                    finishItemProcessing()
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        console.log('parsing pakkumised.ee link failed', link)
+                                        finishItemProcessing()
+                                    }
+                                });
+                            }
+                            else {
+                                counter--
+                                console.log('item has no origin url: ', link)
+                                finishItemProcessing()
+                            }
                         }
                         else {
                             counter--
@@ -210,28 +208,13 @@ app.get('/refresh', function (req, res) {
     });
 });
 
-var parsePage = function (body, parser) {
-    jsdom.env({
-        html:body,
-        scripts:['http://code.jquery.com/jquery-1.6.min.js']
-    }, function (err, window) {
-
-        if (!err) {
-            parser(window.jQuery);
-        }
-        else {
-            console.log('Error: ', err);
-        }
-    });
-};
-
 var fetchPage = function (source, processor) {
     request({
         uri:source,
         timeout: 30000
     }, function (err, response, body) {
         if (!(err || response.statusCode !== 200) && body) {
-            parsePage(body, processor);
+            processor(cheerio.load(body))
         }
         else {
             console.log('Error: ', err);
