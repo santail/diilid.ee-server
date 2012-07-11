@@ -4,6 +4,7 @@
 var express = require('express')
     , routes = require('./routes')
     , request = require('request')
+    , cheerio = require('cheerio')
     , url = require('url')
     , urlify = require('urlify').create({
         trim: true

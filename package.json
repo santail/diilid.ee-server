@@ -17,6 +17,7 @@
         "jsdom":"0.2.1",
         "mongodb":">= 0.9.7-3-5",
         "mongojs":"0.3.x",
-        "contextify":"0.1.3"
+        "contextify":"0.1.3",
+        "cheerio": "0.8.3"
     }
 }
