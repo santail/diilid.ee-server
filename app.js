@@ -95,9 +95,9 @@ app.get('/refresh', function (req, res) {
                 async.forEachSeries(deals, function (item, finishItemProcessing) {
                     var site = $(item).children('span.site-name').text()
                         , title = $(item).find('h3').attr('title').trim()
-                        , link = $(item).find('h3').children('a').attr('href')
+                        , link = $('<div />').html($(item).find('h3').children('a').attr('href')).text()
 
-                    console.log('waiting to pakkumised.ee source request', link)
+                    console.log('waiting to pakkumised.ee source request', link )
 
                     request({
                         uri: link
@@ -106,7 +106,7 @@ app.get('/refresh', function (req, res) {
 
                         if (!(err || response.statusCode !== 200) && body) {
                             var $ = cheerio.load(body)
-                                , originalUrl = $('iframe.offerpage_content').attr('src')
+                                , originalUrl = $('<div />').html($('iframe.offerpage_content').attr('src')).text()
 
                             console.log(originalUrl)
 
