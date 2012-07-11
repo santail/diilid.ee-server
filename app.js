@@ -85,7 +85,7 @@ app.get('/refresh', function (req, res) {
     fetchPage('http://pakkumised.ee', function ($) {
         deals = $('body').find('.offers-list li')
 
-        result.total = counter = deals.length
+        counter = deals.length
         result.items = []
 
         console.log('Deals total: ', deals.length)
@@ -195,7 +195,12 @@ app.get('/refresh', function (req, res) {
         ],
             function (err) {
                 console.log('processing done')
-                if (err) {
+                if (!err) {
+                    result. success = true
+                    result.total = result.items.length
+                }
+                else {
+                    result.success = false
                     console.log('error during process', err)
                 }
 
