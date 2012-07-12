@@ -203,8 +203,8 @@ app.get('/refresh', function (req, res) {
                     console.log('error during process', err)
                 }
 
-                res.writeHead(200, { 'Content-Type': 'text/javascript' });
-                res.json(result);
+                res.writeHead(200, { 'Content-Type': 'text/javascript' })
+                res.end('result(' + JSON.stringify(result) + ')');
             });
     });
 });
