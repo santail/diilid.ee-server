@@ -203,7 +203,7 @@ app.get('/refresh', function (req, res) {
                     console.log('error during process', err)
                 }
 
-                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.writeHead(200, { 'Content-Type': 'text/javascript' });
                 res.json(result);
             });
     });
