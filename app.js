@@ -195,7 +195,7 @@ app.get('/refresh', function (req, res) {
             function (err) {
                 console.log('processing done')
                 if (!err) {
-                    result. success = true
+                    result.success = true
                     result.total = result.items.length
                 }
                 else {
