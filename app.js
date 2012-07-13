@@ -45,7 +45,10 @@ var config = require('./configs/conf.' + app.settings.env + '.js')
 
 app.get('/', routes.index);
 app.get('/deals', function(req, res) {
-    var runningTime = new Date();
+    var runningTime = new Date()
+        , jsonPCallback = req.param('result', 'callback')
+        , result = {}
+
     console.log('checking fresh parsed links exist')
 
     db.offers.find({
@@ -55,10 +58,10 @@ app.get('/deals', function(req, res) {
 
         if (err || !offers) {
             console.log('fresh links missing', err)
-            res.end('result(' + JSON.stringify({
+            result = {
                 success: false
                 , message: 'No fresh offers found'
-            }) + ')');
+            }
         }
         else {
             console.log('fresh links exist')
@@ -69,12 +72,14 @@ app.get('/deals', function(req, res) {
                 list.push(offer)
             });
 
-            res.end('result(' + JSON.stringify({
+            result = {
                 success: true
                 , total: list.length
                 , items: list
-            }) + ')');
+            }
         }
+
+        res.end(jsonPCallback + '(' + JSON.stringify(result) + ')');
     })
 })
 
@@ -85,6 +90,7 @@ app.get('/refresh', function (req, res) {
         , deals = []
         , result = {}
         , runningTime = new Date()
+        , jsonPCallback = req.param('result', 'callback')
 
     console.log('harvesting...')
 
@@ -202,7 +208,7 @@ app.get('/refresh', function (req, res) {
                 }
 
                 res.writeHead(200, { 'Content-Type': 'text/javascript' })
-                res.end('result(' + JSON.stringify(result) + ')');
+                res.end(jsonPCallback + '(' + JSON.stringify(result) + ')');
             });
     });
 });
