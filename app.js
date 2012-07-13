@@ -52,7 +52,7 @@ app.get('/deals', function(req, res) {
     console.log('checking fresh parsed links exist')
 
     db.offers.find({
-        parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
+        parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
     }, function(err, offers) {
         res.writeHead(200, { 'Content-Type': 'text/javascript' })
 
@@ -142,7 +142,7 @@ app.get('/refresh', function (req, res) {
 
                                         _.extend(deal, require(__dirname + '/models/' + site + ".js"))
                                         _.extend(deal, {
-                                            parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
+                                            parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
                                         })
 
                                         db.offers.save(deal, function(err, saved) {
