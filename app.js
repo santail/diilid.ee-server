@@ -51,12 +51,17 @@ app.get('/deals', function(req, res) {
     db.offers.find({
         parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
     }, function(err, offers) {
+        res.writeHead(200, { 'Content-Type': 'text/javascript' })
+
         if (err || !offers) {
             console.log('fresh links missing', err)
+            res.end('result(' + JSON.stringify({
+                success: false
+                , message: 'No fresh offers found'
+            }) + ')');
         }
         else {
             console.log('fresh links exist')
-
             var list = []
 
             offers.forEach(function (offer) {
@@ -64,7 +69,6 @@ app.get('/deals', function(req, res) {
                 list.push(offer)
             });
 
-            res.writeHead(200, { 'Content-Type': 'text/javascript' })
             res.end('result(' + JSON.stringify({
                 success: true
                 , total: list.length
