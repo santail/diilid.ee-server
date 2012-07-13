@@ -134,14 +134,6 @@ app.get('/refresh', function (req, res) {
                                                 , site: site
                                             }
 
-                                        var parsedUrl = url.parse(originalUrl);
-                                        deal.url = {
-                                            href: parsedUrl.href
-                                            , host: parsedUrl.host
-                                            , hostname: parsedUrl.hostname
-                                            , pathname: parsedUrl.pathname
-                                        }
-
                                         _.extend(deal, require(__dirname + '/models/' + site + ".js"))
                                         _.extend(deal, {
                                             parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
