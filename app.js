@@ -64,10 +64,12 @@ app.get('/deals', function(req, res) {
                 list.push(offer)
             });
 
-            res.json({
-                total: list.length
+            res.writeHead(200, { 'Content-Type': 'text/javascript' })
+            res.end('result(' + JSON.stringify({
+                success: true
+                , total: list.length
                 , items: list
-            })
+            }) + ')');
         }
     })
 })
