@@ -118,7 +118,15 @@ app.get('/refresh', function (req, res) {
 
                         if (!(err || response.statusCode !== 200) && body) {
                             var $ = cheerio.load(body)
-                                , originalUrl = $('<div />').html($('iframe.offerpage_content').attr('src')).text()
+                                , frame = $('iframe.offerpage_content')
+
+                            if (frame.length === 0) {
+                                console.log('Some strange content. Skipping ...');
+                                finishItemProcessing() 
+                                return
+                            }
+
+                            var originalUrl = $('<div />').html(frame.attr('src')).text()
 
                             console.log(originalUrl)
 
