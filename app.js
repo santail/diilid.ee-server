@@ -9,6 +9,7 @@ var express = require('express')
     , urlify = require('urlify').create({
         trim: true
     })
+    , pakkumised = require('pakkumised')
     , thumbbot = require('thumbbot')
     , async = require('async')
     , _ = require('underscore')._
@@ -142,13 +143,12 @@ app.get('/refresh', function (req, res) {
                                     console.log('counting: ', counter);
 
                                     if (!(err || response.statusCode !== 200) && body) {
-                                        var $ = cheerio.load(body)
-                                            , deal = {
+                                        var deal = {
                                                 url: url.parse(originalUrl)
                                                 , site: site
                                             }
 
-                                        _.extend(deal, require(__dirname + '/models/' + site + ".js"))
+                                        _.extend(deal, pakkumised.parse(cheerio.load(body), site))
                                         _.extend(deal, {
                                             parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
                                         })
