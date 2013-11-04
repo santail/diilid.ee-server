@@ -1,7 +1,10 @@
 /**
  * Module dependencies.
  */
-var express = require('express')
+var env = process.env.NODE_ENV || 'development', 
+    config = require('./configs/conf.' + env),
+    db = require("mongojs").connect(config.db.url, config.db.collections),
+    express = require('express')
     , routes = require('./routes')
     , request = require('request')
     , cheerio = require('cheerio')
@@ -14,8 +17,9 @@ var express = require('express')
     , async = require('async')
     , _ = require('underscore')._
     , http = require('http')
-    , fs = require('fs')
-    , exec = require('child_process').exec
+    , fs = require('fs'),
+    imageProcessor = require('./services/ImageProcessor.service.js'), 
+    exec = require('child_process').exec
 
 var app = module.exports = express.createServer();
 
@@ -37,10 +41,6 @@ app.configure('development', function(){
 app.configure('production', function(){
   app.use(express.errorHandler());
 });
-
-var config = require('./configs/conf.' + app.settings.env + '.js')
-    , db = require("mongojs").connect(config.db.url, config.db.collections)
-    , imageProcessor = require('./services/ImageProcessor.service.js')
 
 // Routes
 
@@ -235,5 +235,5 @@ var fetchPage = function (source, processor) {
     });
 };
 
-app.listen(config.app.port);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+app.listen(process.env.PORT, process.env.IP);
+console.log('Express server started on port %s', process.env.PORT);

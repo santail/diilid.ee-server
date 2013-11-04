@@ -3,8 +3,8 @@ var config = {
       port: 3000
     }
     , db: {
-        url: 'deals'
-        , collections: ["offers"]
+        url: '127.2.91.1:27017/deals', 
+        collections: ["offers"]
     }
     , images: {
         dir: __dirname + '/public/images/'
