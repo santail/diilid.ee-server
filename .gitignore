@@ -8,5 +8,5 @@ node_modules/
 *.iws
 .c9/
 mongod
-.data
+data/
 *.log
