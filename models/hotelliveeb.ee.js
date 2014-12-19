@@ -1,0 +1,5 @@
+function template($) {
+    return {
+
+    }
+}
