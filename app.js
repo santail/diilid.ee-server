@@ -45,20 +45,23 @@ var config = require('./configs/conf.' + app.settings.env + '.js')
 
 app.get('/', routes.index);
 app.get('/deals', function(req, res) {
-    var runningTime = new Date();
+    var runningTime = new Date()
+        , jsonPCallback = req.param('result', 'callback')
+        , result = {}
+
     console.log('checking fresh parsed links exist')
 
     db.offers.find({
-        parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
+        parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
     }, function(err, offers) {
         res.writeHead(200, { 'Content-Type': 'text/javascript' })
 
         if (err || !offers) {
             console.log('fresh links missing', err)
-            res.end('result(' + JSON.stringify({
+            result = {
                 success: false
                 , message: 'No fresh offers found'
-            }) + ')');
+            }
         }
         else {
             console.log('fresh links exist')
@@ -69,12 +72,14 @@ app.get('/deals', function(req, res) {
                 list.push(offer)
             });
 
-            res.end('result(' + JSON.stringify({
+            result = {
                 success: true
                 , total: list.length
                 , items: list
-            }) + ')');
+            }
         }
+
+        res.end(jsonPCallback + '(' + JSON.stringify(result) + ')');
     })
 })
 
@@ -85,6 +90,7 @@ app.get('/refresh', function (req, res) {
         , deals = []
         , result = {}
         , runningTime = new Date()
+        , jsonPCallback = req.param('result', 'callback')
 
     console.log('harvesting...')
 
@@ -112,7 +118,15 @@ app.get('/refresh', function (req, res) {
 
                         if (!(err || response.statusCode !== 200) && body) {
                             var $ = cheerio.load(body)
-                                , originalUrl = $('<div />').html($('iframe.offerpage_content').attr('src')).text()
+                                , frame = $('iframe.offerpage_content')
+
+                            if (frame.length === 0) {
+                                console.log('Some strange content. Skipping ...');
+                                finishItemProcessing() 
+                                return
+                            }
+
+                            var originalUrl = $('<div />').html(frame.attr('src')).text()
 
                             console.log(originalUrl)
 
@@ -128,23 +142,14 @@ app.get('/refresh', function (req, res) {
                                     console.log('counting: ', counter);
 
                                     if (!(err || response.statusCode !== 200) && body) {
-                                        var $ = cheerio.load(body)
-                                            , deal = {
+                                        var deal = {
                                                 url: url.parse(originalUrl)
                                                 , site: site
                                             }
 
-                                        var parsedUrl = url.parse(originalUrl);
-                                        deal.url = {
-                                            href: parsedUrl.href
-                                            , host: parsedUrl.host
-                                            , hostname: parsedUrl.hostname
-                                            , pathname: parsedUrl.pathname
-                                        }
-
                                         _.extend(deal, require(__dirname + '/models/' + site + ".js"))
                                         _.extend(deal, {
-                                            parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getYear()
+                                            parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
                                         })
 
                                         db.offers.save(deal, function(err, saved) {
@@ -210,7 +215,7 @@ app.get('/refresh', function (req, res) {
                 }
 
                 res.writeHead(200, { 'Content-Type': 'text/javascript' })
-                res.end('result(' + JSON.stringify(result) + ')');
+                res.end(jsonPCallback + '(' + JSON.stringify(result) + ')');
             });
     });
 });
