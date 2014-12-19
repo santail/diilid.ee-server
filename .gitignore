@@ -2,7 +2,11 @@
 *.idea
 .idea/*
 public/images/*
-node_modules/*
+node_modules/
 *.iml
 *.ipr
 *.iws
+.c9/
+mongod
+.data
+*.log
