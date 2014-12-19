@@ -7,6 +7,6 @@ node_modules/
 *.ipr
 *.iws
 .c9/
-mongod
+mongod/
 data/
 *.log
