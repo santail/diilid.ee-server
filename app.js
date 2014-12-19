@@ -13,7 +13,6 @@ var env = process.env.NODE_ENV || 'development',
         trim: true
     }),
     pakkumised = require('pakkumised'),
-    thumbbot = require('thumbbot'),
     async = require('async'),
     _ = require('underscore')._,
     http = require('http'),
