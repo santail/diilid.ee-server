@@ -1,9 +1,10 @@
 var config = {
     app: {
-      port: 3000
+      port: process.env.PORT || 3000,
+      ip: process.env.IP || '0.0.0.0'
     }
     , db: {
-        url: '127.2.91.1:27017/deals', 
+        url: '127.2.91.1:27017/deals',
         collections: ["offers"]
     }
     , images: {

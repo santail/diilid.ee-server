@@ -236,5 +236,5 @@ var fetchPage = function (source, processor) {
     });
 };
 
-app.listen(process.env.PORT, process.env.IP);
-console.log('Express server started on port %s', process.env.PORT);
+app.listen(config.app.port, config.app.ip);
+console.log('Express server started on port %s', config.app.port, config.app.ip);
