@@ -4,20 +4,20 @@
 var env = process.env.NODE_ENV || 'development',
     config = require('./configs/conf.' + env),
     db = require("mongojs").connect(config.db.url, config.db.collections),
-    express = require('express')
-    , routes = require('./routes')
-    , request = require('request')
-    , cheerio = require('cheerio')
-    , url = require('url')
-    , urlify = require('urlify').create({
+    express = require('express'),
+    routes = require('./routes'),
+    request = require('request'),
+    cheerio = require('cheerio'),
+    url = require('url'),
+    urlify = require('urlify').create({
         trim: true
-    })
-    , pakkumised = require('pakkumised')
-    , thumbbot = require('thumbbot')
-    , async = require('async')
-    , _ = require('underscore')._
-    , http = require('http')
-    , fs = require('fs'),
+    }),
+    pakkumised = require('pakkumised'),
+    thumbbot = require('thumbbot'),
+    async = require('async'),
+    _ = require('underscore')._,
+    http = require('http'),
+    fs = require('fs'),
     imageProcessor = require('./services/ImageProcessor.service.js'),
     exec = require('child_process').exec
 
@@ -25,43 +25,48 @@ var app = module.exports = express.createServer();
 
 // Configuration
 
-app.configure(function(){
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+app.configure(function () {
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(app.router);
+    app.use(express.static(__dirname + '/public'));
 });
 
-app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+app.configure('development', function () {
+    app.use(express.errorHandler({
+        dumpExceptions: true,
+        showStack: true
+    }));
 });
 
-app.configure('production', function(){
-  app.use(express.errorHandler());
+app.configure('production', function () {
+    app.use(express.errorHandler());
 });
 
 // Routes
 
 app.get('/', routes.index);
-app.get('/deals', function(req, res) {
-    var runningTime = new Date()
-        , jsonPCallback = req.param('result', 'callback')
-        , result = {}
+app.get('/deals', function (req, res) {
+    var runningTime = new Date(),
+        jsonPCallback = req.param('result', 'callback'),
+        result = {}
 
     console.log('checking fresh parsed links exist')
 
     db.offers.find({
         parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
-    }, function(err, offers) {
-        res.writeHead(200, { 'Content-Type': 'text/javascript' })
+    }, function (err, offers) {
+        res.writeHead(200, {
+            'Content-Type': 'text/javascript'
+        })
 
         if (err || !offers) {
             console.log('fresh links missing', err)
             result = {
-                success: false
-                , message: 'No fresh offers found'
+                success: false,
+                message: 'No fresh offers found'
             }
         }
         else {
@@ -74,9 +79,9 @@ app.get('/deals', function(req, res) {
             });
 
             result = {
-                success: true
-                , total: list.length
-                , items: list
+                success: true,
+                total: list.length,
+                items: list
             }
         }
 
@@ -87,11 +92,11 @@ app.get('/deals', function(req, res) {
 app.get('/refresh', function (req, res) {
     req.connection.setTimeout(600000);
 
-    var counter = 0
-        , deals = []
-        , result = {}
-        , runningTime = new Date()
-        , jsonPCallback = req.param('result', 'callback')
+    var counter = 0,
+        deals = [],
+        result = {},
+        runningTime = new Date(),
+        jsonPCallback = req.param('result', 'callback')
 
     console.log('harvesting...')
 
@@ -105,104 +110,104 @@ app.get('/refresh', function (req, res) {
 
         async.series([
             function (finishFirstStep) {
-                async.forEachSeries(deals, function (item, finishItemProcessing) {
-                    var site = $(item).children('span.site-name').text()
-                        , title = $(item).find('h3').attr('title').trim()
-                        , link = $('<div />').html($(item).find('h3').children('a').attr('href')).text()
+                    async.forEachSeries(deals, function (item, finishItemProcessing) {
+                        var site = $(item).children('span.site-name').text(),
+                            title = $(item).find('h3').attr('title').trim(),
+                            link = $('<div />').html($(item).find('h3').children('a').attr('href')).text()
 
-                    console.log('waiting to pakkumised.ee source request', link )
+                        console.log('waiting to pakkumised.ee source request', link)
 
-                    request({
-                        uri: link
-                    }, function (err, response, body) {
-                        console.log('counting pakkumised.ee link: ', counter)
+                        request({
+                            uri: link
+                        }, function (err, response, body) {
+                            console.log('counting pakkumised.ee link: ', counter)
 
-                        if (!(err || response.statusCode !== 200) && body) {
-                            var $ = cheerio.load(body)
-                                , frame = $('iframe.offerpage_content')
+                            if (!(err || response.statusCode !== 200) && body) {
+                                var $ = cheerio.load(body),
+                                    frame = $('iframe.offerpage_content')
 
-                            if (frame.length === 0) {
-                                console.log('Some strange content. Skipping ...');
-                                finishItemProcessing()
-                                return
-                            }
+                                if (frame.length === 0) {
+                                    console.log('Some strange content. Skipping ...');
+                                    finishItemProcessing()
+                                    return
+                                }
 
-                            var originalUrl = $('<div />').html(frame.attr('src')).text()
+                                var originalUrl = $('<div />').html(frame.attr('src')).text()
 
-                            console.log(originalUrl)
+                                console.log(originalUrl)
 
-                            if (originalUrl) {
-                                console.log('waiting request to original deal', originalUrl)
+                                if (originalUrl) {
+                                    console.log('waiting request to original deal', originalUrl)
 
-                                request({
-                                    uri: originalUrl,
-                                    timeout: 30000
-                                }, function (err, response, body) {
-                                    counter--;
+                                    request({
+                                        uri: originalUrl,
+                                        timeout: 30000
+                                    }, function (err, response, body) {
+                                        counter--;
 
-                                    console.log('counting: ', counter);
+                                        console.log('counting: ', counter);
 
-                                    if (!(err || response.statusCode !== 200) && body) {
-                                        var deal = {
-                                                url: url.parse(originalUrl)
-                                                , site: site
+                                        if (!(err || response.statusCode !== 200) && body) {
+                                            var deal = {
+                                                url: url.parse(originalUrl),
+                                                site: site
                                             }
 
-                                        _.extend(deal, require(__dirname + '/models/' + site + ".js"))
+                                            _.extend(deal, require(__dirname + '/models/' + site + ".js"))
 
-                                        _.extend(deal, {
-                                            parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
-                                        })
+                                            _.extend(deal, {
+                                                parsed: runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
+                                            })
 
-                                        db.offers.save(deal, function(err, saved) {
-                                            if( err || !saved ) {
-                                                console.log("Deal not saved", err);
-                                                finishItemProcessing()
-                                            }
-                                            else {
-                                                console.log('Deal saved:', saved);
-                                                result.items.push(saved);
-
-                                                if (deal.pictures) {
-                                                    console.log('Fetching images:', deal.pictures.length)
-                                                    imageProcessor.process(config.images.dir + saved._id + '/', deal.pictures, finishItemProcessing)
-                                                }
-                                                else {
+                                            db.offers.save(deal, function (err, saved) {
+                                                if (err || !saved) {
+                                                    console.log("Deal not saved", err);
                                                     finishItemProcessing()
                                                 }
-                                            }
-                                        });
-                                    }
-                                    else {
-                                        console.log('parsing pakkumised.ee link failed', link)
-                                        finishItemProcessing()
-                                    }
-                                });
+                                                else {
+                                                    console.log('Deal saved:', saved);
+                                                    result.items.push(saved);
+
+                                                    if (deal.pictures) {
+                                                        console.log('Fetching images:', deal.pictures.length)
+                                                        imageProcessor.process(config.images.dir + saved._id + '/', deal.pictures, finishItemProcessing)
+                                                    }
+                                                    else {
+                                                        finishItemProcessing()
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            console.log('parsing pakkumised.ee link failed', link)
+                                            finishItemProcessing()
+                                        }
+                                    });
+                                }
+                                else {
+                                    counter--
+                                    console.log('item has no origin url: ', link)
+                                    finishItemProcessing()
+                                }
                             }
                             else {
                                 counter--
-                                console.log('item has no origin url: ', link)
+                                console.log('parsing pakkumised.ee link finished with error', link, err)
                                 finishItemProcessing()
                             }
-                        }
-                        else {
-                            counter--
-                            console.log('parsing pakkumised.ee link finished with error', link, err)
-                            finishItemProcessing()
-                        }
-                    });
+                        });
 
-                }, function(err) {
-                    if (err) {
-                        console.log('error reading pakkumised.ee original links', err)
-                    }
-                    if (counter === 0) {
-                        console.log('parsing pakkumised.ee finished successfully')
-                        finishFirstStep(null, 'one');
-                    }
-                })
+                    }, function (err) {
+                        if (err) {
+                            console.log('error reading pakkumised.ee original links', err)
+                        }
+                        if (counter === 0) {
+                            console.log('parsing pakkumised.ee finished successfully')
+                            finishFirstStep(null, 'one');
+                        }
+                    })
 
-                console.log('perform first iteration')
+                    console.log('perform first iteration')
             }
         ],
             function (err) {
@@ -216,7 +221,9 @@ app.get('/refresh', function (req, res) {
                     console.log('error during process', err)
                 }
 
-                res.writeHead(200, { 'Content-Type': 'text/javascript' })
+                res.writeHead(200, {
+                    'Content-Type': 'text/javascript'
+                })
                 res.end(jsonPCallback + '(' + JSON.stringify(result) + ')');
             });
     });
@@ -224,7 +231,7 @@ app.get('/refresh', function (req, res) {
 
 var fetchPage = function (source, processor) {
     request({
-        uri:source,
+        uri: source,
         timeout: 30000
     }, function (err, response, body) {
         if (!(err || response.statusCode !== 200) && body) {
