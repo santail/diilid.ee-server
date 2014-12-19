@@ -1,0 +1,3 @@
+[submodule "node_modules/pakkumised"]
+	path = node_modules/pakkumised
+	url = git://github.com/santail/pakkumised.git
