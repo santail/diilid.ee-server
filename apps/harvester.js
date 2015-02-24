@@ -3,167 +3,173 @@ var config = require('./config/environment'),
     db = require("mongojs").connect(config.db.url, config.db.collections),
     request = require('request'),
     async = require('async'),
-    _ = require('underscore')._;
+    _ = require('underscore')._,
+    cron = require('cron').CronJob;
 
-var runningTime = new Date();
+new cron('*/5 * * * * *', function() {
+    console.log('You will see this message every 5 seconds');
 
-console.log('harvesting...');
+    var runningTime = new Date();
 
-var pageNumber = 0,
-    pageRepeats = false,
-    lastId = null;
+    console.log('harvesting started ...', runningTime);
 
-async.whilst(
-    function () { return !pageRepeats; },
-    function (callback) {
-        pageNumber++;
+    var pageNumber = 0,
+        pageRepeats = false,
+        lastId = null;
 
-        var source =  'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page=' + pageNumber + '&keyword=';
-        console.log('URL: ' + source);
+    async.whilst(
+        function () { return !pageRepeats; },
+        function (callback) {
+            pageNumber++;
 
-        request({
-            uri: source,
-            timeout: 30000
-        }, function (err, response, data) {
-            console.log('Requesting data from pakkumised.ee');
+            var source =  'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page=' + pageNumber + '&keyword=';
+            console.log('URL: ' + source);
 
-            if (!(err || response.statusCode !== 200) && data) {
-                console.log('positive response');
+            request({
+                uri: source,
+                timeout: 30000
+            }, function (err, response, data) {
+                console.log('Requesting data from pakkumised.ee');
 
-                var deals = JSON.parse(data),
-                    counter = _.size(deals);
+                if (!(err || response.statusCode !== 200) && data) {
+                    console.log('positive response');
 
-                if (!_.isEmpty(deals) && lastId !== _.last(_.keys(deals))) {
-                    console.log('not a last page');
+                    var deals = JSON.parse(data),
+                        counter = _.size(deals);
 
-                    lastId = _.last(_.keys(deals));
+                    if (!_.isEmpty(deals) && lastId !== _.last(_.keys(deals))) {
+                        console.log('not a last page');
 
-                    console.log('total offers found on page: ', counter);
+                        lastId = _.last(_.keys(deals));
 
-                    async.forEachSeries(_.keys(deals), function (offerId, finishItemProcessing) {
-                        console.log('processing offers on page ', pageNumber);
+                        console.log('total offers found on page: ', counter);
 
-                        var item = deals[offerId],
-                            site = item.partners_site_name;
+                        async.forEachSeries(_.keys(deals), function (offerId, finishItemProcessing) {
+                            console.log('processing offers on page ', pageNumber);
 
-                        if (!activeSites[site]) {
-                            console.log(site + ' not active. skipping ...');
-                            counter--;
-                            finishItemProcessing();
-                            return;
-                        }
+                            var item = deals[offerId],
+                                site = item.partners_site_name;
 
-                        var originalUrl = item.url;
+                            if (!activeSites[site]) {
+                                console.log(site + ' not active. skipping ...');
+                                counter--;
+                                finishItemProcessing();
+                                return;
+                            }
 
-                        console.log('waiting to pakkumised.ee source request', originalUrl);
+                            var originalUrl = item.url;
 
-                        if (originalUrl) {
-                            console.log('check if deal is already parsed');
+                            console.log('waiting to pakkumised.ee source request', originalUrl);
 
-                            db.offers.find({url: originalUrl}).limit(1).toArray(function (err, deals) {
-                                if (err) {
-                                   counter--;
-                                   console.log('error checking deal ... ');
-                                   finishItemProcessing();
-                                   return;
-                                }
+                            if (originalUrl) {
+                                console.log('check if deal is already parsed');
 
-                                if (deals.length === 1) {
-                                    counter--;
-                                    console.log('deal has been already parsed. skipping ... ');
-                                    finishItemProcessing();
-                                }
-                                else {
-                                    console.log('waiting request to original deal', originalUrl);
+                                db.offers.find({url: originalUrl}).limit(1).toArray(function (err, deals) {
+                                    if (err) {
+                                       counter--;
+                                       console.log('error checking deal ... ');
+                                       finishItemProcessing();
+                                       return;
+                                    }
 
-                                    request({
-                                        uri: originalUrl,
-                                        timeout: 30000
-                                    }, function (err, response, body) {
+                                    if (deals.length === 1) {
                                         counter--;
+                                        console.log('deal has been already parsed. skipping ... ');
+                                        finishItemProcessing();
+                                    }
+                                    else {
+                                        console.log('waiting request to original deal', originalUrl);
 
-                                        console.log('counting: ', counter);
+                                        request({
+                                            uri: originalUrl,
+                                            timeout: 30000
+                                        }, function (err, response, body) {
+                                            counter--;
 
-                                        if (!(err || response.statusCode !== 200) && body) {
-                                            var deal = {
-                                                'url': originalUrl,
-                                                'site': site
-                                            },
-                                            parser = require(__dirname + '/models/' + site + ".js");
+                                            console.log('counting: ', counter);
 
-                                            parser.parse(body, function (parsed) {
+                                            if (!(err || response.statusCode !== 200) && body) {
+                                                var deal = {
+                                                    'url': originalUrl,
+                                                    'site': site
+                                                },
+                                                parser = require(__dirname + '/models/' + site + ".js");
 
-                                                _.extend(deal, parsed);
+                                                parser.parse(body, function (parsed) {
 
-                                                _.extend(deal, {
-                                                    'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
-                                                });
+                                                    _.extend(deal, parsed);
 
-                                                db.offers.save(deal, function (err, saved) {
-                                                    if (err || !saved) {
-                                                        console.log("Deal not saved", err);
-                                                        finishItemProcessing();
-                                                    }
-                                                    else {
-                                                        console.log('Deal saved:', saved);
+                                                    _.extend(deal, {
+                                                        'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
+                                                    });
 
-                                                        if (deal.pictures) {
-                                                            console.log('Fetching images:', deal.pictures.length);
-                                                            // imageProcessor.process(config.images.dir + saved._id + '/', deal.pictures, finishItemProcessing);
+                                                    db.offers.save(deal, function (err, saved) {
+                                                        if (err || !saved) {
+                                                            console.log("Deal not saved", err);
                                                             finishItemProcessing();
                                                         }
                                                         else {
-                                                            finishItemProcessing();
+                                                            console.log('Deal saved:', saved);
+
+                                                            if (deal.pictures) {
+                                                                console.log('Fetching images:', deal.pictures.length);
+                                                                // imageProcessor.process(config.images.dir + saved._id + '/', deal.pictures, finishItemProcessing);
+                                                                finishItemProcessing();
+                                                            }
+                                                            else {
+                                                                finishItemProcessing();
+                                                            }
                                                         }
-                                                    }
+                                                    });
                                                 });
-                                            });
-                                        }
-                                        else {
-                                            console.log('parsing pakkumised.ee link failed', originalUrl);
-                                            finishItemProcessing();
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                        else {
-                            counter--;
-                            console.log('item has no origin url: ', originalUrl);
-                            finishItemProcessing();
-                        }
+                                            }
+                                            else {
+                                                console.log('parsing pakkumised.ee link failed', originalUrl);
+                                                finishItemProcessing();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                            else {
+                                counter--;
+                                console.log('item has no origin url: ', originalUrl);
+                                finishItemProcessing();
+                            }
 
-                    }, function (err) {
-                        if (err) {
-                            console.log('error reading pakkumised.ee original links', err);
-                        }
-                        if (counter === 0) {
-                            console.log('parsing pakkumised.ee finished successfully');
+                        }, function (err) {
+                            if (err) {
+                                console.log('error reading pakkumised.ee original links', err);
+                            }
+                            if (counter === 0) {
+                                console.log('parsing pakkumised.ee finished successfully');
 
-                            console.log(_.isEmpty(deals), _.last(_.keys(deals)), pageNumber);
+                                console.log(_.isEmpty(deals), _.last(_.keys(deals)), pageNumber);
 
-                            callback();
-                        }
-                    });
+                                callback();
+                            }
+                        });
+                    }
+                    else {
+                        pageRepeats = true;
+                        callback();
+                    }
                 }
                 else {
-                    pageRepeats = true;
-                    callback();
+                    console.log('Error: ', err);
+
+                    callback(err);
                 }
+            });
+        },
+        function (err) {
+            if (err) {
+                console.log('There was an error: ', err);
             }
             else {
-                console.log('Error: ', err);
-
-                callback(err);
+                console.log('Finished');
             }
-        });
-    },
-    function (err) {
-        if (err) {
-            console.log('There was an error: ', err);
         }
-        else {
-            console.log('Finished');
-        }
-    }
-);
+    );
+}, null, true, "America/Los_Angeles");
+
