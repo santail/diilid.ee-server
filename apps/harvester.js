@@ -1,3 +1,5 @@
+'use strict';
+
 var config = require('./config/environment'),
     activeSites = config.activeSites,
     db = require("mongojs").connect(config.db.url, config.db.collections),
@@ -6,8 +8,7 @@ var config = require('./config/environment'),
     _ = require('underscore')._,
     cron = require('cron').CronJob;
 
-new cron('*/5 * * * * *', function() {
-    console.log('You will see this message every 5 seconds');
+new cron(config.harvester.execution.rule, function() {
 
     var runningTime = new Date();
 
@@ -171,5 +172,5 @@ new cron('*/5 * * * * *', function() {
             }
         }
     );
-}, null, true, "America/Los_Angeles");
+}, null, true, "Europe/Tallinn");
 

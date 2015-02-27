@@ -3,7 +3,7 @@
 var path = require('path');
 var _ = require('underscore')._;
 
-function requiredProcessEnv(name) {
+function requiredProcessEnv (name) {
   if(!process.env[name]) {
     throw new Error('You must set the ' + name + ' environment variable');
   }
@@ -35,4 +35,4 @@ var all = {
 // ==============================================
 module.exports = _.extend(
   all,
-  require('./' + process.env.NODE_ENV + '.js') || {});
+  require('./' + requiredProcessEnv('NODE_ENV') + '.js') || {});

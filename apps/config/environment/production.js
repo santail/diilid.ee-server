@@ -10,10 +10,20 @@ var config = {
         dir: __dirname + '/public/images/',
         thumbs: []
     },
+    harvester: {
+        execution: {
+            rule: '0 */3 * * *' // every 3 hours
+        }
+    },
+    notifier: {
+        execution: {
+            rule: '0 */3 * * *' // every 3 hours
+        }
+    },
     activeSites: {
         'www.minuvalik.ee': true,
         'www.cherry.ee': true
     }
-}
+};
 
-module.exports = config
+module.exports = config;
