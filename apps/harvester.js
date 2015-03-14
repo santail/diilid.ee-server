@@ -1,16 +1,18 @@
-'use strict';
-
 var config = require('./config/environment'),
     activeSites = config.activeSites,
-    db = require("mongojs").connect(config.db.url, config.db.collections),
+    mongojs = require("mongojs"),
     request = require('request'),
     async = require('async'),
     _ = require('underscore')._,
     cron = require('cron').CronJob;
 
-new cron(config.harvester.execution.rule, function() {
+var Harvester = function () {};
 
-    var runningTime = new Date();
+Harvester.prototype.run = function () {
+    var runningTime = new Date(),
+        db = mongojs.connect(config.db.url, config.db.collections);
+
+    db.collection('offers');
 
     console.log('harvesting started ...', runningTime);
 
@@ -19,11 +21,13 @@ new cron(config.harvester.execution.rule, function() {
         lastId = null;
 
     async.whilst(
-        function () { return !pageRepeats; },
+        function () {
+            return !pageRepeats;
+        },
         function (callback) {
             pageNumber++;
 
-            var source =  'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page=' + pageNumber + '&keyword=';
+            var source = 'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page=' + pageNumber + '&keyword=';
             console.log('URL: ' + source);
 
             request({
@@ -65,12 +69,14 @@ new cron(config.harvester.execution.rule, function() {
                             if (originalUrl) {
                                 console.log('check if deal is already parsed');
 
-                                db.offers.find({url: originalUrl}).limit(1).toArray(function (err, deals) {
+                                db.offers.find({
+                                    url: originalUrl
+                                }).limit(1).toArray(function (err, deals) {
                                     if (err) {
-                                       counter--;
-                                       console.log('error checking deal ... ');
-                                       finishItemProcessing();
-                                       return;
+                                        counter--;
+                                        console.log('error checking deal ... ');
+                                        finishItemProcessing();
+                                        return;
                                     }
 
                                     if (deals.length === 1) {
@@ -91,10 +97,10 @@ new cron(config.harvester.execution.rule, function() {
 
                                             if (!(err || response.statusCode !== 200) && body) {
                                                 var deal = {
-                                                    'url': originalUrl,
-                                                    'site': site
-                                                },
-                                                parser = require(__dirname + '/models/' + site + ".js");
+                                                        'url': originalUrl,
+                                                        'site': site
+                                                    },
+                                                    parser = require(__dirname + '/models/' + site + ".js");
 
                                                 parser.parse(body, function (parsed) {
 
@@ -170,7 +176,21 @@ new cron(config.harvester.execution.rule, function() {
             else {
                 console.log('Finished');
             }
-        }
-    );
-}, null, true, "Europe/Tallinn");
 
+            db.close();
+        }
+
+
+    );
+};
+
+Harvester.prototype.start = function (forceMode) {
+    if (forceMode) {
+        this.run();
+    }
+    else {
+        new cron(config.harvester.execution.rule, this.run, null, true, "Europe/Tallinn");
+    }
+};
+
+module.exports = Harvester;

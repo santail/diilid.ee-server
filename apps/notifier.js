@@ -2,11 +2,29 @@
 
 var config = require('./config/environment'),
     activeSites = config.activeSites,
-    db = require("mongojs").connect(config.db.url, config.db.collections),
+    mongojs = require("mongojs"),
     async = require('async'),
     _ = require('underscore')._,
     cron = require('cron').CronJob;
-    
-new cron(config.notifier.execution.rule, function() {
-    
-});
+
+var Notifier = function () {};
+
+Notifier.prototype.run = function () {
+    var runningTime = new Date(),
+        db = mongojs.connect(config.db.url).collection('notification');
+
+    db.notification.insert();
+
+    console.log('notifier started ...', runningTime);
+};
+
+Notifier.prototype.start = function (forceMode) {
+    if (forceMode) {
+        this.run();
+    }
+    else {
+        new cron(config.notifier.execution.rule, this.run, null, true, "Europe/Tallinn");
+    }
+};
+
+module.exports = Notifier;
