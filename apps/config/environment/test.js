@@ -5,7 +5,7 @@ var config = {
     },
     db: {
         url: 'mongodb://deals:offers@staff.mongohq.com:10020/deals',
-        collections: ["offers"]
+        collections: ["offers", "notifications"]
     },
     images: {
         dir: __dirname + '/public/images/',
@@ -22,7 +22,7 @@ var config = {
         }
     },
     activeSites: {
-        'www.minuvalik.ee': true,
+        // 'www.minuvalik.ee': true,
         'www.cherry.ee': true
     }
 };

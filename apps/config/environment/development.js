@@ -4,8 +4,8 @@ var config = {
         ip: process.env.IP || '0.0.0.0'
     },
     db: {
-        url: '127.2.91.1:27017/deals',
-        collections: ["offers"]
+        url: 'mongodb://deals:offers@staff.mongohq.com:10020/deals',
+        collections: ["offers", "notifications"]
     },
     images: {
         dir: __dirname + '/public/images/',
@@ -18,11 +18,11 @@ var config = {
     },
     notifier: {
         execution: {
-            rule: '*/5 * * * *' // every 5 minutes
+            rule: '0/5 * * * *' // every 5 minutes
         }
     },
     activeSites: {
-        'www.minuvalik.ee': true,
+        // 'www.minuvalik.ee': true,
         'www.cherry.ee': true
     }
 };
