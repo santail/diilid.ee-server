@@ -29,6 +29,10 @@ var all = {
       }
     }
   },
+  activeSites: {
+      'www.minuvalik.ee': true,
+      'www.cherry.ee': true
+  }
 };
 
 // Export the config object based on the NODE_ENV

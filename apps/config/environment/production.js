@@ -16,10 +16,6 @@ var config = {
         execution: {
             rule: '0 */3 * * *' // every 3 hours
         }
-    },
-    activeSites: {
-        'www.minuvalik.ee': true,
-        'www.cherry.ee': true
     }
 };
 
