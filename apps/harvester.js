@@ -100,16 +100,17 @@ Harvester.prototype.run = function () {
                                                         'url': originalUrl,
                                                         'site': site
                                                     },
-                                                    parser = require(__dirname + '/models/' + site + ".js");
-
+                                                    Parser = require(__dirname + '/models/' + site + ".js"),
+                                                    parser = new Parser();
+                                                    
                                                 parser.parse(body, function (parsed) {
 
                                                     _.extend(deal, parsed);
-
+    
                                                     _.extend(deal, {
                                                         'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
                                                     });
-
+    
                                                     db.offers.save(deal, function (err, saved) {
                                                         if (err || !saved) {
                                                             console.log("Deal not saved", err);
@@ -117,7 +118,7 @@ Harvester.prototype.run = function () {
                                                         }
                                                         else {
                                                             console.log('Deal saved:', saved);
-
+    
                                                             if (deal.pictures) {
                                                                 console.log('Fetching images:', deal.pictures.length);
                                                                 // imageProcessor.process(config.images.dir + saved._id + '/', deal.pictures, finishItemProcessing);
