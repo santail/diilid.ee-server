@@ -1,10 +1,6 @@
 var config = {
-    app: {
-        port: process.env.PORT || 3000,
-        ip: process.env.IP || '0.0.0.0'
-    },
     db: {
-        url: 'mongodb://deals:offers@staff.mongohq.com:10020/deals',
+        url: 'mongodb://deals:offers@dogen.mongohq.com:10063/deals_server_development',
         collections: ["offers", "notifications"]
     },
     images: {
@@ -22,7 +18,7 @@ var config = {
         }
     },
     activeSites: {
-        // 'www.minuvalik.ee': true,
+        'www.minuvalik.ee': true,
         'www.cherry.ee': true
     }
 };
