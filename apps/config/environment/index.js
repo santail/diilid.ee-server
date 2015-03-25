@@ -29,9 +29,14 @@ var all = {
       }
     }
   },
+  harvester: {
+    timeout: 30000
+  },
+  pakkumised: true,
   activeSites: {
       'www.minuvalik.ee': true,
-      'www.cherry.ee': true
+      'www.cherry.ee': true,
+      'www.euronics.ee': true
   }
 };
 
