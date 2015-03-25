@@ -1,3 +1,5 @@
+'use strict';
+
 var util = require('util'),
     AbstractParser = require("./abstractParser");
 
@@ -5,12 +7,13 @@ function MinuvalikParser() {
     AbstractParser.call(this);
 
     this.config = {
+        'site': 'www.minuvalik.ee',
         'index': {
-            'rus': 'https://www.minuvalik.ee/ru/',
-            'est': 'https://www.minuvalik.ee/'
+            'rus': 'https://www.minuvalik.ee/ru/?c=all',
+            'est': 'https://www.minuvalik.ee/?c=all'
         },
         'list': function ($) {
-            return $('#ddws > a').map(function () {
+            return $('div.deals li > a').map(function () {
                 return $(this).attr('href');
             });
         },

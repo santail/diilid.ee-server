@@ -3,19 +3,15 @@
 var util = require('util'),
     AbstractParser = require("./abstractParser");
 
-function CherryParser() {
+function PakkumisedParser() {
     AbstractParser.call(this);
 
     this.config = {
-        'site' : 'www.cherry.ee',
         'index': {
-            'rus': 'https://cherry.ee/ru/',
-            'est': 'https://cherry.ee/et/'
+            'est': 'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page='
         },
         'list': function ($) {
-            return $('#themainthing div.offer-block div.row-of-deals div.offer-small div.info > h2 > a').map(function () {
-                return $(this).attr('href');
-            });
+
         },
         'templates': {
             'title': function ($) {
@@ -40,6 +36,10 @@ function CherryParser() {
     };
 }
 
-util.inherits(CherryParser, AbstractParser);
+PakkumisedParser.prototype.parseResponseBody = function (data) {
+    return JSON.parse(data);
+};
 
-module.exports = CherryParser;
+util.inherits(PakkumisedParser, AbstractParser);
+
+module.exports = PakkumisedParser;
