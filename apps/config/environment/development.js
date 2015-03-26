@@ -21,7 +21,8 @@ var config = {
     activeSites: {
       'www.minuvalik.ee': false,
       'www.cherry.ee': false,
-      'www.euronics.ee': false
+      'www.euronics.ee': false,
+      'www.kriisis.ee': false
     }
 };
 
