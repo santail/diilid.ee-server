@@ -46,9 +46,17 @@ function KriisisParser() {
             });
         },
         'templates': {
+            'shop': function ($) {
+                return $('#01 > tr').eq(5).find('td').eq(1).find('table').first().find('tr > td > table').first().find('p').text();
+            },
             'title': function ($) {
-                $('#01 > tr').eq(5).find('td > p').remove();
-                return $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(2).text();
+                var $paragraphs = $('#01 > tr').eq(5).children('td').eq(1).children('p');
+
+                if (_.size($paragraphs) > 4) {
+                    $paragraphs.first().remove();
+                };
+
+                return $('#01 > tr').eq(5).children('td').eq(1).children('p').eq(2).text();
             },
             'pictures': function ($) {
                 return $('#01 > tr').eq(5).find('td').eq(1).find('table').first().find('tr > td > table').eq(2).find('tr > td > img').attr('src');
