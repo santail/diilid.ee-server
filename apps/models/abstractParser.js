@@ -3,8 +3,7 @@
 var _ = require("underscore")._,
     async = require('async'),
     cheerio = require("cheerio"),
-    request = require('request'),
-    urlParser = require("url");
+    tidy = require('htmltidy').tidy;
 
 function AbstractParser() {
     this.config = {};
@@ -20,13 +19,13 @@ AbstractParser.prototype.parseResponseBody = function (body) {
     return cheerio.load(body);
 };
 
-AbstractParser.prototype.getPagingParameters = function (body) {
+AbstractParser.prototype.getPagingParameters = function (language, body) {
     var that = this;
 
     console.log('Checking paging ...');
 
     if (that.config.paging) {
-        var paging = that.config.paging.call(that, body);
+        var paging = that.config.paging.call(that, language, body);
 
         if (_.size(paging) > 0) {
             console.log('Paging found ...', paging);
@@ -38,23 +37,25 @@ AbstractParser.prototype.getPagingParameters = function (body) {
     return false;
 };
 
-AbstractParser.prototype.iteratePages = function (paging, callback) {
-    var that = this,
-        counter = 0;
-
-    console.log('Iterating found pages starting from', paging.first, 'till', paging.last);
-    
-    callback();
-};
-
-AbstractParser.prototype.getOfferLinks = function (body) {
+AbstractParser.prototype.getOfferLinks = function (language, body) {
     var that = this;
-    
-    return that.config.list.call(that, body);
+
+    var links = that.config.list.call(that, body);
+
+    return _.map(links, function (link) {
+        return that.compileOfferUrl(language, link);
+    });
 };
 
-AbstractParser.prototype.compileProperUrl = function (url, link) {
-    return urlParser.resolve(url, link);
+AbstractParser.prototype.compilePageUrl = function (language, link) {
+
+    console.log(language, link);
+
+    return link;
+};
+
+AbstractParser.prototype.compileOfferUrl = function (language, link) {
+    return link;
 };
 
 AbstractParser.prototype.getSite = function () {
@@ -66,7 +67,9 @@ AbstractParser.prototype.setDb = function (db) {
 };
 
 AbstractParser.prototype.parseOffer = function (body, callback) {
-    console.log('parsing ...');
+    var that = this;
+
+    console.log('Parsing offer\'s page ...');
 
     var _apply = function apply(body, templates) {
         var result = {};
@@ -86,7 +89,22 @@ AbstractParser.prototype.parseOffer = function (body, callback) {
         return result;
     };
 
-    callback(_apply(cheerio.load(body), this.config.templates));
+    // TODO Warning: tidy uses 32 bit binary instead of 64, https://github.com/vavere/htmltidy/issues/11
+    // TODO Needs manual update on production for libs
+    tidy(body, {
+        'doctype':'html5',
+        'tidy-mark':false,
+        'indent':true
+    }, function (err, body) {
+        if (!err) {
+            var offer = _apply(cheerio.load(body), that.config.templates);
+            console.log('Parsed offer', offer);
+            callback(err, offer);
+        }
+        else {
+            callback(err);
+        }
+    });
 };
 
 module.exports = AbstractParser;

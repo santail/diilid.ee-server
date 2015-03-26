@@ -1,6 +1,7 @@
 'use strict';
 
 var util = require('util'),
+    urlParser = require("url"),
     AbstractParser = require("./abstractParser");
 
 function MinuvalikParser() {
@@ -37,6 +38,12 @@ function MinuvalikParser() {
         }
     };
 }
+
+AbstractParser.prototype.compileOfferUrl = function (language, link) {
+    var that = this;
+
+    return urlParser.resolve(that.config.index[language], link);
+};
 
 util.inherits(MinuvalikParser, AbstractParser);
 

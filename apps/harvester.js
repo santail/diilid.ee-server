@@ -18,15 +18,20 @@ Harvester.prototype.parse = function (originalUrl, parser, body, callback) {
             'site': parser.getSite()
         };
 
-    parser.parseOffer(body, function (parsed) {
+    parser.parseOffer(body, function (err, parsed) {
+        if (!err) {
+            _.extend(deal, parsed);
 
-        _.extend(deal, parsed);
+            _.extend(deal, {
+                'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
+            });
 
-        _.extend(deal, {
-            'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
-        });
-
-        that.saveOffer(deal, callback);
+            that.saveOffer(deal, callback);
+        }
+        else {
+            console.log("Error parsing offer", err);
+            callback(err)
+        }
     });
 };
 
@@ -39,7 +44,6 @@ Harvester.prototype.saveOffer = function (deal, callback) {
             callback();
         }
         else {
-            console.log('Deal saved:', saved);
 
             if (deal.pictures) {
                 console.log('Fetching images:', deal.pictures.length);
@@ -133,6 +137,67 @@ Harvester.prototype.processOffers = function (deals, callback) {
     });
 };
 
+Harvester.prototype.processOffersNotPakkumised = function (parser, language, url, body, callback) {
+    var that = this,
+        numberOfOffers = 0,
+        numberOfOffersProcessed = 0;
+
+    console.log("Parsing index page for offers links");
+
+    var links = parser.getOfferLinks(language, body);
+        numberOfOffers = _.size(links);
+
+    console.log('Iterating found offers. Total found', links, numberOfOffers);
+
+    async.forEachSeries(links, function (link, finishOfferProcessing) {
+        console.log('Checking offer', link);
+
+        that.db.offers.find({
+            url: link
+        }).limit(1).toArray(function (err, offers) {
+            if (err) {
+                console.log('Error checking offer', link, err);
+                numberOfOffersProcessed++;
+                finishOfferProcessing(err);
+                return;
+            }
+
+            if (offers.length === 1) {
+                console.log('Offer', link, 'already exists. Skipped.');
+                numberOfOffersProcessed++;
+                finishOfferProcessing();
+            }
+            else {
+                console.log('Retrieving offer', link);
+                request({
+                    uri: link,
+                    timeout: 30000
+                }, function (err, response, body) {
+                    numberOfOffersProcessed++;
+
+                    if (!(err || response.statusCode !== 200) && body) {
+                        that.parse(link, parser, body, finishOfferProcessing);
+                    }
+                    else {
+                        console.log('Parsing offer', link, 'failed');
+                        finishOfferProcessing(err);
+                    }
+                });
+            }
+        });
+    }, function (err) {
+        if (err) {
+            console.log('Error retriving offers for', url, err);
+            callback(err);
+        }
+
+        if (numberOfOffers === numberOfOffersProcessed) {
+            console.log('Parsing', url, 'finished successfully');
+            callback(err);
+        }
+    });
+}
+
 Harvester.prototype.run = function () {
     var that = this,
         runningTime = new Date();
@@ -141,7 +206,7 @@ Harvester.prototype.run = function () {
 
     that.db.collection('offers');
 
-    console.log('harvesting started ...', runningTime);
+    console.log('harvesting started', runningTime);
 
     if (!!config.pakkumised) {
         var pageNumber = 0,
@@ -232,71 +297,62 @@ Harvester.prototype.run = function () {
                             console.log("Parsing index page for", language, url);
 
                             var body = parser.parseResponseBody(data);
-                            var paging = parser.getPagingParameters(body);
+                            var paging = parser.getPagingParameters(language, body);
 
                             if (paging) {
-                                numberOfLanguagesProcessed++;
-                                parser.iteratePages(paging, finishLanguageProcessing);
-                            }
-                            else {
-                                var numberOfOffers = 0,
-                                    numberOfOffersProcessed = 0;
+                                var numberOfPages = 0,
+                                    numberOfPagesProcessed = 0;
 
-                                console.log("Parsing index page for offers links");
+                                var pages = paging.pages;
+                                    numberOfPages = _.size(pages);
 
-                                var links = parser.getOfferLinks(body);
-                                numberOfOffers = _.size(links);
+                                async.forEachSeries(pages, function (page, finishPageProcessing) {
+                                    console.log('Requesting page', page);
 
-                                console.log('Iterating found offers. Total found', numberOfOffers);
+                                    request({
+                                        uri: page,
+                                        timeout: 30000
+                                    }, function (err, response, data) {
+                                        console.log('Page', page, 'retrieved', response.statusCode);
 
-                                async.forEachSeries(links, function (link, finishOfferProcessing) {
-                                    link = parser.compileProperUrl(parser.config.index[language], link);
+                                        if (!(err || response.statusCode !== 200) && data) {
+                                            var body = parser.parseResponseBody(data);
 
-                                    console.log('Checking offer', link);
+                                            that.processOffersNotPakkumised(parser, language, url, body, function (err) {
+                                                if (err) {
+                                                    console.error(err);
+                                                }
 
-                                    that.db.offers.find({
-                                        url: link
-                                    }).limit(1).toArray(function (err, offers) {
-                                        if (err) {
-                                            console.log('Error checking offer', link, err);
-                                            numberOfOffersProcessed++;
-                                            finishOfferProcessing(err);
-                                            return;
-                                        }
-
-                                        if (offers.length === 1) {
-                                            console.log('Offer', link, 'already exists. Skipped.');
-                                            numberOfOffersProcessed++;
-                                            finishOfferProcessing();
+                                                numberOfPagesProcessed++;
+                                                finishPageProcessing();
+                                            });
                                         }
                                         else {
-                                            console.log('Retrieving offer', link);
-                                            request({
-                                                uri: link,
-                                                timeout: 30000
-                                            }, function (err, response, body) {
-                                                numberOfOffersProcessed++;
-
-                                                if (!(err || response.statusCode !== 200) && body) {
-                                                    that.parse(link, parser, body, finishOfferProcessing);
-                                                }
-                                                else {
-                                                    console.log('Parsing offer', link, 'failed');
-                                                    finishOfferProcessing(err);
-                                                }
-                                            });
+                                            console.log('Error retrieving index page for', language, url, response.statusCode, err);
+                                            numberOfPagesProcessed++;
+                                            finishPageProcessing();
                                         }
                                     });
                                 }, function (err) {
                                     if (err) {
                                         console.log('Error retriving offers for', url, err);
+                                        finishLanguageProcessing(err);
                                     }
 
-                                    if (numberOfOffers === numberOfOffersProcessed) {
+                                    if (numberOfPages === numberOfPagesProcessed) {
                                         console.log('Parsing', url, 'finished successfully');
                                         numberOfLanguagesProcessed++;
                                         finishLanguageProcessing(err);
                                     }
+                                });
+                            }
+                            else {
+                                that.processOffersNotPakkumised(parser, language, url, body, function (err) {
+                                    if (err) {
+                                        console.error(err);
+                                    }
+                                    numberOfLanguagesProcessed++;
+                                    finishLanguageProcessing(err);
                                 });
                             }
                         }
@@ -309,6 +365,7 @@ Harvester.prototype.run = function () {
                 }, function (err) {
                     if (err) {
                         console.log('Error parsing index page', site, err);
+                        finishSiteProcessing(err);
                     }
 
                     if (numberOfLanguages === numberOfLanguagesProcessed) {
