@@ -16,6 +16,13 @@ var config = {
         execution: {
             rule: '0 */3 * * *' // every 3 hours
         }
+    },
+    pakkumised: false,
+    activeSites: {
+      'www.minuvalik.ee': true,
+      'www.cherry.ee': true,
+      'www.euronics.ee': true,
+      'www.kriisis.ee': true
     }
 };
 

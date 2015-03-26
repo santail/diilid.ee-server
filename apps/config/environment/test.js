@@ -1,7 +1,7 @@
 var config = {
 
     db: {
-        url: 'mongodb://deals:offers@staff.mongohq.com:10020/deals_test',
+        url: 'mongodb://deals:offers@dogen.mongohq.com:10094/deals_server_test',
         collections: ["offers", "notifications"]
     },
     images: {
@@ -17,6 +17,13 @@ var config = {
         execution: {
             rule: '*/5 * * * *' // every 5 minutes
         }
+    },
+    pakkumised: false,
+    activeSites: {
+      'www.minuvalik.ee': true,
+      'www.cherry.ee': true,
+      'www.euronics.ee': true,
+      'www.kriisis.ee': true
     }
 };
 
