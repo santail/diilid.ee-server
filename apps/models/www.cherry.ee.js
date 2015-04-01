@@ -27,13 +27,21 @@ function CherryParser() {
                 });
             },
             'description': {
-                'short': function ($) {
+                'intro': function ($) {
                     // TODO needs to be cleared out
                     return $('#themainthing div.offer-details div.offer-contents div.left-side div#long_text_container').html();
                 },
                 'long': function ($) {
                     // TODO needs to be cleared out
-                    return $('#themainthing div.offer-details div.offer-contents div.left-side').html();
+                    return $('#themainthing div.offer-details div.offer-contents div.left-side > ul.pink-bullets').text();
+                }
+            },
+            'price': {
+                'original': function ($) {
+                    return $('div#deal-info > div.price-old').text().replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').trim();
+                },
+                'discount': function ($) {
+                    return $('div#deal-info > div.price-big').text().replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').trim();
                 }
             }
         }
