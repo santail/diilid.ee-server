@@ -80,18 +80,18 @@ function KriisisParser() {
     };
 }
 
-AbstractParser.prototype.compilePageUrl = function (language, link) {
+util.inherits(KriisisParser, AbstractParser);
+
+KriisisParser.prototype.compilePageUrl = function (language, link) {
     var that = this;
 
     return that.config.index[language] + link;
 };
 
-AbstractParser.prototype.compileOfferUrl = function (language, link) {
+KriisisParser.prototype.compileOfferUrl = function (language, link) {
     var that = this;
 
     return urlParser.resolve(that.config.index[language], link);
 };
-
-util.inherits(KriisisParser, AbstractParser);
 
 module.exports = KriisisParser;

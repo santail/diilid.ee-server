@@ -66,16 +66,16 @@ function EuronicsParser() {
     };
 }
 
-AbstractParser.prototype.compilePageUrl = function (language, link) {
+util.inherits(EuronicsParser, AbstractParser);
+
+EuronicsParser.prototype.compilePageUrl = function (language, link) {
     var that = this;
 
     return that.config.index[language] + link;
 };
 
-AbstractParser.prototype.compileOfferUrl = function (language, link) {
+EuronicsParser.prototype.compileOfferUrl = function (language, link) {
     return link;
 };
-
-util.inherits(EuronicsParser, AbstractParser);
 
 module.exports = EuronicsParser;

@@ -7,6 +7,8 @@ var util = require('util'),
 function MinuvalikParser() {
     AbstractParser.call(this);
 
+    var that = this;
+    
     this.config = {
         'site': 'www.minuvalik.ee',
         'index': {
@@ -22,29 +24,51 @@ function MinuvalikParser() {
             'title': function ($) {
                 return $('.deal_rules_td > h1.title_deal').text();
             },
-            'pictures': function ($) {
+            'pictures': function ($, language) {
                 return $('.deal_rules_td .dd_video_photo > a').map(function () {
-                    return $(this).attr('href');
+                    return that.compileImageUrl(language, $(this).attr('href'));
                 });
             },
             'description': {
+                'intro': function ($) {
+                    return $('.deal_rules_td .dd_lead').html();
+                },
                 'short': function ($) {
-                    return $('.deal_rules_td .dd_descr').first().html();
+                    return $('.deal_rules_td .dd_descr').eq(1).html();
                 },
                 'long': function ($) {
-                    return $('.deal_rules_td .dd_descr').eq(1).html();
+                    return $('.deal_rules_td .dd_descr').first().html();
+                }
+            },
+            'price': {
+                'original': function ($) {
+                    return $('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.dd_basic_price').text();
+                },
+                'discount': function ($) {
+                    return $('.deal_rules_td > div#parent_div > div> div.dd_table_price').text();
+                },
+                'save': function ($) {
+                    return $('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.fl_deals_fp_discount_row').text();
                 }
             }
         }
     };
 }
 
-AbstractParser.prototype.compileOfferUrl = function (language, link) {
+util.inherits(MinuvalikParser, AbstractParser);
+
+MinuvalikParser.prototype.compileImageUrl = function (language, link) {
+    console.log('Image link', language, link);
+
+  var that = this;
+  return urlParser.resolve(that.config.index[language], link);
+};
+
+MinuvalikParser.prototype.compileOfferUrl = function (language, link) {
     var that = this;
 
     return urlParser.resolve(that.config.index[language], link);
 };
 
-util.inherits(MinuvalikParser, AbstractParser);
 
 module.exports = MinuvalikParser;

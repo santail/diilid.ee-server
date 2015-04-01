@@ -36,10 +36,10 @@ function PakkumisedParser() {
     };
 }
 
+util.inherits(PakkumisedParser, AbstractParser);
+
 PakkumisedParser.prototype.parseResponseBody = function (data) {
     return JSON.parse(data);
 };
-
-util.inherits(PakkumisedParser, AbstractParser);
 
 module.exports = PakkumisedParser;
