@@ -32,7 +32,7 @@ function MinuvalikParser() {
                     return $('.deal_rules_td .dd_descr').first().html();
                 },
                 'long': function ($) {
-                    return $($('.deal_rules_td .dd_descr')[1]).html();
+                    return $('.deal_rules_td .dd_descr').eq(1).html();
                 }
             }
         }
