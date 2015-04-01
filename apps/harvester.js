@@ -103,7 +103,10 @@ Harvester.prototype.processOffers = function (deals, callback) {
 
                     request({
                         uri: originalUrl,
-                        timeout: 30000
+                        timeout: 30000,
+                        headers: {
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+                        }
                     }, function (err, response, body) {
                         counter--;
 
@@ -171,7 +174,10 @@ Harvester.prototype.processOffersNotPakkumised = function (parser, language, url
                 console.log('Retrieving offer', link);
                 request({
                     uri: link,
-                    timeout: 30000
+                    timeout: 30000,
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+                    }
                 }, function (err, response, body) {
                     numberOfOffersProcessed++;
 
@@ -198,6 +204,38 @@ Harvester.prototype.processOffersNotPakkumised = function (parser, language, url
     });
 }
 
+Harvester.prototype.processPage = function (page, parser, language, url, finishPageProcessing) {
+    var that = this;
+
+    console.log('Requesting page', page);
+
+    request({
+        uri: page,
+        timeout: 30000,
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+        }
+    }, function (err, response, data) {
+        console.log('Page', page, 'retrieved', response.statusCode);
+
+        if (!(err || response.statusCode !== 200) && data) {
+            var body = parser.parseResponseBody(data);
+
+            that.processOffersNotPakkumised(parser, language, url, body, function (err) {
+                if (err) {
+                    console.error(err);
+                }
+
+                finishPageProcessing();
+            });
+        }
+        else {
+            console.log('Error retrieving index page for', language, url, response.statusCode, err);
+            finishPageProcessing();
+        }
+    });
+};
+
 Harvester.prototype.run = function () {
     var that = this,
         runningTime = new Date();
@@ -220,15 +258,32 @@ Harvester.prototype.run = function () {
             function () {
                 return !pageRepeats;
             },
+            /*
+            function (finishPageProcessing) {
+                pageNumber++;
+
+                var page = 'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page=' + pageNumber + '&keyword=';
+                console.log('URL: ' + page);
+
+                that.processPage(page, parser, language, url, function () {
+                    numberOfPagesProcessed++;
+                    finishPageProcessing();
+                });
+            },
+            */
+
             function (callback) {
                 pageNumber++;
 
-                var source = 'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page=' + pageNumber + '&keyword=';
-                console.log('URL: ' + source);
+                var page = 'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page=' + pageNumber + '&keyword=';
+                console.log('URL: ' + page);
 
                 request({
-                    uri: source,
-                    timeout: 30000
+                    uri: page,
+                    timeout: 30000,
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+                    }
                 }, function (err, response, data) {
                     console.log('Requesting data from pakkumised.ee');
 
@@ -277,7 +332,10 @@ Harvester.prototype.run = function () {
 
                 var Parser = require(__dirname + '/models/' + site + ".js"),
                     parser = new Parser();
-                    parser.setDb(that.db);
+
+                if (parser.config.clean) {
+                    that.db.offers.remove({'site': site});
+                };
 
                 var numberOfLanguages = _.size(parser.config.index),
                     numberOfLanguagesProcessed = 0;
@@ -289,7 +347,10 @@ Harvester.prototype.run = function () {
 
                     request({
                         uri: url,
-                        timeout: 30000
+                        timeout: 30000,
+                        headers: {
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+                        }
                     }, function (err, response, data) {
                         console.log('Index page retrieved', response.statusCode);
 
@@ -307,31 +368,9 @@ Harvester.prototype.run = function () {
                                     numberOfPages = _.size(pages);
 
                                 async.forEachSeries(pages, function (page, finishPageProcessing) {
-                                    console.log('Requesting page', page);
-
-                                    request({
-                                        uri: page,
-                                        timeout: 30000
-                                    }, function (err, response, data) {
-                                        console.log('Page', page, 'retrieved', response.statusCode);
-
-                                        if (!(err || response.statusCode !== 200) && data) {
-                                            var body = parser.parseResponseBody(data);
-
-                                            that.processOffersNotPakkumised(parser, language, url, body, function (err) {
-                                                if (err) {
-                                                    console.error(err);
-                                                }
-
-                                                numberOfPagesProcessed++;
-                                                finishPageProcessing();
-                                            });
-                                        }
-                                        else {
-                                            console.log('Error retrieving index page for', language, url, response.statusCode, err);
-                                            numberOfPagesProcessed++;
-                                            finishPageProcessing();
-                                        }
+                                    that.processPage(page, parser, language, url, function () {
+                                        numberOfPagesProcessed++;
+                                        finishPageProcessing();
                                     });
                                 }, function (err) {
                                     if (err) {
