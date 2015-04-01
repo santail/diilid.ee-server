@@ -1,440 +1,419 @@
 var config = require('./config/environment'),
-    activeSites = config.activeSites,
-    mongojs = require("mongojs"),
-    request = require('request'),
-    async = require('async'),
-    _ = require('underscore')._,
-    cron = require('cron').CronJob;
+  mongojs = require("mongojs"),
+  request = require('request'),
+  async = require('async'),
+  _ = require('underscore')._,
+  cron = require('cron').CronJob;
 
 var Harvester = function () {
-    this.db = null;
+  this.db = null;
 };
 
-Harvester.prototype.parse = function (originalUrl, parser, body, callback) {
-    var that = this,
-        runningTime = new Date(),
-        deal = {
-            'url': originalUrl,
-            'site': parser.getSite()
-        };
+Harvester.prototype.parseOffer = function (originalUrl, parser, body, callback) {
+  var that = this,
+    runningTime = new Date(),
+    offer = {
+      'url': originalUrl,
+      'site': parser.getSite(),
+      'active': true
+    };
 
-    parser.parseOffer(body, function (err, parsed) {
-        if (!err) {
-            _.extend(deal, parsed);
+  parser.parseOffer(body, function (err, parsed) {
+    if (!err) {
+      _.extend(offer, parsed);
 
-            _.extend(deal, {
-                'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
-            });
+      _.extend(offer, {
+        'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
+      });
 
-            that.saveOffer(deal, callback);
-        }
-        else {
-            console.log("Error parsing offer", err);
-            callback(err)
-        }
-    });
-};
-
-Harvester.prototype.saveOffer = function (deal, callback) {
-    var that = this;
-
-    that.db.offers.save(deal, function (err, saved) {
-        if (err || !saved) {
-            console.log("Deal not saved", err);
-            callback();
-        }
-        else {
-
-            if (deal.pictures) {
-                console.log('Fetching images:', deal.pictures.length);
-                // imageProcessor.process(config.images.dir + saved._id + '/', deal.pictures, callback);
-                callback();
-            }
-            else {
-                callback();
-            }
-        }
-    });
-};
-
-Harvester.prototype.processOffers = function (deals, callback) {
-    var that = this,
-        counter = _.size(deals);
-
-    console.log('total offers found on page: ', counter);
-
-    async.forEachSeries(_.keys(deals), function (offerId, finishItemProcessing) {
-
-        var item = deals[offerId],
-            site = item.partners_site_name;
-
-        if (!activeSites[site]) {
-            console.log(site + ' not active. skipping ...');
-            counter--;
-            finishItemProcessing();
-            return;
-        }
-
-        var Parser = require(__dirname + '/models/' + site + ".js"),
-            parser = new Parser();
-
-        var originalUrl = item.url;
-
-        if (originalUrl) {
-            console.log('check if deal is already parsed');
-
-            that.db.offers.find({
-                url: originalUrl
-            }).limit(1).toArray(function (err, deals) {
-                if (err) {
-                    counter--;
-                    console.log('error checking deal ... ');
-                    finishItemProcessing();
-                    return;
-                }
-
-                if (deals.length === 1) {
-                    counter--;
-                    console.log('deal has been already parsed. skipping ... ');
-                    finishItemProcessing();
-                }
-                else {
-                    console.log('waiting request to original deal', originalUrl);
-
-                    request({
-                        uri: originalUrl,
-                        timeout: 30000,
-                        headers: {
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-                        }
-                    }, function (err, response, body) {
-                        counter--;
-
-                        console.log('counting: ', counter);
-
-                        if (!(err || response.statusCode !== 200) && body) {
-                            that.parse(originalUrl, parser, body, finishItemProcessing);
-                        }
-                        else {
-                            console.log('parsing pakkumised.ee link failed', originalUrl);
-                            finishItemProcessing();
-                        }
-                    });
-                }
-            });
-        }
-        else {
-            counter--;
-            console.log('item has no origin url: ', originalUrl);
-            finishItemProcessing();
-        }
-
-    }, function (err) {
+      that.saveOffer(offer, function (err) {
         if (err) {
-            console.log('error reading pakkumised.ee original links', err);
+          console.log("Error saving offer", err);
         }
-        if (counter === 0) {
-            console.log('parsing pakkumised.ee finished successfully');
-            callback();
-        }
-    });
-};
 
-Harvester.prototype.processOffersNotPakkumised = function (parser, language, url, body, callback) {
-    var that = this,
-        numberOfOffers = 0,
-        numberOfOffersProcessed = 0;
-
-    console.log("Parsing index page for offers links");
-
-    var links = parser.getOfferLinks(language, body);
-        numberOfOffers = _.size(links);
-
-    console.log('Iterating found offers. Total found', links, numberOfOffers);
-
-    async.forEachSeries(links, function (link, finishOfferProcessing) {
-        console.log('Checking offer', link);
-
-        that.db.offers.find({
-            url: link
-        }).limit(1).toArray(function (err, offers) {
+        if (offer.pictures) {
+          that.processImages(offer.pictures, function (err) {
             if (err) {
-                console.log('Error checking offer', link, err);
-                numberOfOffersProcessed++;
-                finishOfferProcessing(err);
-                return;
+              console.log("Error processing offers pictures", err);
             }
+            callback(err);
+          });
+        }
+        else {
+          callback(err);
+        }
+      });
+    }
+    else {
+      console.log("Error parsing offer", err);
+      callback(err);
+    }
+  });
+};
 
-            if (offers.length === 1) {
-                console.log('Offer', link, 'already exists. Skipped.');
-                numberOfOffersProcessed++;
-                finishOfferProcessing();
-            }
-            else {
-                console.log('Retrieving offer', link);
-                request({
-                    uri: link,
-                    timeout: 30000,
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-                    }
-                }, function (err, response, body) {
-                    numberOfOffersProcessed++;
+Harvester.prototype.saveOffer = function (offer, callback) {
+  var that = this;
 
-                    if (!(err || response.statusCode !== 200) && body) {
-                        that.parse(link, parser, body, finishOfferProcessing);
-                    }
-                    else {
-                        console.log('Parsing offer', link, 'failed');
-                        finishOfferProcessing(err);
-                    }
-                });
+  that.db.offers.save(offer, function (err, saved) {
+    if (err || !saved) {
+      console.log("Deal not saved", err);
+      callback(err);
+    }
+    else {
+      callback();
+    }
+  });
+};
+
+Harvester.prototype.processImages = function (images, callback) {
+  console.log('Fetching images:', images.length);
+  // imageProcessor.process(config.images.dir + saved._id + '/', deal.pictures, callback);
+  callback();
+};
+
+Harvester.prototype.processOffers = function (parser, language, body, callback) {
+  var that = this,
+    numberOfOffers = 0,
+    numberOfOffersProcessed = 0;
+
+  console.log("Parsing index page for offers links");
+
+  var links = parser.getOfferLinks(language, body);
+  numberOfOffers = _.size(links);
+
+  console.log('Iterating found offers. Total found', numberOfOffers);
+
+  async.forEachSeries(links, function (originalUrl, finishOfferProcessing) {
+    console.log('Checking offer', originalUrl);
+
+    that.db.offers.findOne({
+      url: originalUrl
+    }, function (err, offer) {
+      if (err) {
+        console.log('Error checking offer by url', originalUrl);
+        numberOfOffersProcessed++;
+        finishOfferProcessing(err);
+        return;
+      }
+
+      if (offer) {
+        console.log('Offer', originalUrl, 'has been already parsed. Reactivating.');
+        // find one named 'mathias', tag him as a contributor and return the modified doc
+        that.db.offers.findAndModify({
+          query: {
+            _id: offer._id
+          },
+          update: {
+            $set: {
+              active: true
             }
+          },
+          'new': false
+        }, function (err, doc, lastErrorObject) {
+          if (err) {
+            console.log('Error reactivating offer #Id', offer._id);
+          }
+
+          numberOfOffersProcessed++;
+          finishOfferProcessing();
         });
-    }, function (err) {
-        if (err) {
-            console.log('Error retriving offers for', url, err);
-            callback(err);
-        }
+      }
+      else {
+        console.log('Retrieving offer', originalUrl);
+        request({
+          uri: originalUrl,
+          timeout: 30000,
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+          }
+        }, function (err, response, body) {
+          numberOfOffersProcessed++;
 
-        if (numberOfOffers === numberOfOffersProcessed) {
-            console.log('Parsing', url, 'finished successfully');
-            callback(err);
-        }
+          if (!(err || response.statusCode !== 200) && body) {
+            that.parseOffer(originalUrl, parser.getValidParser(originalUrl), body, finishOfferProcessing);
+          }
+          else {
+            console.log('Parsing offer', originalUrl, 'failed');
+            finishOfferProcessing(err);
+          }
+        });
+      }
     });
-}
+  }, function (err) {
+    if (err) {
+      callback(err, links);
+    }
+    else {
+      if (numberOfOffers === numberOfOffersProcessed) {
+        callback(err, links);
+      }
+    }
+  });
+};
 
 Harvester.prototype.processPage = function (page, parser, language, url, finishPageProcessing) {
-    var that = this;
+  var that = this;
 
-    console.log('Requesting page', page);
+  console.log('Requesting page', page);
+
+  request({
+    uri: page,
+    timeout: 30000,
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+    }
+  }, function (err, response, data) {
+    console.log('Page', page, 'retrieved', response.statusCode);
+
+    if (!(err || response.statusCode !== 200) && data) {
+      var body = parser.parseResponseBody(data);
+
+      that.processOffers(parser, language, body, function (err) {
+        if (err) {
+          console.error(err);
+        }
+
+        finishPageProcessing(err);
+      });
+    }
+    else {
+      console.log('Error retrieving index page for', language, url, response.statusCode, err);
+      finishPageProcessing(err);
+    }
+  });
+};
+
+Harvester.prototype.processSite = function (parser, callback) {
+  var that = this;
+
+  var numberOfLanguages = _.size(parser.config.index),
+    numberOfLanguagesProcessed = 0;
+
+  async.forEachSeries(_.keys(parser.config.index), function (language, finishLanguageProcessing) {
+    var url = parser.config.index[language];
+
+    console.log("Retrieving index page for", language, url);
 
     request({
-        uri: page,
-        timeout: 30000,
-        headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-        }
+      uri: url,
+      timeout: 30000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+      }
     }, function (err, response, data) {
-        console.log('Page', page, 'retrieved', response.statusCode);
+      console.log('Index page retrieved', response.statusCode);
 
-        if (!(err || response.statusCode !== 200) && data) {
-            var body = parser.parseResponseBody(data);
+      if (!(err || response.statusCode !== 200) && data) {
+        console.log("Parsing index page for", language, url);
 
-            that.processOffersNotPakkumised(parser, language, url, body, function (err) {
-                if (err) {
-                    console.error(err);
-                }
+        var body = parser.parseResponseBody(data);
+        var paging = parser.getPagingParameters(language, body);
 
-                finishPageProcessing();
+        if (paging) {
+          var numberOfPages = 0,
+            numberOfPagesProcessed = 0;
+
+          var pages = paging.pages;
+          numberOfPages = _.size(pages);
+
+          async.forEachSeries(pages, function (page, finishPageProcessing) {
+            that.processPage(page, parser, language, url, function (err) {
+              numberOfPagesProcessed++;
+              finishPageProcessing(err);
             });
+          }, function (err) {
+            if (err) {
+              console.log('Error retriving offers for', url, err);
+              finishLanguageProcessing(err);
+            }
+
+            if (numberOfPages === numberOfPagesProcessed) {
+              console.log('Parsing', url, 'finished successfully');
+              numberOfLanguagesProcessed++;
+              finishLanguageProcessing(err);
+            }
+          });
         }
         else {
-            console.log('Error retrieving index page for', language, url, response.statusCode, err);
-            finishPageProcessing();
+          that.processOffers(parser, language, body, function (err) {
+            if (err) {
+              console.log('Error retriving offers for', url, err);
+            }
+            else {
+              console.log('IndexParsing', url, 'parsed successfully');
+            }
+
+            numberOfLanguagesProcessed++;
+            finishLanguageProcessing(err);
+          });
         }
+      }
+      else {
+        console.log('Error retrieving index page for', language, url, response.statusCode, err);
+        numberOfLanguagesProcessed++;
+        finishLanguageProcessing(err);
+      }
     });
+  }, function (err) {
+    if (err) {
+      callback(err);
+    }
+    else {
+      if (numberOfLanguages === numberOfLanguagesProcessed) {
+        callback();
+      }
+    }
+  });
 };
 
 Harvester.prototype.run = function () {
-    var that = this,
-        runningTime = new Date();
+  var that = this,
+    runningTime = new Date();
 
-    that.db = mongojs.connect(config.db.url, config.db.collections);
+  that.db = mongojs.connect(config.db.url, config.db.collections);
 
-    that.db.collection('offers');
+  that.db.collection('offers');
 
-    console.log('harvesting started', runningTime);
+  console.log('harvesting started', runningTime);
 
-    if (!!config.pakkumised) {
-        var pageNumber = 0,
-            pageRepeats = false,
-            lastId = null;
+  if (!!config.pakkumised) {
+    var pageNumber = 0,
+      pageRepeats = false,
+      lastId = null;
 
-        var PakkumisedParser = require(__dirname + '/models/pakkumised.ee.js'),
-            parser = new PakkumisedParser();
+    var PakkumisedParser = require(__dirname + '/models/pakkumised.ee.js'),
+      parser = new PakkumisedParser();
 
-        async.whilst(
-            function () {
-                return !pageRepeats;
-            },
-            /*
-            function (finishPageProcessing) {
-                pageNumber++;
+    async.whilst(
+      function () {
+        return !pageRepeats;
+      },
+      function (finishPageProcessing) {
+        pageNumber++;
 
-                var page = 'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page=' + pageNumber + '&keyword=';
-                console.log('URL: ' + page);
+        var page = 'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page=' + pageNumber + '&keyword=';
+        console.log('URL: ' + page);
 
-                that.processPage(page, parser, language, url, function () {
-                    numberOfPagesProcessed++;
-                    finishPageProcessing();
-                });
-            },
-            */
+        request({
+          uri: page,
+          timeout: 30000,
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+          }
+        }, function (err, response, data) {
+          console.log('Requesting data from pakkumised.ee');
 
-            function (callback) {
-                pageNumber++;
+          if (!(err || response.statusCode !== 200) && data) {
+            console.log('positive response');
 
-                var page = 'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page=' + pageNumber + '&keyword=';
-                console.log('URL: ' + page);
+            that.processOffers(parser, 'est', data, function (err, deals) {
+              if (err) {
+                console.error(err);
+              }
 
-                request({
-                    uri: page,
-                    timeout: 30000,
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-                    }
-                }, function (err, response, data) {
-                    console.log('Requesting data from pakkumised.ee');
+              if (!_.isEmpty(deals) && lastId !== _.last(_.keys(deals))) {
+                console.log('not a last page');
 
-                    if (!(err || response.statusCode !== 200) && data) {
-                        console.log('positive response');
+                lastId = _.last(_.keys(deals));
 
-                        var deals = parser.parseResponseBody(data);
+                console.log('processing offers on page ', pageNumber);
+              }
+              else {
+                pageRepeats = true;
+              }
 
-                        if (!_.isEmpty(deals) && lastId !== _.last(_.keys(deals))) {
-                            console.log('not a last page');
+              finishPageProcessing(err);
+            });
+          }
+          else {
+            console.log('Error: ', err);
 
-                            lastId = _.last(_.keys(deals));
+            finishPageProcessing(err);
+          }
+        });
+      },
+      function (err) {
+        if (err) {
+          console.log('There was an error: ', err);
+        }
+        else {
+          console.log('Finished');
+        }
 
-                            console.log('processing offers on page ', pageNumber);
+        that.db.close();
+      }
+    );
+  }
 
-                            that.processOffers(deals, callback);
-                        }
-                        else {
-                            pageRepeats = true;
-                            callback();
-                        }
-                    }
-                    else {
-                        console.log('Error: ', err);
+  async.forEachSeries(_.keys(config.activeSites), function (site, finishSiteProcessing) {
+    if (config.activeSites[site]) {
+      console.log('Site', site, 'is active. Harvesting.');
 
-                        callback(err);
-                    }
-                });
-            },
-            function (err) {
-                if (err) {
-                    console.log('There was an error: ', err);
-                }
-                else {
-                    console.log('Finished');
-                }
+      var Parser = require(__dirname + '/models/' + site + ".js"),
+        parser = new Parser();
 
-                that.db.close();
-            }
-        );
+      if (parser.config.reactivate) {
+        console.log('Deactivating offers for site', site);
+
+        that.db.offers.update({
+          'site': site
+        }, {
+          $set: {
+            active: false
+          }
+        }, {
+          'multi': true,
+          'new': false
+        }, function (err) {
+          if (err) {
+            console.log('Error deactivating offers for site', site, err);
+          }
+
+          that.processSite(parser, function (err) {
+            that.onSiteProcessed(err, site, finishSiteProcessing);
+          });
+        });
+      }
+      else {
+        that.processSite(parser, function (err) {
+          that.onSiteProcessed(err, site, finishSiteProcessing);
+        });
+      }
     }
     else {
-        async.forEachSeries(_.keys(config.activeSites), function (site, finishSiteProcessing) {
-            if (config.activeSites[site]) {
-                console.log('Site', site, 'is active, and not pakkumised. Harvesting ...');
-
-                var Parser = require(__dirname + '/models/' + site + ".js"),
-                    parser = new Parser();
-
-                if (parser.config.clean) {
-                    that.db.offers.remove({'site': site});
-                };
-
-                var numberOfLanguages = _.size(parser.config.index),
-                    numberOfLanguagesProcessed = 0;
-
-                async.forEachSeries(_.keys(parser.config.index), function (language, finishLanguageProcessing) {
-                    var url = parser.config.index[language];
-
-                    console.log("Retrieving index page for", language, url);
-
-                    request({
-                        uri: url,
-                        timeout: 30000,
-                        headers: {
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-                        }
-                    }, function (err, response, data) {
-                        console.log('Index page retrieved', response.statusCode);
-
-                        if (!(err || response.statusCode !== 200) && data) {
-                            console.log("Parsing index page for", language, url);
-
-                            var body = parser.parseResponseBody(data);
-                            var paging = parser.getPagingParameters(language, body);
-
-                            if (paging) {
-                                var numberOfPages = 0,
-                                    numberOfPagesProcessed = 0;
-
-                                var pages = paging.pages;
-                                    numberOfPages = _.size(pages);
-
-                                async.forEachSeries(pages, function (page, finishPageProcessing) {
-                                    that.processPage(page, parser, language, url, function () {
-                                        numberOfPagesProcessed++;
-                                        finishPageProcessing();
-                                    });
-                                }, function (err) {
-                                    if (err) {
-                                        console.log('Error retriving offers for', url, err);
-                                        finishLanguageProcessing(err);
-                                    }
-
-                                    if (numberOfPages === numberOfPagesProcessed) {
-                                        console.log('Parsing', url, 'finished successfully');
-                                        numberOfLanguagesProcessed++;
-                                        finishLanguageProcessing(err);
-                                    }
-                                });
-                            }
-                            else {
-                                that.processOffersNotPakkumised(parser, language, url, body, function (err) {
-                                    if (err) {
-                                        console.error(err);
-                                    }
-                                    numberOfLanguagesProcessed++;
-                                    finishLanguageProcessing(err);
-                                });
-                            }
-                        }
-                        else {
-                            console.log('Error retrieving index page for', language, url, response.statusCode, err);
-                            numberOfLanguagesProcessed++;
-                            finishLanguageProcessing(err);
-                        }
-                    });
-                }, function (err) {
-                    if (err) {
-                        console.log('Error parsing index page', site, err);
-                        finishSiteProcessing(err);
-                    }
-
-                    if (numberOfLanguages === numberOfLanguagesProcessed) {
-                        console.log('Parsing index page', site, 'finished successfully');
-                        finishSiteProcessing(err);
-                    }
-                });
-            }
-            else {
-                finishSiteProcessing();
-            }
-        }, function (err) {
-            if (err) {
-                console.log('Error processing sites', err);
-            }
-
-            console.log('Harvesting finished');
-
-            that.db.close();
-        });
+      console.log('Site', site, 'is switched off. Skipped.');
+      finishSiteProcessing();
     }
+  }, function (err) {
+    if (err) {
+      console.log('Harvesting failed', err);
+    }
+    else {
+      console.log('Harvesting finished');
+    }
+
+    that.db.close();
+  });
+};
+
+Harvester.prototype.onSiteProcessed = function (err, site, callback) {
+  if (err) {
+    console.log('Error processing site', site);
+  }
+  else {
+    console.log('Processing site', site, 'finished successfully');
+  }
+
+  callback(err);
 };
 
 Harvester.prototype.start = function (forceMode) {
-    if (forceMode) {
-        this.run();
-    }
-    else {
-        new cron(config.harvester.execution.rule, this.run, null, true, "Europe/Tallinn");
-    }
+  if (forceMode) {
+    this.run();
+  }
+  else {
+    new cron(config.harvester.execution.rule, this.run, null, true, "Europe/Tallinn");
+  }
 };
 
 module.exports = Harvester;
