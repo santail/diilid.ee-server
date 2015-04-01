@@ -37,7 +37,8 @@ var all = {
       'www.minuvalik.ee': true,
       'www.cherry.ee': true,
       'www.euronics.ee': true,
-      'www.kriisis.ee': true
+      'www.kriisis.ee': true,
+      'www.onoff.ee': true
   }
 };
 

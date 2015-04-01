@@ -1,8 +1,7 @@
 var config = {
-
     db: {
         url: 'mongodb://deals:offers@dogen.mongohq.com:10094/deals_server_test',
-        collections: ["offers", "notifications"]
+        collections: ["offers", "notifications", "wishes"]
     },
     images: {
         dir: __dirname + '/public/images/',
@@ -23,7 +22,8 @@ var config = {
       'www.minuvalik.ee': true,
       'www.cherry.ee': true,
       'www.euronics.ee': true,
-      'www.kriisis.ee': true
+      'www.kriisis.ee': true,
+      'www.onoff.ee': true
     }
 };
 
