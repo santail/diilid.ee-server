@@ -37,6 +37,10 @@ AbstractParser.prototype.getPagingParameters = function (language, body) {
     return false;
 };
 
+AbstractParser.prototype.getValidParser = function (url) {
+  return this;
+};
+
 AbstractParser.prototype.getOfferLinks = function (language, body) {
     var that = this;
 
@@ -71,7 +75,7 @@ AbstractParser.prototype.parseOffer = function (body, callback, language) {
     var that = this,
         language = language || 'est';
 
-    console.log('Parsing offer\'s page ...');
+    console.log('Parsing offer ...');
 
     var _apply = function apply(body, templates, language) {
         var result = {};
@@ -100,7 +104,7 @@ AbstractParser.prototype.parseOffer = function (body, callback, language) {
     }, function (err, body) {
         if (!err) {
             var offer = _apply(cheerio.load(body), that.config.templates, language);
-            console.log('Parsed offer', offer);
+            console.log('Offer parsed', offer);
             callback(err, offer);
         }
         else {
