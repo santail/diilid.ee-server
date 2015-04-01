@@ -2,6 +2,7 @@
 
 var util = require('util'),
     urlParser = require("url"),
+    _ = require("underscore")._,
     AbstractParser = require("./abstractParser");
 
 function OnoffParser() {
@@ -17,41 +18,46 @@ function OnoffParser() {
             'eng': 'http://www.onoff.ee/font-colorb00000monthly-offersfont-eng/#&price=0-1400&onpage=9999&list=1'
         },
         'list': function ($) {
-            return $('#itemsBox_560 > li > a').map(function () {
+            return $('div.content.catalog > ul.shop_prod > li > a').map(function () {
                 return $(this).attr('href');
             });
         },
         'templates': {
             'title': function ($) {
-                return $('#contentBox > div.pageTitle').text();
+                return $('div.center_box__right > h1.page_title').text();
             },
             'pictures': function ($, language) {
-                return $('#contentBox > div.content.catalog > ul.shopProdInfoBox div.shopProdImgBox > a').map(function () {
-                    return that.compileImageUrl(language, $(this).attr('href'));
-                });
+              var mainPictureUrl = $('div.center_box__right > div.content.catalog > div.prod_in > div.prod_in__pic > a').attr('href');
+
+              var pictureUrls = [that.compileImageUrl(language, mainPictureUrl)];
+
+              $('div.center_box__right > div.content.catalog > div.prod_in > div.prod_in__pic > ul > li > a').each(function () {
+                  pictureUrls.push(that.compileImageUrl(language, $(this).attr('href')));
+              });
+
+              return pictureUrls;
             },
             'description': {
                 'short': function ($) {
-                     return  $('#contentBox > div.content.catalog > ul.shopProdInfoBox div.shopProdText table').html();
+                    return $('div.center_box__right > div.content.catalog > div.prod_in > div.prod_in__info table').eq(1).html();
                 },
                 'long': function ($) {
-                    return $('#contentBox > div.content.catalog > ul.shopProdInfoBox div.shopProdBoxContent').text();
+                    return $('div.center_box__right > div.content.catalog > div.prod_in > div.prod_in__text').text();
                 }
             },
             'price': {
-              'original': function ($) {
-                var container = $('#contentBox > div.content.catalog > ul.shopProdInfoBox div.shopProdText > form').first();
+                'discount': function ($) {
+                    var container = $('div.center_box__right > div.content.catalog > div.prod_in > form > div.shop_prod__price').first();
 
-                container.children('input').remove();
-                container.children('span').remove();
-                container.children('div').remove();
-                container.children('a').remove();
+                    container.children('span').remove();
+                    container.children('div').remove();
+                    container.children('a').remove();
 
-                return container.text();
-              },
-              'discount': function ($) {
-                return $('#contentBox > div.content.catalog > ul.shopProdInfoBox div.shopProdDisc').text();
-              }
+                    return container.text();
+                },
+                'save': function ($) {
+                    return $('div.center_box__right > div.content.catalog > div.prod_in > div.shop_prod__procent').text();
+                }
             }
         }
     };
@@ -60,13 +66,13 @@ function OnoffParser() {
 util.inherits(OnoffParser, AbstractParser);
 
 OnoffParser.prototype.compileImageUrl = function (language, link) {
-  var that = this;
-  return urlParser.resolve(that.config.index[language], link);
+    var that = this;
+    return urlParser.resolve(that.config.index[language], link);
 };
 
 OnoffParser.prototype.compileOfferUrl = function (language, link) {
-  var that = this;
-  return urlParser.resolve(that.config.index[language], link);
+    var that = this;
+    return urlParser.resolve(that.config.index[language], link);
 };
 
 
