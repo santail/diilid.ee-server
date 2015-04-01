@@ -8,7 +8,7 @@ function MinuvalikParser() {
     AbstractParser.call(this);
 
     var that = this;
-    
+
     this.config = {
         'site': 'www.minuvalik.ee',
         'index': {
