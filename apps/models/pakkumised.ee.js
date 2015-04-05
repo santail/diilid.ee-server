@@ -49,6 +49,7 @@ AbstractParser.prototype.getOfferLinks = function (language, body) {
 };
 
 PakkumisedParser.prototype.parseResponseBody = function (data) {
+  console.log(data);
     return JSON.parse(data);
 };
 
@@ -82,19 +83,19 @@ AbstractParser.prototype.getValidParser = function (url) {
   if (url.indexOf('crazydeal.ee') > -1) {
     // Parser = require(__dirname + '/www.crazydeal.ee.js');
   }
-  
+
   if (url.indexOf('soodushind.ee') > -1) {
     // Parser = require(__dirname + '/www.soodushind.ee.js');
   }
-  
+
   if (url.indexOf('soodus24.ee') > -1) {
     // Parser = require(__dirname + '/www.soodus24.ee.js');
   }
-    
+
   if (url.indexOf('ostulaine.ee') > -1) {
     // Parser = require(__dirname + '/www.ostulaine.ee.js');
   }
-  
+
   return new Parser();
 };
 

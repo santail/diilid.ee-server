@@ -1,6 +1,7 @@
 'use strict';
 
 var util = require('util'),
+    urlParser = require("url"),
     AbstractParser = require("./abstractParser");
 
 function CherryParser() {
@@ -49,5 +50,10 @@ function CherryParser() {
 }
 
 util.inherits(CherryParser, AbstractParser);
+
+CherryParser.prototype.compileOfferUrl = function (language, link) {
+  var that = this;
+  return urlParser.resolve(that.config.index[language], link);
+};
 
 module.exports = CherryParser;
