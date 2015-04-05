@@ -41,10 +41,10 @@ AbstractParser.prototype.getValidParser = function (url) {
   return this;
 };
 
-AbstractParser.prototype.getOfferLinks = function (language, body) {
+AbstractParser.prototype.getOfferLinks = function (data, language) {
     var that = this;
 
-    var links = that.config.list.call(that, body);
+    var links = that.config.list.call(that, data, language);
 
     return _.map(links, function (link) {
         return that.compileOfferUrl(language, link);
@@ -104,7 +104,6 @@ AbstractParser.prototype.parseOffer = function (body, callback, language) {
     }, function (err, body) {
         if (!err) {
             var offer = _apply(cheerio.load(body), that.config.templates, language);
-            console.log('Offer parsed', offer);
             callback(err, offer);
         }
         else {
