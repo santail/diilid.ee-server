@@ -1,9 +1,9 @@
 var config = require('./config/environment'),
   mongojs = require("mongojs"),
-  request = require('request'),
   async = require('async'),
   _ = require('underscore')._,
-  cron = require('cron').CronJob;
+  cron = require('cron').CronJob,
+  Crawler = require("./services/Crawler");
 
 var Harvester = function () {
   this.db = null;
@@ -18,6 +18,7 @@ Harvester.prototype.parseOffer = function (originalUrl, parser, body, callback) 
       'active': true
     };
 
+  console.log('Parsing offer', originalUrl);
   parser.parseOffer(body, function (err, parsed) {
     if (!err) {
       _.extend(offer, parsed);
@@ -122,10 +123,10 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
         else {
           console.log('Retrieving offer', originalUrl);
 
-          that.requestAndProcess(originalUrl, function (data) {
+          that.crawler.request(originalUrl, function (data) {
             that.parseOffer(originalUrl, parser.getValidParser(originalUrl), data, finishOfferProcessing);
           }, function (err, response) {
-            console.log('Parsing offer', originalUrl, 'failed');
+            console.log('Parsing offer', originalUrl, 'failed', err);
             finishOfferProcessing(err);
           });
         }
@@ -143,7 +144,7 @@ Harvester.prototype.processPage = function (url, parser, language, finishPagePro
 
   console.log('Requesting page', url);
 
-  that.requestAndProcess(url, function (data) {
+  that.crawler.request(url, function (data) {
       that.processOffers(parser, language, parser.parseResponseBody(data), function (err) {
         finishPageProcessing(err);
       });
@@ -168,7 +169,7 @@ Harvester.prototype.processSite = function (parser, callback) {
 
     console.log("Retrieving index page for", language, url);
 
-    that.requestAndProcess(url,
+    that.crawler.request(url,
       function (data) {
         console.log("Parsing index page for", language, url);
 
@@ -338,8 +339,9 @@ Harvester.prototype.run = function () {
     runningTime = new Date();
 
   that.db = mongojs.connect(config.db.url, config.db.collections);
-
   that.db.collection('offers');
+
+  that.crawler = new Crawler();
 
   console.log('harvesting started', runningTime);
 
@@ -369,25 +371,6 @@ Harvester.prototype.onSiteProcessed = function (err, site, callback) {
   }
 
   callback(err);
-};
-
-Harvester.prototype.requestAndProcess = function (url, onSuccess, onFailure) {
-  request({
-    uri: url,
-    timeout: 30000,
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-    }
-  }, function (err, response, data) {
-    console.log('Index page retrieved', response.statusCode);
-
-    if (!(err || response.statusCode !== 200) && data) {
-      onSuccess(data);
-    }
-    else {
-      onFailure(err, response);
-    }
-  });
 };
 
 Harvester.prototype.start = function (forceMode) {
