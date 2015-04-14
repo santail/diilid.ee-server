@@ -11,7 +11,7 @@ function MinuvalikParser() {
 
   this.config = {
     'site': 'www.minuvalik.ee',
-    'reactivate': false,
+    'reactivate': true,
     'cleanup': false,
     'index': {
       'rus': 'https://www.minuvalik.ee/ru/?c=all',
