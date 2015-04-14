@@ -16,7 +16,11 @@ AbstractParser.prototype.isPakkumised = function () {
 };
 
 AbstractParser.prototype.parseResponseBody = function (body) {
-    return cheerio.load(body);
+    return cheerio.load(body, {
+        normalizeWhitespace: true,
+        xmlMode: true,
+        decodeEntities: true
+    });
 };
 
 AbstractParser.prototype.getPagingParameters = function (language, body) {
@@ -74,8 +78,6 @@ AbstractParser.prototype.setDb = function (db) {
 AbstractParser.prototype.parseOffer = function (body, callback, language) {
     var that = this,
         language = language || 'est';
-
-    console.log('Parsing offer ...');
 
     var _apply = function apply(body, templates, language) {
         var result = {};
