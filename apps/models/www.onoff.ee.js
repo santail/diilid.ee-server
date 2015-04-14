@@ -12,6 +12,7 @@ function OnoffParser() {
 
     this.config = {
         'site': 'www.onoff.ee',
+        'reactivate': true,
         'index': {
             'rus': 'http://www.onoff.ee/font-colorb00000predlozenija-mesjatsafont/#&price=0-1400&onpage=9999&list=1',
             'est': 'http://www.onoff.ee/font-colorb00000kuupakkumisedfont/#&price=0-1400&onpage=9999&list=1',
@@ -27,15 +28,19 @@ function OnoffParser() {
                 return $('div.center_box__right > h1.page_title').text();
             },
             'pictures': function ($, language) {
-              var mainPictureUrl = $('div.center_box__right > div.content.catalog > div.prod_in > div.prod_in__pic > a').attr('href');
+                var pictureUrls = [];
 
-              var pictureUrls = [that.compileImageUrl(language, mainPictureUrl)];
+                var mainPictureUrl = $('div.center_box__right > div.content.catalog > div.prod_in > div.prod_in__pic > a').attr('href');
 
-              $('div.center_box__right > div.content.catalog > div.prod_in > div.prod_in__pic > ul > li > a').each(function () {
-                  pictureUrls.push(that.compileImageUrl(language, $(this).attr('href')));
-              });
+                if (mainPictureUrl) {
+                    pictureUrls.push(that.compileImageUrl(language, mainPictureUrl));
+                }
 
-              return pictureUrls;
+                $('div.center_box__right > div.content.catalog > div.prod_in > div.prod_in__pic > ul > li > a').each(function () {
+                    pictureUrls.push(that.compileImageUrl(language, $(this).attr('href')));
+                });
+
+                return pictureUrls;
             },
             'description': {
                 'short': function ($) {
