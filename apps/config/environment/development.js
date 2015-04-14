@@ -21,6 +21,7 @@ var config = {
     activeSites: {
       'www.minuvalik.ee': false,
       'www.cherry.ee': false,
+      'www.chilli.ee': true,
       'www.euronics.ee': false,
       'www.kriisis.ee': false,
       'www.onoff.ee': false
