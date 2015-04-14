@@ -343,7 +343,7 @@ Harvester.prototype.run = function () {
 
   that.crawler = new Crawler();
 
-  console.log('harvesting started', runningTime);
+  console.log('Harvesting started', runningTime);
 
   that.runPakkumisedHarvesting();
   that.runHarvesting();
