@@ -18,6 +18,10 @@ var config = {
             AuthToken: 'aea7130ceb8f49b9937bdb7f11f063ca',
             from: '+15005550006'
         },
+            gmail: {
+            user: 'nikolai.muhhin',
+            password: 'vkSG9667'
+        },
         execution: {
             rule: '*/5 * * * *' // every 5 minutes
         }

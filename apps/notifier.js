@@ -87,8 +87,8 @@ Notifier.prototype.run = function () {
     that.smtp = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'nikolai.muhhin',
-            pass: 'vkSG9667'
+            user: config.notifier.gmail.user,
+            pass: config.notifier.gmail.password
         }
     });
 
