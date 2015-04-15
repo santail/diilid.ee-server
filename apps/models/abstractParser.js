@@ -37,12 +37,11 @@ AbstractParser.prototype.getPagingParameters = function (language, body) {
         }
     }
 
-    console.log('Paging not found');
     return false;
 };
 
 AbstractParser.prototype.getValidParser = function (url) {
-  return this;
+    return this;
 };
 
 AbstractParser.prototype.getOfferLinks = function (data, language) {
@@ -100,12 +99,17 @@ AbstractParser.prototype.parseOffer = function (body, callback, language) {
     // TODO Warning: tidy uses 32 bit binary instead of 64, https://github.com/vavere/htmltidy/issues/11
     // TODO Needs manual update on production for libs
     tidy(body, {
-        'doctype':'html5',
-        'tidy-mark':false,
-        'indent':true
+        'doctype': 'html5',
+        'tidy-mark': false,
+        'indent': true
     }, function (err, body) {
         if (!err) {
             var offer = _apply(cheerio.load(body), that.config.templates, language);
+
+            _.extend(offer, {
+                'language': language
+            });
+
             callback(err, offer);
         }
         else {
