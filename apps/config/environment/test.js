@@ -13,17 +13,23 @@ var config = {
         }
     },
     notifier: {
+        twilio: {
+            AccountSID: 'ACd1bf8420ca6755efc182e1f96068177d',
+            AuthToken: 'aea7130ceb8f49b9937bdb7f11f063ca',
+            from: '+15005550006'
+        },
         execution: {
             rule: '*/5 * * * *' // every 5 minutes
         }
     },
     pakkumised: false,
     activeSites: {
-      'www.minuvalik.ee': true,
-      'www.cherry.ee': true,
-      'www.euronics.ee': true,
-      'www.kriisis.ee': true,
-      'www.onoff.ee': true
+        'www.minuvalik.ee': true,
+        'www.cherry.ee': true,
+        'www.chilli.ee': false,
+        'www.euronics.ee': true,
+        'www.kriisis.ee': true,
+        'www.onoff.ee': true
     }
 };
 

@@ -1,19 +1,25 @@
 'use strict';
 
 var config = require('./config/environment'),
-    activeSites = config.activeSites,
     mongojs = require("mongojs"),
-    async = require('async'),
     _ = require('underscore')._,
     nodemailer = require('nodemailer'),
-    cron = require('cron').CronJob;
+    cron = require('cron').CronJob,
+    twilio = require('twilio')(config.notifier.twilio.AccountSID, config.notifier.twilio.AuthToken);;
 
 var Notifier = function () {
     this.db = null;
     this.smtp = null;
 };
 
-Notifier.prototype.compileEmailBody = function (offer) {
+Notifier.prototype.compileEmailBody = function (offers) {
+
+  var body = "<h1>Offers:</h1>";
+
+  _.each(offers, function (offer) {
+    body += "<p>" + offer.title + "</p>";
+  });
+
     return '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">'
             + '<tr>'
                 + '<td align="center">'
@@ -32,7 +38,7 @@ Notifier.prototype.compileEmailBody = function (offer) {
 
                             + '<!-- Блок номер 1 -->'
                              + '<span style="display:inline-block; width:300px;">'
-                                 + 'Контент блока'
+                                 + body
                              + '</span>'
                             + '<!-- Блок номер 1 -->'
          + '<!--[if gte mso 9]>'
@@ -62,7 +68,11 @@ Notifier.prototype.compileEmailBody = function (offer) {
              + '</center>   '
             + '</td>'
           + '</tr>'
-        + '</table>'
+        + '</table>';
+};
+
+Notifier.prototype.compileSmsBody = function (offers) {
+  return "<h1>Offers:" + _.size(offers) + "</h1>";
 };
 
 Notifier.prototype.run = function () {
@@ -107,20 +117,28 @@ Notifier.prototype.run = function () {
             function (err, offers) {
                 console.log('Found', _.size(offers), 'offers. Notifiyng user');
 
-                _.each(offers, function (offer) {
+                console.log('Sending email to', wish.email);
 
-                    console.log('Sending email to', wish.email, offer);
-
-                     that.smtp.sendMail({
-                        from: 'notifier-robot@salestracker.eu',
-                        to: wish.email,
-                        subject: 'hello',
-                        html: that.compileEmailBody(offer)
-                    },
-                    function (err, result) {
-                        console.log('Email sent', err);
-                    });
+                 that.smtp.sendMail({
+                    from: 'notifier-robot@salestracker.eu',
+                    to: wish.email,
+                    subject: 'hello',
+                    html: that.compileEmailBody(offers)
+                },
+                function (err, result) {
+                    console.log('Email sent', err);
                 });
+
+                if (wish.hasPhone) {
+                  twilio.sendMessage({
+                    to: wish.phone,
+                    from: config.notifier.twilio.from,
+                    body: that.compileSmsBody(offers)
+                  },
+                  function(error, response) {
+                    console.log(error || response);
+                  });
+                }
             });
         });
     });
