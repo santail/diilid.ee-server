@@ -9,16 +9,17 @@ var Harvester = function () {
   this.db = null;
 };
 
-Harvester.prototype.parseOffer = function (originalUrl, parser, body, callback) {
+Harvester.prototype.parseOffer = function (url, language, parser, body, callback) {
   var that = this,
     runningTime = new Date(),
     offer = {
-      'url': originalUrl,
+      'url': url,
       'site': parser.getSite(),
       'active': true
     };
 
-  console.log('Parsing offer', originalUrl);
+  console.log('Parsing offer', url, language);
+  
   parser.parseOffer(body, function (err, parsed) {
     if (!err) {
       _.extend(offer, parsed);
@@ -49,7 +50,7 @@ Harvester.prototype.parseOffer = function (originalUrl, parser, body, callback) 
       console.log("Error parsing offer", err);
       callback(err, offer);
     }
-  });
+  }, language);
 };
 
 Harvester.prototype.saveOffer = function (offer, callback) {
@@ -75,58 +76,39 @@ Harvester.prototype.processImages = function (images, callback) {
 Harvester.prototype.processOffers = function (parser, language, data, callback) {
   var that = this;
 
-  console.log("Parsing index page for offers links");
+  console.log("Parsing page for offers links", language);
 
   var links = parser.getOfferLinks(data, language);
 
   console.log('Iterating found offers. Total found', _.size(links));
 
-  var functions = _.map(links, function (originalUrl) {
-
+  var functions = _.map(links, function (url) {
     return function (finishOfferProcessing) {
+      console.log('Checking offer', url);
+              
       that.db.offers.findOne({
-        url: originalUrl
+        url: url
       }, function (err, offer) {
-        console.log('Checking offer', originalUrl);
-
         if (err) {
-          console.log('Error checking offer by url', originalUrl);
+          console.log('Error checking offer by url', url);
           finishOfferProcessing(err);
           return;
         }
 
         if (parser.config.reactivate && offer) {
-          console.log('Offer', originalUrl, 'has been already parsed. Reactivating.');
-          // find one named 'mathias', tag him as a contributor and return the modified doc
-          that.db.offers.findAndModify({
-            query: {
-              _id: offer._id
-            },
-            update: {
-              $set: {
-                active: true
-              }
-            },
-            'new': false
-          }, function (err, doc, lastErrorObject) {
-            if (err) {
-              console.log('Error reactivating offer #Id', offer._id);
-            }
-
-            finishOfferProcessing(err);
-          });
+          that.reactivateOffer(offer, finishOfferProcessing);
         }
         else if (offer) {
-          console.log('Offer', originalUrl, 'has been already parsed. Skipped.');
+          console.log('Offer', url, 'has been already parsed. Skipped.');
           finishOfferProcessing();
         }
         else {
-          console.log('Retrieving offer', originalUrl);
+          console.log('Retrieving offer', url);
 
-          that.crawler.request(originalUrl, function (data) {
-            that.parseOffer(originalUrl, parser.getValidParser(originalUrl), data, finishOfferProcessing);
+          that.crawler.request(url, function (data) {
+            that.parseOffer(url, language, parser.getValidParser(url), data, finishOfferProcessing);
           }, function (err, response) {
-            console.log('Parsing offer', originalUrl, 'failed', err);
+            console.log('Parsing offer', url, 'failed', err);
             finishOfferProcessing(err);
           });
         }
@@ -136,6 +118,30 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
 
   async.parallel(functions, function (err, links) {
     callback(err, links);
+  });
+};
+
+Harvester.prototype.reactivateOffer = function (offer, callback) {
+  var that = this;
+  
+  console.log('Offer #Id', offer._id, ':', offer.url, 'has been already parsed. Reactivating.');
+  
+  that.db.offers.findAndModify({
+    query: {
+      _id: offer._id
+    },
+    update: {
+      $set: {
+        active: true
+      }
+    },
+    'new': false
+  }, function (err, doc, lastErrorObject) {
+    if (err) {
+      console.log('Error reactivating offer #Id', offer._id);
+    }
+
+    callback(err);
   });
 };
 
@@ -161,6 +167,8 @@ Harvester.prototype.processPage = function (url, parser, language, finishPagePro
 Harvester.prototype.processSite = function (parser, callback) {
   var that = this;
 
+  console.log('Processing site', parser.getSite());
+
   var numberOfLanguages = _.size(parser.config.index),
     numberOfLanguagesProcessed = 0;
 
@@ -169,47 +177,51 @@ Harvester.prototype.processSite = function (parser, callback) {
 
     console.log("Retrieving index page for", language, url);
 
-    that.crawler.request(url,
-      function (data) {
-        console.log("Parsing index page for", language, url);
+    that.crawler.request(url, function (data) {
+      console.log("Parsing index page for", language, url);
 
-        var body = parser.parseResponseBody(data);
-        var paging = parser.getPagingParameters(language, body);
+      var body = parser.parseResponseBody(data);
+      var paging = parser.getPagingParameters(language, body);
 
-        if (paging) {
-          var pages = paging.pages;
+      if (paging) {
+        var pages = paging.pages;
+        
+        console.log('Paging found. Processing in parallel', _.size(pages), 'pages');
 
-          var functions = _.map(pages, function (pageUrl) {
-            return function (finishPageProcessing) {
-              that.processPage(pageUrl, parser, language, function (err) {
-                finishPageProcessing(err);
-              });
-            };
-          });
+        var functions = _.map(pages, function (pageUrl) {
+          return function (finishPageProcessing) {
+            that.processPage(pageUrl, parser, language, function (err) {
+              finishPageProcessing(err);
+            });
+          };
+        });
 
-          async.parallel(functions, function (err, pages) {
-            callback(err, pages);
-          });
-        }
-        else {
-          that.processOffers(parser, language, body, function (err) {
-            if (err) {
-              console.log('Error retriving offers for', url, err);
-            }
-            else {
-              console.log('Index page', url, 'parsed successfully');
-            }
+        async.parallel(functions, function (err) {
+          numberOfLanguagesProcessed++;
+          finishLanguageProcessing(err);
+        });
+      }
+      else {
+        console.log('Paging not found.');
+        
+        that.processOffers(parser, language, body, function (err) {
+          if (err) {
+            console.log('Error retriving offers for', url, err);
+          }
+          else {
+            console.log('Index page', url, 'parsed successfully');
+          }
 
-            numberOfLanguagesProcessed++;
-            finishLanguageProcessing(err);
-          });
-        }
-      },
-      function (err, response) {
-        console.log('Error retrieving index page for', language, url, response.statusCode, err);
-        numberOfLanguagesProcessed++;
-        finishLanguageProcessing(err);
-      });
+          numberOfLanguagesProcessed++;
+          finishLanguageProcessing(err);
+        });
+      }
+    },
+    function (err, response) {
+      console.log('Error retrieving index page for', language, url, response.statusCode, err);
+      numberOfLanguagesProcessed++;
+      finishLanguageProcessing(err);
+    });
 
   }, function (err) {
     if (err) {
@@ -269,10 +281,72 @@ Harvester.prototype.runPakkumisedHarvesting = function () {
   }
 };
 
-Harvester.prototype.runHarvesting = function () {
+Harvester.prototype.cleanupOffersBefore = function (parser, callback) {
   var that = this;
 
+  console.log('Cleaning up all offers for site', parser.getSite());
+
+  that.db.offers.remove({
+    'site': parser.getSite()
+  }, function (err) {
+    if (err) {
+      console.log('Error cleaning up offers for site', parser.getSite(), err);
+      that.onSiteProcessed(err, parser.getSite(), callback);
+    }
+    else {
+      console.log('Offers for site', parser.getSite(), 'removed');
+
+      that.processSite(parser, function (err) {
+        that.onSiteProcessed(err, parser.getSite(), callback);
+      });
+    }
+  });
+};
+
+Harvester.prototype.reactivateOffersBefore = function (parser, callback) {
+  var that = this;
+
+  console.log('Deactivating offers for site', parser.getSite());
+
+  that.db.offers.update({
+    'site': parser.getSite()
+  }, {
+    $set: {
+      active: false
+    }
+  }, {
+    'multi': true,
+    'new': false
+  }, function (err) {
+    if (err) {
+      console.log('Error deactivating offers for site', parser.getSite(), err);
+      that.onSiteProcessed(err, parser.getSite(), callback);
+    }
+    else {
+      console.log('Offers for site', parser.getSite(), 'deactivated');
+
+      that.processSite(parser, function (err) {
+        that.onSiteProcessed(err, parser.getSite(), callback);
+      });
+    }
+  });
+};
+
+Harvester.prototype.runHarvesting = function () {
+  var that = this,
+    runningTime = new Date();
+
+  console.log('Harvesting started', runningTime);
+
+  var numberOfSites = _.size(config.activeSites),
+    numberOfSitesProcessed = 0;
+    
   async.forEachSeries(_.keys(config.activeSites), function (site, finishSiteProcessing) {
+    var onSiteProcessedCallback = function (err) {
+      numberOfSitesProcessed++;
+      finishSiteProcessing(err);
+    };
+        
     if (config.activeSites[site]) {
       console.log('Site', site, 'is active. Harvesting.');
 
@@ -280,78 +354,34 @@ Harvester.prototype.runHarvesting = function () {
         parser = new Parser();
 
       if (parser.config.cleanup) {
-        that.db.offers.remove({
-          'site': site
-        }, function (err) {
-          if (err) {
-            console.log('Error cleaning up offers for site', site, err);
-            that.onSiteProcessed(err, site, finishSiteProcessing);
-          }
-          else {
-            that.processSite(parser, function (err) {
-              that.onSiteProcessed(err, site, finishSiteProcessing);
-            });
-          }
-        });
+        that.cleanupOffersBefore(parser, onSiteProcessedCallback);
       }
-
-      if (parser.config.reactivate) {
-        console.log('Deactivating offers for site', site);
-
-        that.db.offers.update({
-          'site': site
-        }, {
-          $set: {
-            active: false
-          }
-        }, {
-          'multi': true,
-          'new': false
-        }, function (err) {
-          if (err) {
-            console.log('Error deactivating offers for site', site, err);
-            that.onSiteProcessed(err, site, finishSiteProcessing);
-          }
-          else {
-            that.processSite(parser, function (err) {
-              that.onSiteProcessed(err, site, finishSiteProcessing);
-            });
-          }
-        });
+      else if (parser.config.reactivate) {
+        that.reactivateOffersBefore(parser, onSiteProcessedCallback);
       }
       else {
         that.processSite(parser, function (err) {
-          that.onSiteProcessed(err, site, finishSiteProcessing);
+          that.onSiteProcessed(err, parser.getSite(), onSiteProcessedCallback);
         });
       }
     }
     else {
       console.log('Site', site, 'is switched off. Skipped.');
-      finishSiteProcessing();
+      onSiteProcessedCallback();
     }
   }, function (err) {
-    that.onHarvestingFinished(err);
+    if (err) {
+      that.onHarvestingFinished(err);
+    }
+    else {
+      if (numberOfSites === numberOfSitesProcessed) {
+        that.onHarvestingFinished(err);  
+      }
+    }
   });
 };
 
-Harvester.prototype.run = function () {
-  var that = this,
-    runningTime = new Date();
-
-  that.db = mongojs.connect(config.db.url, config.db.collections);
-  that.db.collection('offers');
-
-  that.crawler = new Crawler();
-
-  console.log('Harvesting started', runningTime);
-
-  that.runPakkumisedHarvesting();
-  that.runHarvesting();
-};
-
 Harvester.prototype.onHarvestingFinished = function (err) {
-  var that = this;
-
   if (err) {
     console.log('Harvesting failed', err);
   }
@@ -359,7 +389,7 @@ Harvester.prototype.onHarvestingFinished = function (err) {
     console.log('Harvesting finished');
   }
 
-  that.db.close();
+  this.db.close();
 };
 
 Harvester.prototype.onSiteProcessed = function (err, site, callback) {
@@ -371,6 +401,17 @@ Harvester.prototype.onSiteProcessed = function (err, site, callback) {
   }
 
   callback(err);
+};
+
+Harvester.prototype.run = function () {
+  var that = this;
+
+  that.db = mongojs.connect(config.db.url, config.db.collections);
+  that.db.collection('offers');
+  that.crawler = new Crawler();
+
+  that.runPakkumisedHarvesting();
+  that.runHarvesting();
 };
 
 Harvester.prototype.start = function (forceMode) {
