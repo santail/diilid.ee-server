@@ -1,0 +1,1 @@
+db.offers.createIndex( { title: "text", "description.short": "text", "description.long": "text", "description.intro": "text" }, {"name": "title_and_description_index", "weights" : {title: 10}} );
