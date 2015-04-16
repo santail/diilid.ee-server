@@ -72,10 +72,8 @@ function KriisisParser() {
           return $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(1).text();
         }
       },
-      'active': {
-        'period': function ($) {
-          return $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(0).text();
-        }
+      'period': function ($) {
+        return $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(0).text();
       }
     }
   };
