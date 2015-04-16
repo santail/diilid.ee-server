@@ -9,6 +9,12 @@ function AbstractParser() {
     this.config = {};
     this.isInPakkumised = false;
     this.db = null;
+
+    this.languages = {
+      'rus': 'ru',
+      'est': 'fi',
+      'eng': 'en'
+    };
 }
 
 AbstractParser.prototype.isPakkumised = function () {
@@ -107,7 +113,7 @@ AbstractParser.prototype.parseOffer = function (body, callback, language) {
             var offer = _apply(cheerio.load(body), that.config.templates, language);
 
             _.extend(offer, {
-                'language': language
+                'language': that.languages[language]
             });
 
             callback(err, offer);
