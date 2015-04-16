@@ -17,7 +17,7 @@ Notifier.prototype.compileEmailBody = function (offers) {
   var body = "<h1>Offers:</h1>";
 
   _.each(offers, function (offer) {
-    body += "<p>" + offer.title + "</p>";
+    body += '<p><a href="' + offer.url + '" title="' + offer.title + '" />' + offer.title + '</a> ' + offer.site + '</p>';
   });
 
     return '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">'
@@ -75,6 +75,13 @@ Notifier.prototype.compileSmsBody = function (offers) {
   return "<h1>Offers:" + _.size(offers) + "</h1>";
 };
 
+Notifier.prototype.findWishesAndProcess = function () {
+  var that = this;
+  that.db.wishes.find(function (err, wishes) {
+
+  });
+};
+
 Notifier.prototype.run = function () {
     var that = this,
         runningTime = new Date();
@@ -92,11 +99,13 @@ Notifier.prototype.run = function () {
         }
     });
 
+  that.findWishesAndProcess();
+
     console.log('Requesting users wishes');
 
     that.db.wishes.find(function (err, wishes) {
         if (err) {
-            console.log('Error retrieving wishes')
+            console.log('Error retrieving wishes');
         }
 
         console.log('Found', _.size(wishes), 'wishes, Processing');
@@ -106,13 +115,10 @@ Notifier.prototype.run = function () {
             console.log('Searching for offers containing', wish.contains);
 
             that.db.offers.find({
-                $or: [{
-                  'title': new RegExp(wish.contains, 'i')
-                }, {
-                  'description.short': new RegExp(wish.contains, 'i')
-                }, {
-                  'description.long': new RegExp(wish.contains, 'i')
-                }]
+                $text: {
+                  $search: wish.contains,
+                  $language: wish.language
+                }
             },
             function (err, offers) {
                 console.log('Found', _.size(offers), 'offers. Notifiyng user');
@@ -135,10 +141,12 @@ Notifier.prototype.run = function () {
                     from: config.notifier.twilio.from,
                     body: that.compileSmsBody(offers)
                   },
-                  function(error, response) {
-                    console.log(error || response);
+                  function(err, response) {
+                    console.log(err || response);
                   });
                 }
+
+                that.db.close();
             });
         });
     });
