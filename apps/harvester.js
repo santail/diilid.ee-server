@@ -303,7 +303,7 @@ Harvester.prototype.cleanupOffersBefore = function (parser, callback) {
   });
 };
 
-Harvester.prototype.reactivateOffersBefore = function (parser, callback) {
+Harvester.prototype.deactivateOffersBefore = function (parser, callback) {
   var that = this;
 
   console.log('Deactivating offers for site', parser.getSite());
@@ -357,7 +357,7 @@ Harvester.prototype.runHarvesting = function () {
         that.cleanupOffersBefore(parser, onSiteProcessedCallback);
       }
       else if (parser.config.reactivate) {
-        that.reactivateOffersBefore(parser, onSiteProcessedCallback);
+        that.deactivateOffersBefore(parser, onSiteProcessedCallback);
       }
       else {
         that.processSite(parser, function (err) {
