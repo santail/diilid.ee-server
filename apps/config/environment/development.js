@@ -9,7 +9,7 @@ var config = {
   },
   harvester: {
     execution: {
-      rule: '0/5 * * * * *' // every 5 minutes
+      rule: '0/5 * * * * *' // every 5 seconds
     }
   },
   notifier: {
@@ -23,7 +23,7 @@ var config = {
       password: 'vkSG9667'
     },
     execution: {
-      rule: '0/5 * * * * *' // every 5 minutes
+      rule: '0/5 * * * * *' // every 5 seconds
     }
   },
   pakkumised: false,
