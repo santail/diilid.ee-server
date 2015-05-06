@@ -415,11 +415,13 @@ Harvester.prototype.run = function () {
 };
 
 Harvester.prototype.start = function (forceMode) {
+  var that = this;
+  
   if (forceMode) {
-    this.run();
+    that.run();
   }
   else {
-    new cron(config.harvester.execution.rule, this.run, null, true, "Europe/Tallinn");
+    new cron(config.harvester.execution.rule, that.run.bind(that), null, true, "Europe/Tallinn");
   }
 };
 

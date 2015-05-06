@@ -86,7 +86,7 @@ Notifier.prototype.run = function () {
     var that = this,
         runningTime = new Date();
 
-    console.log('Starting notifier process');
+    console.log('Starting notifier process', that);
 
     that.db = mongojs.connect(config.db.url, config.db.collections);
     that.db.collection('wishes');
@@ -98,8 +98,6 @@ Notifier.prototype.run = function () {
             pass: config.notifier.gmail.password
         }
     });
-
-  that.findWishesAndProcess();
 
     console.log('Requesting users wishes');
 
@@ -153,11 +151,15 @@ Notifier.prototype.run = function () {
 };
 
 Notifier.prototype.start = function (forceMode) {
+  var that = this;
+
+  console.log('Starting Notifier');
+
     if (forceMode) {
-        this.run();
+        that.run();
     }
     else {
-        new cron(config.notifier.execution.rule, this.run, null, true, "Europe/Tallinn");
+        new cron(config.notifier.execution.rule, that.run.bind(that), null, true, "Europe/Tallinn");
     }
 };
 
