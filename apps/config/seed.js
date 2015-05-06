@@ -5,21 +5,16 @@ var config = require('./environment'),
 var db = mongojs.connect(config.db.url, config.db.collections);
 db.collection('wishes');
 
+db.wishes.remove({});
+
 db.wishes.insert([{
-    contains: 'sushi',
-    hasEmail: true,
+    contains: 'суши',
     email: 'nikolai.muhhin@gmail.com',
     hasPhone: true,
-    phone: '+37253003125'
-  }, {
-    contains: 'pizza',
-    hasEmail: true,
-    email: 'nikolai.muhhin@swedbank.ee',
-    hasPhone: false,
-    phone: null
-  }], function (result) {
-    console.log('Seeding finished', result);
-
+    phone: '+37253003125',
+    language: 'ru'
+  }], function (err) {
+    console.log('Seeding finished', err);
   });
 
 db.close();
