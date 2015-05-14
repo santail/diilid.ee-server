@@ -1,6 +1,6 @@
 var config = {
     db: {
-        url: 'mongodb://deals:offers@dogen.mongohq.com:10094/deals_server_test',
+        url: 'mongodb://' + process.env.IP + ':10094/deals_server_test',
         collections: ["offers", "notifications", "wishes"]
     },
     images: {
@@ -30,7 +30,7 @@ var config = {
     activeSites: {
         'www.minuvalik.ee': true,
         'www.cherry.ee': true,
-        'www.chilli.ee': false,
+        'www.chilli.ee': true,
         'www.euronics.ee': true,
         'www.kriisis.ee': true,
         'www.onoff.ee': true
