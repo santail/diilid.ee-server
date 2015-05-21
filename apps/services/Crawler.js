@@ -57,20 +57,20 @@ Crawler.prototype.request = function (url, onSuccess, onFailure) {
   function _makeRequest(options) {
     request(options, function (err, response, data) {
       if (err || response.statusCode !== 200 || !data) {
-        console.log('Error ' + err + ' when fetching ' + self.options.uri + (self.options.retries ? ' (' + self.options.retries + ' retries left)' : ''));
+        console.log('Error ' + err + ' when fetching ' + options.uri + (retries ? ' (' + retries + ' retries left)' : ''));
 
         if (retries) {
           setTimeout(function () {
             retries--;
 
             // If there is a "proxies" option, rotate it so that we don't keep hitting the same one
-            if (self.options.proxies) {
+            if (options.proxies) {
               options.proxies.push(options.proxies.shift());
             }
 
             _makeRequest(options);
 
-          }, self.options.retryTimeout);
+          }, options.retryTimeout);
         }
         else {
           onFailure(err, response);
