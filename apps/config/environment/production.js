@@ -1,6 +1,6 @@
 var config = {
   db: {
-    url: 'mongodb://deals:offers@staff.mongohq.com:10020/deals',
+    uri: 'mongodb://' + process.env.IP + ':27017/deals',
     collections: ["offers", "notifications", "wishes"]
   },
   images: {
