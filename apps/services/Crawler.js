@@ -1,5 +1,6 @@
 "use strict";
-var util = require('util'),
+var config = require('../config/environment'),
+  util = require('util'),
   _ = require("underscore")._,
   request = require('request');
 
@@ -24,7 +25,7 @@ Crawler.prototype.init = function init(options) {
     proxies: [
     ],
     retries: 3,
-    retryTimeout: 5 * 60 * 1000,
+    retryTimeout: config.retryTimeout,
     timeout: 3 * 60 * 1000,
     debug: true
   };
@@ -57,7 +58,18 @@ Crawler.prototype.request = function (url, onSuccess, onFailure) {
   function _makeRequest(options) {
     request(options, function (err, response, data) {
       if (err || response.statusCode !== 200 || !data) {
-        console.log('Error ' + err + ' when fetching ' + options.uri + (retries ? ' (' + retries + ' retries left)' : ''));
+        
+        if (err) {
+          console.log('Error ' + err + ' when fetching ' + options.uri + (retries ? ' (' + retries + ' retries left)' : ''));
+        }
+        
+        if (response.statusCode !== 200) {
+          console.log('Host ' + options.uri + ' returned invalid status code: ' + response.statusCode + '. ' + (retries ? ' (' + retries + ' retries left)' : ''));
+        }
+        
+        if (!data) {
+          console.log('Request ' + options.uri + ' returned no data: ' + data + '. ' + (retries ? ' (' + retries + ' retries left)' : ''));
+        }
 
         if (retries) {
           setTimeout(function () {
