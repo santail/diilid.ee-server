@@ -10,7 +10,8 @@ var config = {
   harvester: {
     execution: {
       rule: '0/5 * * * * *' // every 5 seconds
-    }
+    },
+    retryTimeout: 5 * 1000
   },
   notifier: {
     twilio: {
