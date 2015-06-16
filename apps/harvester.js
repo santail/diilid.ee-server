@@ -1,5 +1,4 @@
 var config = require('./config/environment'),
-  mongojs = require("mongojs"),
   async = require('async'),
   _ = require('underscore')._,
   cron = require('cron').CronJob,
@@ -19,7 +18,7 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
     };
 
   console.log('Parsing offer', url, language);
-  
+
   parser.parseOffer(body, function (err, parsed) {
     if (!err) {
       _.extend(offer, parsed);
@@ -85,7 +84,7 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
   var functions = _.map(links, function (url) {
     return function (finishOfferProcessing) {
       console.log('Checking offer', url);
-              
+
       that.db.offers.findOne({
         url: url
       }, function (err, offer) {
@@ -123,9 +122,9 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
 
 Harvester.prototype.reactivateOffer = function (offer, callback) {
   var that = this;
-  
+
   console.log('Offer #Id', offer._id, ':', offer.url, 'has been already parsed. Reactivating.');
-  
+
   that.db.offers.findAndModify({
     query: {
       _id: offer._id
@@ -185,7 +184,7 @@ Harvester.prototype.processSite = function (parser, callback) {
 
       if (paging) {
         var pages = paging.pages;
-        
+
         console.log('Paging found. Processing in parallel', _.size(pages), 'pages');
 
         var functions = _.map(pages, function (pageUrl) {
@@ -203,7 +202,7 @@ Harvester.prototype.processSite = function (parser, callback) {
       }
       else {
         console.log('Paging not found.');
-        
+
         that.processOffers(parser, language, body, function (err) {
           if (err) {
             console.log('Error retriving offers for', url, err);
@@ -340,13 +339,13 @@ Harvester.prototype.runHarvesting = function () {
 
   var numberOfSites = _.size(config.activeSites),
     numberOfSitesProcessed = 0;
-    
+
   async.forEachSeries(_.keys(config.activeSites), function (site, finishSiteProcessing) {
     var onSiteProcessedCallback = function (err) {
       numberOfSitesProcessed++;
       finishSiteProcessing(err);
     };
-        
+
     if (config.activeSites[site]) {
       console.log('Site', site, 'is active. Harvesting.');
 
@@ -375,7 +374,7 @@ Harvester.prototype.runHarvesting = function () {
     }
     else {
       if (numberOfSites === numberOfSitesProcessed) {
-        that.onHarvestingFinished(err);  
+        that.onHarvestingFinished(err);
       }
     }
   });
@@ -406,7 +405,7 @@ Harvester.prototype.onSiteProcessed = function (err, site, callback) {
 Harvester.prototype.run = function () {
   var that = this;
 
-  that.db = mongojs.connect(config.db.url, config.db.collections);
+  that.db = require('mongojs').connect(config.db.uri, config.db.collections);
   that.db.collection('offers');
   that.crawler = new Crawler();
 
@@ -416,7 +415,7 @@ Harvester.prototype.run = function () {
 
 Harvester.prototype.start = function (forceMode) {
   var that = this;
-  
+
   if (forceMode) {
     that.run();
   }
