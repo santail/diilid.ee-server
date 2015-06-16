@@ -42,18 +42,18 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
             if (err) {
               console.log("Error processing offers pictures", err);
             }
-            callback(err, offer);
+            return callback(err, offer);
           });
         }
         else {
-          callback(err, offer);
+          return callback(err, offer);
         }
       });
     }
     else {
       log.error("Error parsing offer", err);
 
-      callback(err, offer);
+      return callback(err, offer);
     }
   }, language);
 };
@@ -63,11 +63,10 @@ Harvester.prototype.saveOffer = function (offer, callback) {
 
   that.db.offers.save(offer, function (err, saved) {
     if (err || !saved) {
-      console.log("Deal not saved", err);
-      callback(err);
+      return callback(err);
     }
     else {
-      callback();
+      return callback();
     }
   });
 };
@@ -75,7 +74,7 @@ Harvester.prototype.saveOffer = function (offer, callback) {
 Harvester.prototype.processImages = function (images, callback) {
   console.log('Fetching images:', images.length);
   // imageProcessor.process(config.images.dir + saved._id + '/', deal.pictures, callback);
-  callback();
+  return callback();
 };
 
 Harvester.prototype.processOffers = function (parser, language, data, callback) {
@@ -122,7 +121,7 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
   });
 
   async.parallel(functions, function (err, links) {
-    callback(err, links);
+    return callback(err, links);
   });
 };
 
@@ -146,7 +145,7 @@ Harvester.prototype.reactivateOffer = function (offer, callback) {
       console.log('Error reactivating offer #Id', offer._id);
     }
 
-    callback(err);
+    return callback(err);
   });
 };
 
@@ -230,11 +229,11 @@ Harvester.prototype.processSite = function (parser, callback) {
 
   }, function (err) {
     if (err) {
-      callback(err);
+      return callback(err);
     }
     else {
       if (numberOfLanguages === numberOfLanguagesProcessed) {
-        callback();
+        return callback();
       }
     }
   });
@@ -405,7 +404,7 @@ Harvester.prototype.onSiteProcessed = function (err, site, callback) {
     console.log('Processing site', site, 'finished successfully');
   }
 
-  callback(err);
+  return callback(err);
 };
 
 Harvester.prototype.run = function () {
