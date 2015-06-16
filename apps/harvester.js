@@ -4,6 +4,11 @@ var config = require('./config/environment'),
   cron = require('cron').CronJob,
   Crawler = require("./services/Crawler");
 
+var logentries = require('node-logentries');
+var log = logentries.logger({
+  token:'8ea9fd5d-1960-40ba-b5ec-7a00a21186bd'
+});
+
 var Harvester = function () {
   this.db = null;
 };
@@ -17,7 +22,7 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
       'active': true
     };
 
-  console.log('Parsing offer', url, language);
+  log.info('Parsing offer', url, language);
 
   parser.parseOffer(body, function (err, parsed) {
     if (!err) {
@@ -46,7 +51,8 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
       });
     }
     else {
-      console.log("Error parsing offer", err);
+      log.error("Error parsing offer", err);
+
       callback(err, offer);
     }
   }, language);
@@ -75,15 +81,15 @@ Harvester.prototype.processImages = function (images, callback) {
 Harvester.prototype.processOffers = function (parser, language, data, callback) {
   var that = this;
 
-  console.log("Parsing page for offers links", language);
+  log.info("Parsing page for offers links for " + language);
 
   var links = parser.getOfferLinks(data, language);
 
-  console.log('Iterating found offers. Total found', _.size(links));
+  console.log('Iterating found offers. Total found ' + _.size(links));
 
   var functions = _.map(links, function (url) {
     return function (finishOfferProcessing) {
-      console.log('Checking offer', url);
+      log.info('Checking offer ' + url);
 
       that.db.offers.findOne({
         url: url
@@ -382,10 +388,10 @@ Harvester.prototype.runHarvesting = function () {
 
 Harvester.prototype.onHarvestingFinished = function (err) {
   if (err) {
-    console.log('Harvesting failed', err);
+    log.log('error', {'message': 'Harvesting failed', 'error': err});
   }
   else {
-    console.log('Harvesting finished');
+    log.info('Harvesting finished');
   }
 
   this.db.close();
@@ -393,7 +399,7 @@ Harvester.prototype.onHarvestingFinished = function (err) {
 
 Harvester.prototype.onSiteProcessed = function (err, site, callback) {
   if (err) {
-    console.log('Error processing site', site);
+    log.log('error', {'message': 'Error processing site ' + site, 'error': err});
   }
   else {
     console.log('Processing site', site, 'finished successfully');
@@ -404,6 +410,8 @@ Harvester.prototype.onSiteProcessed = function (err, site, callback) {
 
 Harvester.prototype.run = function () {
   var that = this;
+
+  log.info('Initiating Harvester\' run');
 
   that.db = require('mongojs').connect(config.db.uri, config.db.collections);
   that.db.collection('offers');
