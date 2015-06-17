@@ -22,10 +22,9 @@ Crawler.prototype.init = function init(options) {
       'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
       'agents': [firefox, chrome]
     },
-    proxies: [
-    ],
+    proxies: [],
     retries: 3,
-    retryTimeout: config.retryTimeout,
+    retryTimeout: config.harvester.retryTimeout,
     timeout: 3 * 60 * 1000,
     debug: true
   };
@@ -46,52 +45,61 @@ Crawler.prototype.request = function (url, onSuccess, onFailure) {
   if (self.options.agents) {
     options.headers['User-Agent'] = self.options.agents.shift();
   }
+
   if (self.options.referer) {
-      options.headers.Referer = options.referer;
+    options.headers.Referer = options.referer;
   }
+
   if (self.options.proxies && self.options.proxies.length) {
-      options.proxies = self.options.proxies;
-      options.proxy = self.options.proxies[0];
+    options.proxies = self.options.proxies;
+    options.proxy = self.options.proxies[0];
   }
+
+  var handler = function (err, response, data) {
+    if (err || response.statusCode !== 200 || !data) {
+
+      if (retries) {
+        retries--;
+      }
+
+      if (err) {
+        console.log(err + ' when fetching ' + options.uri + (retries ? ' (' + retries + ' retries left)' : ''));
+      }
+      else if (response.statusCode !== 200) {
+        console.log('Host ' + options.uri + ' returned invalid status code: ' + response.statusCode + '. ' + (retries ? ' (' + retries + ' retries left)' : ''));
+      }
+      else if (!data) {
+        console.log('Request ' + options.uri + ' returned no data: ' + data + '. ' + (retries ? ' (' + retries + ' retries left)' : ''));
+      }
+
+      if (retries) {
+        setTimeout(function () {
+          // If there is a "proxies" option, rotate it so that we don't keep hitting the same one
+          if (options.proxies) {
+            options.proxies.push(options.proxies.shift());
+          }
+
+          _makeRequest(options);
+
+        }, options.retryTimeout);
+      }
+      else {
+        return onFailure(err, response);
+      }
+    }
+    else {
+      return onSuccess(data);
+    }
+  };
 
 
   function _makeRequest(options) {
-    request(options, function (err, response, data) {
-      if (err || response.statusCode !== 200 || !data) {
-        
-        if (err) {
-          console.log('Error ' + err + ' when fetching ' + options.uri + (retries ? ' (' + retries + ' retries left)' : ''));
-        }
-        
-        if (response.statusCode !== 200) {
-          console.log('Host ' + options.uri + ' returned invalid status code: ' + response.statusCode + '. ' + (retries ? ' (' + retries + ' retries left)' : ''));
-        }
-        
-        if (!data) {
-          console.log('Request ' + options.uri + ' returned no data: ' + data + '. ' + (retries ? ' (' + retries + ' retries left)' : ''));
-        }
-
-        if (retries) {
-          setTimeout(function () {
-            retries--;
-
-            // If there is a "proxies" option, rotate it so that we don't keep hitting the same one
-            if (options.proxies) {
-              options.proxies.push(options.proxies.shift());
-            }
-
-            _makeRequest(options);
-
-          }, options.retryTimeout);
-        }
-        else {
-          onFailure(err, response);
-        }
-      }
-      else {
-        onSuccess(data);
-      }
-    });
+    try {
+      request(options, handler);
+    }
+    catch (ex) {
+      return onFailure(ex);
+    }
   }
 
   _makeRequest(options);
