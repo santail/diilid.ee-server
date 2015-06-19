@@ -37,8 +37,6 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
         'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
       });
 
-      LOG.info('Saving offer');
-
       that.saveOffer(offer, function (err) {
         if (err) {
           LOG.error({
@@ -49,18 +47,30 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
           return callback(err, offer);
         }
 
-        if (offer.pictures) {
-          that.processImages(offer.pictures, function (err) {
-            return callback(err, offer);
-          });
-        }
-        else {
+        that.postprocessOffer(offer, function (err) {
           return callback(err, offer);
-        }
+        });
       });
     }
 
   }, language);
+};
+
+Harvester.prototype.postprocessOffer = function (offer, callback) {
+  var that = this;
+  
+  if (offer.pictures) {
+    that.processImages(offer.pictures, function (err) {
+      if (err) {
+        return callback(err, offer);
+      }
+      
+      return callback(null, offer);
+    });
+  }
+  else {  
+    return callback(null, offer);
+  }
 };
 
 Harvester.prototype.saveOffer = function (offer, callback) {
@@ -74,14 +84,18 @@ Harvester.prototype.saveOffer = function (offer, callback) {
         'message': 'Error saving offer ' + offer.url,
         'error': err
       });
+
+      return callback(err);
     }
+
+    LOG.info('Offer', offer.url, 'saved with id ' + offer._id);
 
     return callback(err);
   });
 };
 
 Harvester.prototype.processImages = function (images, callback) {
-  console.log('Fetching images:', images.length);
+  LOG.info('Fetching images:', images.length);
   // imageProcessor.process(config.images.dir + saved._id + '/', deal.pictures, callback);
   return callback();
 };
@@ -93,7 +107,7 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
   var links = parser.getOfferLinks(data, language),
       linksNumber = _.size(links);
 
-  LOG.info(linksNumber, "total links found");
+  LOG.info('Total links found on page', linksNumber);
 
   var functions = _.map(links, function (url, index) {
     return function (finishOfferProcessing) {
