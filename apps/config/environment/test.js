@@ -11,7 +11,12 @@ var config = {
     execution: {
       rule: '*/5 * * * *' // every 5 minutes
     },
-    retryTimeout: 1 * 60 * 1000
+    retryTimeout: 1 * 60 * 1000,
+    logs: {
+      'logentries': {
+        'token': '35014ffd-cc1b-409c-9adb-75a639b58dde'
+      }
+    }
   },
   notifier: {
     twilio: {
