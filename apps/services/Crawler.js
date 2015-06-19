@@ -33,7 +33,7 @@ Crawler.prototype.init = function init(options) {
   self.options = _.extend(defaultOptions, options);
 };
 
-Crawler.prototype.request = function (url, onSuccess, onFailure) {
+Crawler.prototype.request = function (url, callback) {
   var self = this,
     options = {
       uri: url
@@ -84,11 +84,11 @@ Crawler.prototype.request = function (url, onSuccess, onFailure) {
         }, options.retryTimeout);
       }
       else {
-        return onFailure(err, response);
+        return callback(err, data, response);
       }
     }
     else {
-      return onSuccess(data);
+      return callback(err, data, response);
     }
   };
 
