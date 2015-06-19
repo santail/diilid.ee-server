@@ -19,15 +19,15 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
       'active': true
     };
 
-  LOG.info('Parsing offer for ' + site + 'language ' + language + ': ' + url);
+  LOG.info('Parsing offer for ' + site + ' language ' + language + ': ' + url);
 
   parser.parseOffer(body, function (err, parsed) {
     if (err) {
       LOG.error({
-        'message': 'Error retrieving offer for ' + site + 'language ' + language + ': ' + url,
+        'message': 'Error retrieving offer for ' + site + ' language ' + language + ': ' + url,
         'error': err
       });
-              
+
       return callback(err, offer);
     }
     else {
@@ -37,8 +37,15 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
         'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
       });
 
+      LOG.info('Saving offer');
+
       that.saveOffer(offer, function (err) {
         if (err) {
+          LOG.error({
+            'message': 'Error saving parsed offer ' + url,
+            'error': err
+          });
+
           return callback(err, offer);
         }
 
@@ -59,13 +66,17 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
 Harvester.prototype.saveOffer = function (offer, callback) {
   var that = this;
 
+  LOG.debug('Saving offer', offer);
+
   that.db.offers.save(offer, function (err, saved) {
     if (err || !saved) {
-      return callback(err);
+      LOG.error({
+        'message': 'Error saving offer ' + offer.url,
+        'error': err
+      });
     }
-    else {
-      return callback();
-    }
+
+    return callback(err);
   });
 };
 
@@ -79,21 +90,24 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
   var that = this,
       site = parser.getSite();
 
-  LOG.info("Parsing page for offers links for " + language);
+  var links = parser.getOfferLinks(data, language),
+      linksNumber = _.size(links);
 
-  var links = parser.getOfferLinks(data, language);
+  LOG.info(linksNumber, "total links found");
 
-  console.log('Iterating found offers. Total found ' + _.size(links));
-
-  var functions = _.map(links, function (url) {
+  var functions = _.map(links, function (url, index) {
     return function (finishOfferProcessing) {
-      LOG.info('Checking offer ' + url);
+      LOG.info('Checking offer', index + 1, 'of', linksNumber, url);
 
       that.db.offers.findOne({
         url: url
       }, function (err, offer) {
         if (err) {
-          console.log('Error checking offer by url', url);
+          LOG.error({
+            'message': 'Error checking offer by url ' + url,
+            'error': err
+          });
+
           return finishOfferProcessing(err);
         }
 
@@ -101,7 +115,8 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
           that.reactivateOffer(offer, finishOfferProcessing);
         }
         else if (offer) {
-          console.log('Offer', url, 'has been already parsed. Skipped.');
+          LOG.info('Offer', url, 'has been already parsed. Skipped.');
+
           return finishOfferProcessing();
         }
         else {
@@ -133,7 +148,7 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
 Harvester.prototype.reactivateOffer = function (offer, callback) {
   var that = this;
 
-  console.log('Offer #Id', offer._id, ':', offer.url, 'has been already parsed. Reactivating.');
+  LOG.info('Offer #Id', offer._id, offer.url, 'has been already parsed. Reactivating.');
 
   that.db.offers.findAndModify({
     query: {
@@ -147,7 +162,10 @@ Harvester.prototype.reactivateOffer = function (offer, callback) {
     'new': false
   }, function (err, doc, lastErrorObject) {
     if (err) {
-      console.log('Error reactivating offer #Id', offer._id);
+      LOG.error({
+        'message': 'Error reactivating offer #Id ' + offer._id,
+        'error': err
+      });
     }
 
     return callback(err);
@@ -163,13 +181,15 @@ Harvester.prototype.processPage = function (url, parser, language, finishPagePro
   that.crawler.request(url, function (err, data, response) {
       if (err) {
         LOG.error({
-          'message': 'Error retrieving page for ' + site + 'language ' + language + ': ' + url,
+          'message': 'Error retrieving page for ' + site + ' language ' + language + ': ' + url,
           'statusCode': response.statusCode,
           'error': err
         });
 
         return finishPageProcessing(err);
       }
+
+      LOG.info('Parsing page to get offers links for ' + site + ' language ' + language + ': ' + url);
 
       that.processOffers(parser, language, parser.parseResponseBody(data), function (err) {
         return finishPageProcessing(err);
@@ -328,7 +348,7 @@ Harvester.prototype.cleanupOffersBefore = function (parser, callback) {
         'message': 'Error deleting offers for site ' + site,
         'error': err
       });
-      
+
       return that.onSiteProcessed(err, site, callback);
     }
     else {
@@ -362,7 +382,7 @@ Harvester.prototype.deactivateOffersBefore = function (parser, callback) {
         'message': 'Error deleting deactivating for site ' + site,
         'error': err
       });
-      
+
       return that.onSiteProcessed(err, site, callback);
     }
     else {
@@ -434,7 +454,7 @@ Harvester.prototype.runHarvesting = function () {
 Harvester.prototype.onHarvestingFinished = function (err) {
   if (err) {
     LOG.error({
-      'message': 'Harvesting failed', 
+      'message': 'Harvesting failed',
       'error': err
     });
   }
@@ -448,7 +468,7 @@ Harvester.prototype.onHarvestingFinished = function (err) {
 Harvester.prototype.onSiteProcessed = function (err, site, callback) {
   if (err) {
     LOG.error({
-      'message': 'Error processing site ' + site, 
+      'message': 'Error processing site ' + site,
       'error': err
     });
   }
