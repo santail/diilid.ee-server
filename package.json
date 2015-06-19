@@ -23,7 +23,9 @@
     "nodetime": "^0.8.15",
     "request": "^2.27.0",
     "twilio": "^1.11.1",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
+    "winston": "^1.0.0",
+    "winston-logentries": "^1.0.1"
   },
   "devDependencies": {
     "nodemon": "^1.3.7"

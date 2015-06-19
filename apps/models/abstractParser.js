@@ -3,7 +3,8 @@
 var _ = require("underscore")._,
     async = require('async'),
     cheerio = require("cheerio"),
-    tidy = require('htmltidy').tidy;
+    tidy = require('htmltidy').tidy,
+    LOG = require("../services/Logger");
 
 function AbstractParser() {
     this.config = {};
@@ -22,6 +23,8 @@ AbstractParser.prototype.isPakkumised = function () {
 };
 
 AbstractParser.prototype.parseResponseBody = function (body) {
+  LOG.debug('Create DOM from body', body);
+
     return cheerio.load(body, {
         normalizeWhitespace: true,
         xmlMode: true,
@@ -32,17 +35,23 @@ AbstractParser.prototype.parseResponseBody = function (body) {
 AbstractParser.prototype.getPagingParameters = function (language, body) {
     var that = this;
 
-    console.log('Checking paging ...');
+    LOG.info('Checking if paging exists.');
 
     if (that.config.paging) {
         var paging = that.config.paging.call(that, language, body);
 
         if (_.size(paging) > 0) {
-            console.log('Paging found ...', paging);
+            LOG.info('Paging found. Total pages: ', _.size(paging.pages));
+            LOG.debug('Paging properties:', paging);
+
             return paging;
         }
+        
+        LOG.info('Paging not found.');
+        return false;
     }
 
+    LOG.info('Paging is not configured.');
     return false;
 };
 
