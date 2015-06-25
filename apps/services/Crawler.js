@@ -98,7 +98,7 @@ Crawler.prototype.request = function (url, callback) {
       request(options, handler);
     }
     catch (ex) {
-      return onFailure(ex);
+      return callback(ex);
     }
   }
 
