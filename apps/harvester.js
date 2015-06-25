@@ -319,7 +319,7 @@ Harvester.prototype.runPakkumisedHarvesting = function () {
       pageRepeats = false,
       lastId = null;
 
-    var PakkumisedParser = require(__dirname + '/models/pakkumised.ee.js'),
+    var PakkumisedParser = require(__dirname + '/parsers/pakkumised.ee.js'),
       parser = new PakkumisedParser();
 
     async.whilst(
@@ -440,7 +440,7 @@ Harvester.prototype.runHarvesting = function () {
     if (config.activeSites[site]) {
       LOG.info('Site', site, 'is active. Continue.');
 
-      var Parser = require(__dirname + '/models/' + site + ".js"),
+      var Parser = require(__dirname + '/parsers/' + site + ".js"),
         parser = new Parser();
 
       LOG.info('Parser', parser.config.site, 'used. Checking configuration.');
