@@ -58,17 +58,17 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
 
 Harvester.prototype.postprocessOffer = function (offer, callback) {
   var that = this;
-  
+
   if (offer.pictures) {
     that.processImages(offer.pictures, function (err) {
       if (err) {
         return callback(err, offer);
       }
-      
+
       return callback(null, offer);
     });
   }
-  else {  
+  else {
     return callback(null, offer);
   }
 };
@@ -79,10 +79,19 @@ Harvester.prototype.saveOffer = function (offer, callback) {
   LOG.debug('Saving offer', offer);
 
   that.db.offers.save(offer, function (err, saved) {
-    if (err || !saved) {
+    if (err) {
       LOG.error({
         'message': 'Error saving offer ' + offer.url,
         'error': err
+      });
+
+      return callback(err);
+    }
+
+    if (!saved) {
+      LOG.error({
+        'message': 'Offer not saved ' + offer.url,
+        'error': new Error('Offer not saved')
       });
 
       return callback(err);
@@ -95,7 +104,7 @@ Harvester.prototype.saveOffer = function (offer, callback) {
 };
 
 Harvester.prototype.processImages = function (images, callback) {
-  LOG.info('Fetching images:', images.length);
+  LOG.debug('Fetching images:', images.length);
   // imageProcessor.process(config.images.dir + saved._id + '/', deal.pictures, callback);
   return callback();
 };
