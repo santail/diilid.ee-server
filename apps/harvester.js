@@ -14,18 +14,16 @@ Harvester.prototype.start = function (forceMode) {
 
   if (forceMode) {
     LOG.info('Running in force mode. No recurring.');
-    that.run();
+    return that.run();
   }
   else {
     LOG.info('Running in reccuring mode.', config.harvester.execution.rule);
-    new cron(config.harvester.execution.rule, that.run.bind(that), null, true, "Europe/Tallinn");
+    return new cron(config.harvester.execution.rule, that.run.bind(that), null, true, "Europe/Tallinn");
   }
 };
 
 Harvester.prototype.run = function () {
   var that = this;
-
-  LOG.info('Running harvesting');
 
   LOG.info('Connecting to database', config.db.uri);
 
@@ -64,25 +62,23 @@ Harvester.prototype.runPakkumisedHarvesting = function () {
 
         that.processPage(pageUrl, parser, 'est', function (err, deals) {
           if (err) {
-            console.error(err);
+            LOG.error({
+              'message': 'Error processing page from pakkumised.ee ' + pageUrl
+            });
           }
 
           if (!_.isEmpty(deals) && lastId !== _.last(_.keys(deals))) {
-            console.log('not a last page');
-
             lastId = _.last(_.keys(deals));
-
-            console.log('processing offers on page ', pageNumber);
           }
           else {
             pageRepeats = true;
           }
 
-          finishPageProcessing(err);
+          return finishPageProcessing(err);
         });
       },
       function (err) {
-        that.onHarvestingFinished(err);
+        return that.onHarvestingFinished(err);
       }
     );
   }
@@ -220,12 +216,10 @@ Harvester.prototype.processSite = function (parser, callback) {
 
     LOG.info("Retrieving index page for", site, 'language', language, ':', url);
 
-    that.crawler.request(url, function (err, data, response) {
+    that.crawler.request(url, function (err, data) {
       if (err) {
         LOG.error({
-          'message': 'Error retrieving index page for ' + site + 'language ' + language + ': ' + url,
-          'statusCode': response.statusCode,
-          'error': err
+          'message': 'Error retrieving index page for ' + site + 'language ' + language + ': ' + url
         });
 
         numberOfLanguagesProcessed++;
@@ -300,12 +294,10 @@ Harvester.prototype.processPage = function (url, parser, language, finishPagePro
 
   LOG.info('Requesting page for', site, 'language', language, ':', url);
 
-  that.crawler.request(url, function (err, data, response) {
+  that.crawler.request(url, function (err, data) {
       if (err) {
         LOG.error({
-          'message': 'Error retrieving page for ' + site + ' language ' + language + ': ' + url,
-          'statusCode': response.statusCode,
-          'error': err
+          'message': 'Error retrieving page for ' + site + ' language ' + language + ': ' + url
         });
 
         return finishPageProcessing(err);
@@ -355,12 +347,10 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
         else {
           LOG.info('Retrieving offer for', site, 'language', language, ':', url);
 
-          that.crawler.request(url, function (err, data, response) {
+          that.crawler.request(url, function (err, data) {
             if (err) {
               LOG.error({
-                'message': 'Error retrieving offer for ' + site + 'language ' + language + ': ' + url,
-                'statusCode': response.statusCode,
-                'error': err
+                'message': 'Error retrieving offer for ' + site + ' language ' + language + ': ' + url
               });
 
               return finishOfferProcessing(err);
@@ -411,7 +401,7 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
     runningTime = new Date(),
     offer = {
       'url': url,
-      'site': parser.getSite(),
+      'site': site,
       'active': true
     };
 
@@ -420,7 +410,7 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
   parser.parseOffer(body, function (err, parsed) {
     if (err) {
       LOG.error({
-        'message': 'Error retrieving offer for ' + site + ' language ' + language + ': ' + url,
+        'message': 'Error parsing data for ' + site + ' language ' + language + ': ' + url,
         'error': err
       });
 
