@@ -2,7 +2,8 @@
 var config = require('../config/environment'),
   util = require('util'),
   _ = require("underscore")._,
-  request = require('request');
+  request = require('request'),
+  LOG = require("./Logger");
 
 function Crawler(options) {
   var self = this;
@@ -63,13 +64,24 @@ Crawler.prototype.request = function (url, callback) {
       }
 
       if (err) {
-        console.log(err + ' when fetching ' + options.uri + (retries ? ' (' + retries + ' retries left)' : ''));
+        LOG.error({
+          'message': 'Error when fetching ' + options.uri + (retries ? ' (' + retries + ' retries left)' : ''),
+          'error': err
+        });
       }
       else if (response.statusCode !== 200) {
-        console.log('Host ' + options.uri + ' returned invalid status code: ' + response.statusCode + '. ' + (retries ? ' (' + retries + ' retries left)' : ''));
+        LOG.error({
+          'message': 'Host ' + options.uri + ' returned invalid status code: ' + response.statusCode + '. ' + (retries ? ' (' + retries + ' retries left)' : ''),
+          'statusCode': response.statusCode,
+          'error': err
+        });
       }
       else if (!data) {
-        console.log('Request ' + options.uri + ' returned no data: ' + data + '. ' + (retries ? ' (' + retries + ' retries left)' : ''));
+        LOG.error({
+          'message': 'Request ' + options.uri + ' returned no data: ' + data + '. ' + (retries ? ' (' + retries + ' retries left)' : ''),
+          'statusCode': response.statusCode,
+          'data': data
+        });
       }
 
       if (retries) {
@@ -84,11 +96,11 @@ Crawler.prototype.request = function (url, callback) {
         }, options.retryTimeout);
       }
       else {
-        return callback(err, data, response);
+        return callback(err, data);
       }
     }
     else {
-      return callback(err, data, response);
+      return callback(err, data);
     }
   };
 
@@ -98,6 +110,10 @@ Crawler.prototype.request = function (url, callback) {
       request(options, handler);
     }
     catch (ex) {
+      LOG.error({
+        'message': 'Error retrieving content by http request',
+        'error': ex.message
+      });
       return callback(ex);
     }
   }
