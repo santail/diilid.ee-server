@@ -20,7 +20,7 @@ var Logger = new winston.Logger({
           (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
       },
       handleExceptions: true,
-      level: 'info'
+      level: config.harvester.logs.level
     })
   ],
   exitOnError: false

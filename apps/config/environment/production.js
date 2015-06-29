@@ -15,7 +15,8 @@ var config = {
     logs: {
       'logentries': {
         'token': '8f74bbd5-354c-4f71-a9d9-ffc3d4d179b3'
-      }
+      },
+      'level': 'info'
     }
   },
   notifier: {
