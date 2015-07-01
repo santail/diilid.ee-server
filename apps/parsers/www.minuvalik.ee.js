@@ -17,30 +17,6 @@ function MinuvalikParser() {
       'rus': 'https://www.minuvalik.ee/ru/?c=all',
       'est': 'https://www.minuvalik.ee/?c=all'
     },
-    'paging': function (language, $) {
-      var pagination = $('div.content_div.center.deals div > div.t17.pt10 > a');
-
-      var paging = {
-        'pattern': '?c=all&from={pageNumber}',
-        'first': 1,
-        'last': pagination.last().attr('href').replace(/.*from=(\d)/, "$1"),
-        'pages': function () {
-          var pages = [];
-
-          for (var pageNumber = 1; pageNumber <= this.last; pageNumber++) {
-            pages.push(that.compilePageUrl(language, this.pattern.replace('{pageNumber}', pageNumber)));
-          }
-
-          return pages;
-        }
-      };
-
-      return {
-        'first': paging.first,
-        'last': paging.last,
-        'pages': paging.pages()
-      };
-    },
     'list': function ($) {
       return $('div.deals li > a').map(function () {
         return $(this).attr('href');
