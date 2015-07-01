@@ -63,7 +63,8 @@ Harvester.prototype.runPakkumisedHarvesting = function () {
         that.processPage(pageUrl, parser, 'est', function (err, deals) {
           if (err) {
             LOG.error({
-              'message': 'Error processing page from pakkumised.ee ' + pageUrl
+              'message': 'Error processing page from pakkumised.ee ' + pageUrl,
+              'error': err.message
             });
           }
 
@@ -152,7 +153,7 @@ Harvester.prototype.cleanupOffersBefore = function (parser, callback) {
     if (err) {
       LOG.error({
         'message': 'Error deleting offers for site ' + site,
-        'error': err
+        'error': err.message
       });
 
       return that.onSiteProcessed(err, site, callback);
@@ -169,7 +170,7 @@ Harvester.prototype.cleanupOffersBefore = function (parser, callback) {
 
 Harvester.prototype.deactivateOffersBefore = function (parser, callback) {
   var that = this,
-      site = parser.getSite();
+    site = parser.getSite();
 
   LOG.info('Deactivating excisting offers for site', site, 'and read fresh data');
 
@@ -185,8 +186,8 @@ Harvester.prototype.deactivateOffersBefore = function (parser, callback) {
   }, function (err) {
     if (err) {
       LOG.error({
-        'message': 'Error deleting deactivating for site ' + site,
-        'error': err
+        'message': 'Error deactivating for site ' + site,
+        'error': err.message
       });
 
       return that.onSiteProcessed(err, site, callback);
@@ -203,10 +204,10 @@ Harvester.prototype.deactivateOffersBefore = function (parser, callback) {
 
 Harvester.prototype.processSite = function (parser, callback) {
   var that = this,
-      site = parser.getSite(),
-      languages = _.keys(parser.config.index),
-      numberOfLanguages = _.size(languages),
-      numberOfLanguagesProcessed = 0;
+    site = parser.getSite(),
+    languages = _.keys(parser.config.index),
+    numberOfLanguages = _.size(languages),
+    numberOfLanguagesProcessed = 0;
 
   LOG.info('Processing', site, 'gathering fresh data');
   LOG.info('Site', site, 'has', numberOfLanguages, 'languages', languages);
@@ -219,7 +220,8 @@ Harvester.prototype.processSite = function (parser, callback) {
     that.crawler.request(url, function (err, data) {
       if (err) {
         LOG.error({
-          'message': 'Error retrieving index page for ' + site + 'language ' + language + ': ' + url
+          'message': 'Error retrieving index page for ' + site + 'language ' + language + ': ' + url,
+          'error': err.message
         });
 
         numberOfLanguagesProcessed++;
@@ -233,7 +235,7 @@ Harvester.prototype.processSite = function (parser, callback) {
 
       if (paging) {
         var pages = paging.pages,
-            pagesNumber = _.size(pages);
+          pagesNumber = _.size(pages);
 
         var functions = _.map(pages, function (pageUrl, index) {
           return function (finishPageProcessing) {
@@ -257,11 +259,11 @@ Harvester.prototype.processSite = function (parser, callback) {
           if (err) {
             LOG.error({
               'message': 'Error processing offers for ' + site + 'language ' + language + ': ' + url,
-              'error': err
+              'error': err.message
             });
           }
           else {
-            LOG.info('Index page for', site, 'language', language , ':', url, 'parsed successfully');
+            LOG.info('Index page for', site, 'language', language, ':', url, 'parsed successfully');
           }
 
           numberOfLanguagesProcessed++;
@@ -273,7 +275,7 @@ Harvester.prototype.processSite = function (parser, callback) {
     if (err) {
       LOG.error({
         'message': 'Error processing site ' + site,
-        'error': err
+        'error': err.message
       });
 
       return callback(err);
@@ -290,33 +292,34 @@ Harvester.prototype.processSite = function (parser, callback) {
 
 Harvester.prototype.processPage = function (url, parser, language, finishPageProcessing) {
   var that = this,
-      site = parser.getSite();
+    site = parser.getSite();
 
   LOG.info('Requesting page for', site, 'language', language, ':', url);
 
   that.crawler.request(url, function (err, data) {
-      if (err) {
-        LOG.error({
-          'message': 'Error retrieving page for ' + site + ' language ' + language + ': ' + url
-        });
-
-        return finishPageProcessing(err);
-      }
-
-      LOG.info('Parsing page to get offers links for ' + site + ' language ' + language + ': ' + url);
-
-      that.processOffers(parser, language, parser.parseResponseBody(data), function (err) {
-        return finishPageProcessing(err);
+    if (err) {
+      LOG.error({
+        'message': 'Error retrieving page for ' + site + ' language ' + language + ': ' + url,
+        'error': err.message
       });
+
+      return finishPageProcessing(err);
+    }
+
+    LOG.info('Parsing page to get offers links for ' + site + ' language ' + language + ': ' + url);
+
+    that.processOffers(parser, language, parser.parseResponseBody(data), function (err) {
+      return finishPageProcessing(err);
     });
+  });
 };
 
 Harvester.prototype.processOffers = function (parser, language, data, callback) {
   var that = this,
-      site = parser.getSite();
+    site = parser.getSite();
 
   var links = parser.getOfferLinks(data, language),
-      linksNumber = _.size(links);
+    linksNumber = _.size(links);
 
   LOG.info('Total links found on page', linksNumber);
 
@@ -330,7 +333,7 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
         if (err) {
           LOG.error({
             'message': 'Error checking offer by url ' + url,
-            'error': err
+            'error': err.message
           });
 
           return finishOfferProcessing(err);
@@ -350,7 +353,8 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
           that.crawler.request(url, function (err, data) {
             if (err) {
               LOG.error({
-                'message': 'Error retrieving offer for ' + site + ' language ' + language + ': ' + url
+                'message': 'Error retrieving offer for ' + site + ' language ' + language + ': ' + url,
+                'error': err.message
               });
 
               return finishOfferProcessing(err);
@@ -387,7 +391,7 @@ Harvester.prototype.reactivateOffer = function (offer, callback) {
     if (err) {
       LOG.error({
         'message': 'Error reactivating offer #Id ' + offer._id,
-        'error': err
+        'error': err.message
       });
     }
 
@@ -407,11 +411,11 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
 
   LOG.info('Parsing offer for ' + site + ' language ' + language + ': ' + url);
 
-  parser.parseOffer(body, function (err, parsed) {
+  parser.parseOffer(body, language, function (err, parsed) {
     if (err) {
       LOG.error({
         'message': 'Error parsing data for ' + site + ' language ' + language + ': ' + url,
-        'error': err
+        'error': err.message
       });
 
       return callback(err, offer);
@@ -427,7 +431,7 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
         if (err) {
           LOG.error({
             'message': 'Error saving parsed offer ' + url,
-            'error': err
+            'error': err.message
           });
 
           return callback(err, offer);
@@ -439,7 +443,7 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
       });
     }
 
-  }, language);
+  });
 };
 
 Harvester.prototype.saveOffer = function (offer, callback) {
@@ -451,7 +455,7 @@ Harvester.prototype.saveOffer = function (offer, callback) {
     if (err) {
       LOG.error({
         'message': 'Error saving offer ' + offer.url,
-        'error': err
+        'error': err.message
       });
 
       return callback(err);
@@ -499,7 +503,7 @@ Harvester.prototype.onSiteProcessed = function (err, site, callback) {
   if (err) {
     LOG.error({
       'message': 'Error processing site ' + site,
-      'error': err
+      'error': err.message
     });
   }
   else {
@@ -513,7 +517,7 @@ Harvester.prototype.onHarvestingFinished = function (err) {
   if (err) {
     LOG.error({
       'message': 'Harvesting failed',
-      'error': err
+      'error': err.message
     });
   }
   else {

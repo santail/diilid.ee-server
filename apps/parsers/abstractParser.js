@@ -89,7 +89,7 @@ AbstractParser.prototype.setDb = function (db) {
     this.db = db;
 };
 
-AbstractParser.prototype.parseOffer = function (body, callback, language) {
+AbstractParser.prototype.parseOffer = function (body, language, callback) {
     var that = this,
         language = language || 'est';
 
