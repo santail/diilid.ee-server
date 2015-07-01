@@ -27,9 +27,17 @@ function ChillyParser() {
         return $('.product-container.single-product div.product > div.product-desc > h1').text();
       },
       'pictures': function ($, language) {
-        return $('.product-container.single-product div.product > div.product-img ul > li > img').map(function () {
-          return that.compileImageUrl(language, $(this).attr('src'));
+        var pictureUrls = [];
+
+        $('.product-container.single-product div.product > div.product-img ul > li > img').each(function () {
+          pictureUrls.push(that.compileImageUrl(language, $(this).attr('src')));
         });
+
+        $('div.main-content div.gallery > img').each(function () {
+          pictureUrls.push(that.compileImageUrl(language, $(this).attr('src')));
+        });
+
+        return pictureUrls;
       },
       'description': {
         'long': function ($) {
