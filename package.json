@@ -12,6 +12,7 @@
     "test": "mocha --harmony"
   },
   "dependencies": {
+    "agenda": "^0.6.28",
     "async": "^0.9.0",
     "cheerio": "^0.12.2",
     "cron": "^1.0.6",
@@ -28,6 +29,8 @@
     "winston-logentries": "^1.0.1"
   },
   "devDependencies": {
+    "chai": "^3.0.0",
+    "mocha": "^2.2.5",
     "nodemon": "^1.3.7"
   }
 }
