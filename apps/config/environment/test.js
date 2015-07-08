@@ -9,7 +9,7 @@ var config = {
   },
   harvester: {
     execution: {
-      rule: '*/5 * * * *' // every 5 minutes
+      rule: '5 minutes' // every 5 minutes
     },
     retryTimeout: 1 * 60 * 1000,
     logs: {
@@ -30,7 +30,7 @@ var config = {
       password: 'vkSG9667'
     },
     execution: {
-      rule: '*/5 * * * *' // every 5 minutes
+      rule: '5 minutes' // every 5 minutes
     }
   },
   pakkumised: false,

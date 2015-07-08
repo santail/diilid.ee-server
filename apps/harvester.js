@@ -2,6 +2,7 @@ var config = require('./config/environment'),
   async = require('async'),
   _ = require('underscore')._,
   cron = require('cron').CronJob,
+  Agenda = require("agenda"),
   Crawler = require("./services/Crawler"),
   LOG = require("./services/Logger");
 
@@ -18,11 +19,20 @@ Harvester.prototype.start = function (forceMode) {
   }
   else {
     LOG.info('Running in reccuring mode.', config.harvester.execution.rule);
-    return new cron(config.harvester.execution.rule, that.run.bind(that), null, true, "Europe/Tallinn");
+
+    var agenda = new Agenda({db: { address: config.db.uri}, defaultLockLifetime: 10000});
+
+    agenda.define('execute harvester', function(job, done) {
+      that.run(done);
+    });
+
+    agenda.every(config.harvester.execution.rule, 'execute harvester');
+
+    agenda.start();
   }
 };
 
-Harvester.prototype.run = function () {
+Harvester.prototype.run = function (callback) {
   var that = this;
 
   LOG.info('Connecting to database', config.db.uri);
@@ -34,8 +44,7 @@ Harvester.prototype.run = function () {
 
   that.crawler = new Crawler();
 
-  that.runPakkumisedHarvesting();
-  that.runHarvesting();
+  that.runPakkumisedHarvesting() && that.runHarvesting() && callback();
 };
 
 Harvester.prototype.runPakkumisedHarvesting = function () {
@@ -83,6 +92,8 @@ Harvester.prototype.runPakkumisedHarvesting = function () {
       }
     );
   }
+  
+  return true;
 };
 
 Harvester.prototype.runHarvesting = function () {
@@ -139,6 +150,8 @@ Harvester.prototype.runHarvesting = function () {
       }
     }
   });
+  
+  return true;
 };
 
 Harvester.prototype.cleanupOffersBefore = function (parser, callback) {
