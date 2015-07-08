@@ -36,12 +36,8 @@ Crawler.prototype.init = function init(options) {
 
 Crawler.prototype.request = function (url, callback) {
   var self = this,
-    options = {
-      uri: url
-    },
+    options = self.options,
     retries = self.options.retries;
-
-  _.extend(options, self.options);
 
   if (self.options.agents) {
     options.headers['User-Agent'] = self.options.agents.shift();
@@ -57,46 +53,44 @@ Crawler.prototype.request = function (url, callback) {
   }
 
   var handler = function (err, response, data) {
-    if (err || response.statusCode !== 200 || !data) {
+    retries--;
 
-      if (retries) {
-        retries--;
-      }
+    if (err || response.statusCode !== 200 || !data) {
 
       if (err) {
         LOG.error({
-          'message': 'Error when fetching ' + options.uri + (retries ? ' (' + retries + ' retries left)' : ''),
-          'error': err
+          'message': 'Error when fetching ' + url + (retries ? ' (' + retries + ' retries left)' : 'No retries left.'),
+          'error': err.message
         });
       }
       else if (response.statusCode !== 200) {
         LOG.error({
-          'message': 'Host ' + options.uri + ' returned invalid status code: ' + response.statusCode + '. ' + (retries ? ' (' + retries + ' retries left)' : ''),
-          'statusCode': response.statusCode,
-          'error': err
+          'message': 'Host ' + url + ' returned invalid status code: ' + response.statusCode + '. ' + (retries ? '(' + retries + ' retries left)' : 'No retries left.')
         });
       }
       else if (!data) {
         LOG.error({
-          'message': 'Request ' + options.uri + ' returned no data: ' + data + '. ' + (retries ? ' (' + retries + ' retries left)' : ''),
+          'message': 'Request ' + url + ' returned no data: ' + data + '. ' + (retries ? '(' + retries + ' retries left)' : 'No retries left.'),
           'statusCode': response.statusCode,
           'data': data
         });
       }
 
       if (retries) {
+
         setTimeout(function () {
           // If there is a "proxies" option, rotate it so that we don't keep hitting the same one
           if (options.proxies) {
             options.proxies.push(options.proxies.shift());
           }
 
-          _makeRequest(options);
+          _makeRequest(url, options);
 
         }, options.retryTimeout);
+
       }
       else {
-        return callback(err, data);
+        return callback(err || new Error("Request failed. No retries left."), data);
       }
     }
     else {
@@ -105,20 +99,21 @@ Crawler.prototype.request = function (url, callback) {
   };
 
 
-  function _makeRequest(options) {
+  function _makeRequest(url, options) {
     try {
-      request(options, handler);
+      request.get(url, options, handler);
     }
     catch (ex) {
       LOG.error({
         'message': 'Error retrieving content by http request',
         'error': ex.message
       });
+
       return callback(ex);
     }
   }
 
-  _makeRequest(options);
+  _makeRequest(url, options);
 };
 
 module.exports = Crawler;
