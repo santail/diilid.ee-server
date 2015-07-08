@@ -48,32 +48,44 @@ function KriisisParser() {
     },
     'templates': {
       'shop': function ($) {
-        return $('#01 > tr').eq(5).find('td').eq(1).find('table').first().find('tr > td > table').first().find('p').text();
+        return $('#01 > tr').eq(5).find('td').eq(1).find('table').first().find('tr > td > table').first().find('p').text().replace(/Pood: |Магазин: /, '');
       },
-      'title': function ($) {
+      'title': function ($, language) {
         var $paragraphs = $('#01 > tr').eq(5).children('td').eq(1).children('p');
 
         if (_.size($paragraphs) > 4) {
           $paragraphs.first().remove();
         }
 
-        return $('#01 > tr').eq(5).children('td').eq(1).children('p').eq(2).text();
+        var rows = $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(2);
+
+        if (language === 'rus') {
+          return rows.find('b').first().text();
+        }
+
+        return rows.text();
       },
       'pictures': function ($) {
-        return $('#01 > tr').eq(5).find('td').eq(1).find('table').first().find('tr > td > table').eq(2).find('tr > td > img').attr('src');
+        return [$('#01 > tr').eq(5).find('td').eq(1).find('table').first().find('tr > td > table').eq(2).find('tr > td > img').attr('src')];
       },
       'description': {
-        'short': function ($) {
-          return $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(2).text();
+        'short': function ($, language) {
+          var rows = $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(2);
+
+          if (language === 'rus') {
+            return rows.find('b').first().text();
+          }
+
+          return rows.text();
         }
       },
       'price': {
         'sales': function ($) {
-          return $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(1).text();
+          return $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(1).text().replace(/Hind: |Цена: /, '');
         }
       },
       'period': function ($) {
-        return $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(0).text();
+        return $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(0).text().replace(/Kampaania periood: |Период кампании: /, '');
       }
     }
   };

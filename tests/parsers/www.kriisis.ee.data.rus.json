@@ -1,0 +1,15 @@
+{
+  "description": {
+    "short": "Копченая колбаса Moskva"
+  },
+  "language": "ru",
+  "period": "02.07.2015 - 12.07.2015",
+  "pictures": [
+    "http://www.kriisis.ee/testing/files/12-07-2015/128314.jpg"
+    ],
+  "price": {
+    "sales": "1.99€"
+  },
+  "shop": "Comarket",
+  "title": "Копченая колбаса Moskva"
+}
