@@ -28,17 +28,6 @@ var all = {
         safe: true
       }
     }
-  },
-  harvester: {
-    timeout: 30000
-  },
-  pakkumised: true,
-  activeSites: {
-      'www.minuvalik.ee': true,
-      'www.cherry.ee': true,
-      'www.euronics.ee': true,
-      'www.kriisis.ee': true,
-      'www.onoff.ee': true
   }
 };
 

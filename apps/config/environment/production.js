@@ -16,6 +16,11 @@ var config = {
       'logentries': {
         'token': '8f74bbd5-354c-4f71-a9d9-ffc3d4d179b3'
       },
+      "loggly": {
+        "subdomain": "nikolaimuhhin",
+        "token": "baaf8934-7b4a-45ab-aa1f-688fa3e67f92",
+        "tags": ["harvester: production"]
+      },
       'level': 'info'
     }
   },
@@ -31,6 +36,17 @@ var config = {
     },
     execution: {
       rule: '3 hours' // every 3 hours
+    },
+    logs: {
+      'logentries': {
+        'token': '8f74bbd5-354c-4f71-a9d9-ffc3d4d179b3'
+      },
+      "loggly": {
+        "subdomain": "nikolaimuhhin",
+        "token": "baaf8934-7b4a-45ab-aa1f-688fa3e67f92",
+        "tags": ["notifier: production"]
+      },
+      'level': 'info'
     }
   },
   pakkumised: false,

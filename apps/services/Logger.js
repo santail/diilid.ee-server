@@ -13,19 +13,19 @@ var Logger = new winston.Logger({
       "token": config.harvester.logs.logentries.token
     }),
     new winston.transports.Loggly({
-      "subdomain": "nikolaimuhhin",
-      "inputToken": "baaf8934-7b4a-45ab-aa1f-688fa3e67f92",
-      tags: ["NodeJS"],
-      json:true
+      "subdomain": config.harvester.logs.loggly.subdomain,
+      "inputToken": config.harvester.logs.loggly.token,
+      "tags": config.harvester.logs.loggly.tags,
+      "json": true
     }),
-    new (winston.transports.Console)({
-      timestamp: function() {
+    new(winston.transports.Console)({
+      timestamp: function () {
         return Date.now();
       },
       formatter: function (options) {
         // Return string will be passed to logger.
-        return options.timestamp() +' '+ options.level.toUpperCase() +' '+ (undefined !== options.message ? options.message : '') +
-          (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
+        return options.timestamp() + ' ' + options.level.toUpperCase() + ' ' + (undefined !== options.message ? options.message : '') +
+          (options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '');
       },
       handleExceptions: true,
       level: config.harvester.logs.level
