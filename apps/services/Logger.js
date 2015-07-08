@@ -2,13 +2,21 @@
 var config = require('../config/environment');
 
 var winston = require('winston');
-var Logentries = require('winston-logentries');
+
+require('winston-logentries');
+require('winston-loggly');
 
 var Logger = new winston.Logger({
   transports: [
     new winston.transports.Logentries({
-      timestamp: true,
-      token: config.harvester.logs.logentries.token
+      "timestamp": true,
+      "token": config.harvester.logs.logentries.token
+    }),
+    new winston.transports.Loggly({
+      "subdomain": "nikolaimuhhin",
+      "inputToken": "baaf8934-7b4a-45ab-aa1f-688fa3e67f92",
+      tags: ["NodeJS"],
+      json:true
     }),
     new (winston.transports.Console)({
       timestamp: function() {
