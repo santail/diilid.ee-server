@@ -5,11 +5,6 @@ var harvester = require("./harvester"),
     cli = require('nash')(),
     LOG = require("./services/Logger");
 
-require('nodetime').profile({
-  accountKey: 'ddd532b852f953c005e71b17c4cfb79b640faa77',
-  appName: 'SalesTracker'
-});
-
 LOG.info('Running SalesTracker.eu-server application');
 
 var forceMode;

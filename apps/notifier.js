@@ -6,6 +6,11 @@ var config = require('./config/environment'),
   cron = require('cron').CronJob,
   twilio = require('twilio')(config.notifier.twilio.AccountSID, config.notifier.twilio.AuthToken);
 
+require('nodetime').profile({
+  accountKey: 'ddd532b852f953c005e71b17c4cfb79b640faa77',
+  appName: 'SalesTracker-Notifier'
+});
+
 var Notifier = function () {
   this.db = null;
   this.smtp = null;
