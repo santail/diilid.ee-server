@@ -1,10 +1,20 @@
 var config = require('./config/environment'),
   async = require('async'),
   _ = require('underscore')._,
-  cron = require('cron').CronJob,
+
   Agenda = require("agenda"),
   Crawler = require("./services/Crawler"),
   LOG = require("./services/Logger");
+
+var memwatch = require('memwatch');
+
+memwatch.on('leak', function(info) { 
+  
+  LOG.error({
+    'message': 'Memory leak detected',
+    'error': info.reason
+  });
+});
 
 require('nodetime').profile({
   accountKey: 'ddd532b852f953c005e71b17c4cfb79b640faa77',
@@ -28,7 +38,17 @@ Harvester.prototype.start = function (forceMode) {
     var agenda = new Agenda({db: { address: config.db.uri}, defaultLockLifetime: 10000});
 
     agenda.define('execute harvester', function(job, done) {
-      that.run(done);
+      try {
+        that.run(done);
+      }
+      catch (ex) {
+        LOG.error({
+          'message': 'Error running harvester',
+          'error': ex.message
+        });
+        
+        done();
+      }
     });
 
     agenda.every(config.harvester.execution.rule, 'execute harvester');
@@ -40,16 +60,16 @@ Harvester.prototype.start = function (forceMode) {
 Harvester.prototype.run = function (callback) {
   var that = this;
 
-  LOG.info('Connecting to database', config.db.uri);
+  LOG.debug('Connecting to database', config.db.uri);
 
   that.db = require('mongojs').connect(config.db.uri, config.db.collections);
 
-  LOG.info('Switch to offers schema');
+  LOG.debug('Switch to offers schema');
   that.db.collection('offers');
 
   that.crawler = new Crawler();
 
-  that.runPakkumisedHarvesting() && that.runHarvesting() && callback();
+  that.runPakkumisedHarvesting() && that.runHarvesting() && callback() && that.db.close();
 };
 
 Harvester.prototype.runPakkumisedHarvesting = function () {
@@ -97,7 +117,7 @@ Harvester.prototype.runPakkumisedHarvesting = function () {
       }
     );
   }
-  
+
   return true;
 };
 
@@ -155,7 +175,7 @@ Harvester.prototype.runHarvesting = function () {
       }
     }
   });
-  
+
   return true;
 };
 
@@ -176,13 +196,12 @@ Harvester.prototype.cleanupOffersBefore = function (parser, callback) {
 
       return that.onSiteProcessed(err, site, callback);
     }
-    else {
-      LOG.info('Offers for site', site, 'deleted');
 
-      return that.processSite(parser, function (err) {
-        return that.onSiteProcessed(err, site, callback);
-      });
-    }
+    LOG.info('Offers for site', site, 'deleted');
+
+    return that.processSite(parser, function (err) {
+      return that.onSiteProcessed(err, site, callback);
+    });
   });
 };
 
@@ -210,13 +229,12 @@ Harvester.prototype.deactivateOffersBefore = function (parser, callback) {
 
       return that.onSiteProcessed(err, site, callback);
     }
-    else {
-      LOG.info('Offers for site', site, 'deactivated');
 
-      return that.processSite(parser, function (err) {
-        return that.onSiteProcessed(err, site, callback);
-      });
-    }
+    LOG.info('Offers for site', site, 'deactivated');
+
+    return that.processSite(parser, function (err) {
+      return that.onSiteProcessed(err, site, callback);
+    });
   });
 };
 
@@ -238,7 +256,7 @@ Harvester.prototype.processSite = function (parser, callback) {
     that.crawler.request(url, function (err, data) {
       if (err) {
         LOG.error({
-          'message': 'Error retrieving index page for ' + site + 'language ' + language + ': ' + url,
+          'message': 'Error retrieving index page for ' + site + ' language ' + language + ': ' + url,
           'error': err.message
         });
 
@@ -298,17 +316,16 @@ Harvester.prototype.processSite = function (parser, callback) {
 
       return callback(err);
     }
-    else {
-      if (numberOfLanguages === numberOfLanguagesProcessed) {
-        LOG.info('Site', site, 'processed successfully');
 
-        return callback();
-      }
+    if (numberOfLanguages === numberOfLanguagesProcessed) {
+      LOG.info('Site', site, 'processed successfully');
+
+      return callback();
     }
   });
 };
 
-Harvester.prototype.processPage = function (url, parser, language, finishPageProcessing) {
+Harvester.prototype.processPage = function (url, parser, language, callback) {
   var that = this,
     site = parser.getSite();
 
@@ -321,13 +338,13 @@ Harvester.prototype.processPage = function (url, parser, language, finishPagePro
         'error': err.message
       });
 
-      return finishPageProcessing(err);
+      return callback(err);
     }
 
     LOG.info('Parsing page to get offers links for ' + site + ' language ' + language + ': ' + url);
 
     that.processOffers(parser, language, parser.parseResponseBody(data), function (err) {
-      return finishPageProcessing(err);
+      return callback(err);
     });
   });
 };
@@ -343,7 +360,7 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
 
   var functions = _.map(links, function (url, index) {
     return function (finishOfferProcessing) {
-      LOG.info('Checking offer', index + 1, 'of', linksNumber, url);
+      LOG.debug('Checking offer', index + 1, 'of', linksNumber, url);
 
       that.db.offers.findOne({
         url: url
@@ -361,12 +378,12 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
           that.reactivateOffer(offer, finishOfferProcessing);
         }
         else if (offer) {
-          LOG.info('Offer', url, 'has been already parsed. Skipped.');
+          LOG.debug('Offer', url, 'has been already parsed. Skipped.');
 
           return finishOfferProcessing();
         }
         else {
-          LOG.info('Retrieving offer for', site, 'language', language, ':', url);
+          LOG.debug('Retrieving offer for', site, 'language', language, ':', url);
 
           that.crawler.request(url, function (err, data) {
             if (err) {
@@ -385,15 +402,15 @@ Harvester.prototype.processOffers = function (parser, language, data, callback) 
     };
   });
 
-  async.parallel(functions, function (err, links) {
-    return callback(err, links);
+  async.parallel(functions, function (err) {
+    return callback(err);
   });
 };
 
 Harvester.prototype.reactivateOffer = function (offer, callback) {
   var that = this;
 
-  LOG.info('Offer #Id', offer._id, offer.url, 'has been already parsed. Reactivating.');
+  LOG.debug('Offer #Id', offer._id, offer.url, 'has been already parsed. Reactivating.');
 
   that.db.offers.findAndModify({
     query: {
@@ -430,17 +447,21 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
   LOG.info('Parsing offer for ' + site + ' language ' + language + ': ' + url);
 
   parser.parseOffer(body, language, function (err, parsed) {
+    body = null;
+    
     if (err) {
       LOG.error({
         'message': 'Error parsing data for ' + site + ' language ' + language + ': ' + url,
         'error': err.message
       });
 
-      return callback(err, offer);
+      return callback(err);
     }
     else {
       _.extend(offer, parsed);
 
+      parsed = null;
+      
       _.extend(offer, {
         'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
       });
@@ -452,15 +473,16 @@ Harvester.prototype.parseOffer = function (url, language, parser, body, callback
             'error': err.message
           });
 
-          return callback(err, offer);
+          offer = null;
+          return callback(err);
         }
 
         that.postprocessOffer(offer, function (err) {
-          return callback(err, offer);
+          offer = null;
+          return callback(err);
         });
       });
     }
-
   });
 };
 
@@ -490,6 +512,9 @@ Harvester.prototype.saveOffer = function (offer, callback) {
 
     LOG.info('Offer', offer.url, 'saved with id ' + offer._id);
 
+    offer = null;
+    saved = null;
+    
     return callback(err);
   });
 };
@@ -541,8 +566,6 @@ Harvester.prototype.onHarvestingFinished = function (err) {
   else {
     LOG.info('Harvesting finished');
   }
-
-  this.db.close();
 };
 
 module.exports = Harvester;

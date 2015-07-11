@@ -23,7 +23,9 @@ Crawler.prototype.init = function init(options) {
       'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
       'agents': [firefox, chrome]
     },
-    proxies: [],
+    proxies: [
+      'http://46.101.248.216:8888'
+      ],
     retries: 3,
     retryTimeout: config.harvester.retryTimeout,
     timeout: 3 * 60 * 1000,
@@ -59,7 +61,7 @@ Crawler.prototype.request = function (url, callback) {
 
       if (err) {
         LOG.error({
-          'message': 'Error when fetching ' + url + (retries ? ' (' + retries + ' retries left)' : 'No retries left.'),
+          'message': 'Error when fetching ' + url + (retries ? ' (' + retries + ' retries left)' : 'No retries left.') + options.proxy,
           'error': err.message
         });
       }
@@ -82,6 +84,7 @@ Crawler.prototype.request = function (url, callback) {
           // If there is a "proxies" option, rotate it so that we don't keep hitting the same one
           if (options.proxies) {
             options.proxies.push(options.proxies.shift());
+            options.proxy = self.options.proxies[0];
           }
 
           _makeRequest(url, options);
