@@ -78,6 +78,61 @@ Crawler.prototype.request = function (url, callback) {
     self.options.proxies.push(self.options.proxies.shift());
   }
 
+  var convertToUtf = function (response) {
+    if (self.options.forceUTF8) {
+      //TODO check http header or meta equiv?
+      var iconvObj;
+
+      if (!self.options.incomingEncoding) {
+        var detected = jschardet.detect(response.body);
+
+        if (detected && detected.encoding) {
+          console.log(
+            'Detected charset ' + detected.encoding +
+            ' (' + Math.floor(detected.confidence * 100) + '% confidence)'
+          );
+
+          if (detected.encoding !== 'utf-8' && detected.encoding !== 'ascii') {
+
+            if (iconv) {
+              iconvObj = new iconv(detected.encoding, 'UTF-8//TRANSLIT//IGNORE');
+              response.body = iconvObj.convert(response.body).toString();
+
+              // iconv-lite doesn't support Big5 (yet)
+            }
+            else if (detected.encoding !== 'Big5') {
+              response.body = iconvLite.decode(response.body, detected.encoding);
+            }
+
+          }
+          else if (typeof response.body !== 'string') {
+            response.body = response.body.toString();
+          }
+
+        }
+        else {
+          response.body = response.body.toString('utf8'); //hope for the best
+        }
+      }
+      else { // do not hope to best use custom encoding
+        if (iconv) {
+          iconvObj = new iconv(self.options.incomingEncoding, 'UTF-8//TRANSLIT//IGNORE');
+          response.body = iconvObj.convert(response.body).toString();
+          // iconv-lite doesn't support Big5 (yet)
+        }
+        else if (self.options.incomingEncoding !== 'Big5') {
+          response.body = iconvLite.decode(response.body, options.incomingEncoding);
+        }
+      }
+
+    }
+    else {
+      response.body = response.body.toString();
+    }
+
+    return response.body;
+  };
+  
   var onError = function (err, response) {
     if (err) {
       LOG.error({
