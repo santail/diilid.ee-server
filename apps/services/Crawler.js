@@ -1,6 +1,6 @@
 "use strict";
+
 var config = require('../config/environment'),
-  util = require('util'),
   _ = require("underscore")._,
   request = require('request'),
   LOG = require("./Logger");
@@ -8,6 +8,7 @@ var config = require('../config/environment'),
 function Crawler(options) {
   var self = this;
   self.init(options);
+  self.counter = 0;
 }
 
 Crawler.prototype.init = function init(options) {
@@ -20,77 +21,99 @@ Crawler.prototype.init = function init(options) {
     headers: {
       'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
       'accept-language': 'en-US,en;q=0.8',
-      'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-      'agents': [firefox, chrome]
+      'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'
     },
-    proxies: [
-      'http://46.101.248.216:8888'
-      ],
+    'agents': [
+      firefox,
+      chrome
+    ],
+    proxies: config.harvester.proxies,
     retries: 3,
     retryTimeout: config.harvester.retryTimeout,
-    timeout: 3 * 60 * 1000,
-    debug: true
+    requestInterval: config.harvester.requestInterval,
+    debug: true,
+    forceUTF: false
   };
 
   //return defaultOptions with overriden properties from options.
-  self.options = _.extend(defaultOptions, options);
+  self.options = _.extend(defaultOptions, options || {});
 };
 
 Crawler.prototype.request = function (url, callback) {
   var self = this,
-    options = self.options,
+    _options = {
+      'headers': []
+    },
     retries = self.options.retries;
 
+  if (!self.options.headers) {
+    self.options.headers = {};
+  }
+  if (self.options.forceUTF8) {
+    if (!self.options.headers['Accept-Charset'] && !self.options.headers['accept-charset']) {
+      self.options.headers['Accept-Charset'] = 'utf-8;q=0.7,*;q=0.3';
+    }
+    if (!self.options.encoding) {
+      self.options.encoding = null;
+    }
+  }
+  if (typeof self.options.encoding === 'undefined') {
+    self.options.headers['Accept-Encoding'] = 'gzip';
+    self.options.encoding = null;
+  }
+
   if (self.options.agents) {
-    options.headers['User-Agent'] = self.options.agents.shift();
+    var agent = self.options.agents.shift();
+    _options.headers['User-Agent'] = agent;
+
+    self.options.agents.push(agent);
   }
 
   if (self.options.referer) {
-    options.headers.Referer = options.referer;
+    _options.headers.Referer = self.options.referer;
   }
 
-  if (self.options.proxies && self.options.proxies.length) {
-    options.proxies = self.options.proxies;
-    options.proxy = self.options.proxies[0];
+  if (self.options.proxies) {
+    _options.proxy = self.options.proxies[0];
+    self.options.proxies.push(self.options.proxies.shift());
   }
+
+  var onError = function (err, response) {
+    if (err) {
+      LOG.error({
+        'message': 'Error when fetching ' + url + ' ' + (retries ? '(' + retries + ' retries left)' : 'No retries left.') + ' ' + _options.proxy || '',
+        'error': err.message
+      });
+    }
+    else if (response.statusCode !== 200) {
+      LOG.error({
+        'message': 'Host ' + url + ' returned invalid status code: ' + response.statusCode + ' ' + (retries ? '(' + retries + ' retries left)' : 'No retries left.') + ' ' + _options.proxy || ''
+      });
+    }
+    else {
+      LOG.error({
+        'message': 'Request ' + url + ' returned no data ' + (retries ? '(' + retries + ' retries left)' : 'No retries left.') + ' ' + _options.proxy || '',
+        'statusCode': response.statusCode
+      });
+    }
+  };
 
   var handler = function (err, response, data) {
+    var config = _.extend({}, _options);
+
     retries--;
 
     if (err || response.statusCode !== 200 || !data) {
 
-      if (err) {
-        LOG.error({
-          'message': 'Error when fetching ' + url + (retries ? ' (' + retries + ' retries left)' : 'No retries left.') + options.proxy,
-          'error': err.message
-        });
-      }
-      else if (response.statusCode !== 200) {
-        LOG.error({
-          'message': 'Host ' + url + ' returned invalid status code: ' + response.statusCode + '. ' + (retries ? '(' + retries + ' retries left)' : 'No retries left.')
-        });
-      }
-      else if (!data) {
-        LOG.error({
-          'message': 'Request ' + url + ' returned no data: ' + data + '. ' + (retries ? '(' + retries + ' retries left)' : 'No retries left.'),
-          'statusCode': response.statusCode,
-          'data': data
-        });
-      }
+      onError(err, response);
 
       if (retries) {
+        if (self.options.proxies) {
+          config.proxy = self.options.proxies[0];
+          self.options.proxies.push(self.options.proxies.shift());
+        }
 
-        setTimeout(function () {
-          // If there is a "proxies" option, rotate it so that we don't keep hitting the same one
-          if (options.proxies) {
-            options.proxies.push(options.proxies.shift());
-            options.proxy = self.options.proxies[0];
-          }
-
-          _makeRequest(url, options);
-
-        }, options.retryTimeout);
-
+        request.get(url, config, handler);
       }
       else {
         return callback(err || new Error("Request failed. No retries left."), data);
@@ -101,22 +124,7 @@ Crawler.prototype.request = function (url, callback) {
     }
   };
 
-
-  function _makeRequest(url, options) {
-    try {
-      request.get(url, options, handler);
-    }
-    catch (ex) {
-      LOG.error({
-        'message': 'Error retrieving content by http request',
-        'error': ex.message
-      });
-
-      return callback(ex);
-    }
-  }
-
-  _makeRequest(url, options);
+  request.get(url, _options, handler);
 };
 
 module.exports = Crawler;
