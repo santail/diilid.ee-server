@@ -7,11 +7,19 @@ var config = {
     dir: __dirname + '/public/images/',
     thumbs: []
   },
+  nodetime: {
+    accountKey: 'ddd532b852f953c005e71b17c4cfb79b640faa77',
+    appName: 'SalesTracker-Harvester'
+  },
   harvester: {
+    proxies: [
+      // 'http://46.101.248.216:8888/'
+    ],
     execution: {
       rule: '2 minutes' // every 2 minutes
     },
     retryTimeout: 5 * 1000,
+    requestInterval: 1 * 1000,
     logs: {
       'logentries': {
         'token': '8ea9fd5d-1960-40ba-b5ec-7a00a21186bd'
@@ -19,9 +27,9 @@ var config = {
       "loggly": {
         "subdomain": "nikolaimuhhin",
         "token": "baaf8934-7b4a-45ab-aa1f-688fa3e67f92",
-        "tags": ["harvester: " + this.env]
+        "tags": ["harvester: development"]
       },
-      'level': 'debug'
+      'level': 'info'
     }
   },
   notifier: {

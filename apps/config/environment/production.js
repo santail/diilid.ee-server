@@ -7,11 +7,19 @@ var config = {
     dir: __dirname + '/public/images/',
     thumbs: []
   },
+  nodetime: {
+    accountKey: 'ddd532b852f953c005e71b17c4cfb79b640faa77',
+    appName: 'SalesTracker-Harvester'
+  },
   harvester: {
+    proxies: [
+      // 'http://46.101.248.216:8888/'
+    ],
     execution: {
       rule: '3 hours' // every 3 hours
     },
     retryTimeout: 5 * 60 * 1000,
+    requestInterval: 1 * 1000,
     logs: {
       'logentries': {
         'token': '8f74bbd5-354c-4f71-a9d9-ffc3d4d179b3'
