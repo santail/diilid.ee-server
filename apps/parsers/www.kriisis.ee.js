@@ -14,8 +14,8 @@ function KriisisParser() {
     'site': 'www.kriisis.ee',
     'reactivate': true,
     'index': {
-      'rus': 'http://www.kriisis.ee/ru/',
-      'est': 'http://www.kriisis.ee/'
+      'rus': 'http://www.kriisis.ee/ru/view_rating.php',
+      'est': 'http://www.kriisis.ee/view_rating.php'
     },
     'paging': function (language, $) {
       var pagination = $('div.pstrnav > a');
