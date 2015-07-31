@@ -371,11 +371,11 @@ Harvester.prototype.processOffers = function (parser, language, body, callback) 
           });
 
           numberOfLinksProcessed++;
-          return finishLinkProcessing(err);
+          return finishLinkProcessing();
         }
 
         if (parser.config.reactivate && offer) {
-          that.reactivateOffer(offer, function () {
+          that.reactivateOffer(offer, function (err) {
             numberOfLinksProcessed++;
             finishLinkProcessing();
           });
@@ -399,12 +399,12 @@ Harvester.prototype.processOffers = function (parser, language, body, callback) 
               });
 
               numberOfLinksProcessed++;
-              return finishLinkProcessing(err);
+              return finishLinkProcessing();
             }
 
-            that.parseOffer(url, language, parser.getValidParser(url), data, function (err) {
+            that.parseOffer(url, language, parser.getValidParser(url), data, function () {
               numberOfLinksProcessed++;
-              finishLinkProcessing(err);
+              finishLinkProcessing();
             });
           });
         }
