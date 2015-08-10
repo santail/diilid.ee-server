@@ -2,9 +2,9 @@
 
 var config = require('./config/environment'),
   _ = require('underscore')._,
-  nodemailer = require('nodemailer'),
-  cron = require('cron').CronJob,
-  twilio = require('twilio')(config.notifier.twilio.AccountSID, config.notifier.twilio.AuthToken);
+  Agenda = require("agenda"),
+  Messenger = require("./services/Messenger"),
+  LOG = require("./services/Logger");
 
 require('nodetime').profile({
   accountKey: 'ddd532b852f953c005e71b17c4cfb79b640faa77',
@@ -13,52 +13,14 @@ require('nodetime').profile({
 
 var Notifier = function () {
   this.db = null;
-  this.smtp = null;
-};
-
-Notifier.prototype.compileEmailBody = function (offers) {
-
-  var body = "<h1>Offers:</h1>";
-
-  _.each(offers, function (offer) {
-    body += '<p><a href="' + offer.url + '" title="' + offer.title + '" />' + offer.title + '</a> ' + offer.site + '</p>';
-  });
-
-  return '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' + '<tr>' + '<td align="center">' + '<center style="max-width: 600px; width: 100%;">' + '<!--[if gte mso 9]>' + '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0"><tr><td>' + '<![endif]-->' + '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' + '<tr>' + '<td>' + '<!--[if gte mso 9]>' + '<table border="0" cellpadding="0" cellspacing="0">' + '<tr><td align="center">' + '<table border="0" cellpadding="0" cellspacing="0" width="300"     align="center"><tr><td>' + '<![endif]-->'
-
-  +'<!-- Блок номер 1 -->' + '<span style="display:inline-block; width:300px;">' + body
-    + '</span>' + '<!-- Блок номер 1 -->' + '<!--[if gte mso 9]>' + '</td></tr></table>' + '</td>' + '<td align="center">' + '<table border="0" cellpadding="0" cellspacing="0" align="center"><tr><td>' + '<![endif]-->' + '<!-- Блок номер 2 -->' + '<span style="display:inline-block; width:300px;">' + 'Контент блока' + '</span>' + '<!-- Блок номер 2 -->' + '<!--[if gte mso 9]>' + '</td></tr></table>' + '</td>' + '</tr></table>' + '<![endif]-->' + '</td>' + '</tr>' + '</table>' + '<!--[if gte mso 9]>' + '</td>' + '</tr>' + '</table>' + '<![endif]-->' + '</center>   ' + '</td>' + '</tr>' + '</table>';
-};
-
-Notifier.prototype.compileSmsBody = function (offers) {
-  return "<h1>Offers:" + _.size(offers) + "</h1>";
-};
-
-Notifier.prototype.findWishesAndProcess = function () {
-  var that = this;
-  that.db.wishes.find(function (err, wishes) {
-    if (err) {
-
-    }
-  });
 };
 
 Notifier.prototype.run = function () {
   var that = this,
-    runningTime = new Date();
+    messenger = new Messenger();
 
   that.db = require('mongojs').connect(config.db.uri, config.db.collections);
   that.db.collection('wishes');
-
-  that.smtp = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: config.notifier.gmail.user,
-      pass: config.notifier.gmail.password
-    }
-  });
-
-  console.log('Starting notifier process', that);
 
   that.db.wishes.find(function (err, wishes) {
     if (err) {
@@ -82,29 +44,10 @@ Notifier.prototype.run = function () {
 
           }
 
-          console.log('Found', _.size(offers), 'offers. Notifiyng user');
-
-          console.log('Sending email to', wish.email);
-
-          that.smtp.sendMail({
-              from: 'notifier-robot@salestracker.eu',
-              to: wish.email,
-              subject: 'hello',
-              html: that.compileEmailBody(offers)
-            },
-            function (err, result) {
-              console.log('Email sent', err);
-            });
+          messenger.sendEmail(wish.email, offers);
 
           if (wish.hasPhone) {
-            twilio.sendMessage({
-                to: wish.phone,
-                from: config.notifier.twilio.from,
-                body: that.compileSmsBody(offers)
-              },
-              function (err, response) {
-                console.log(err || response);
-              });
+            messenger.sendSms(wish.phone, offers);
           }
 
           that.db.close();
@@ -116,13 +59,37 @@ Notifier.prototype.run = function () {
 Notifier.prototype.start = function (forceMode) {
   var that = this;
 
-  console.log('Starting Notifier');
-
   if (forceMode) {
-    that.run();
+    LOG.info('Running in force mode. No recurring.');
+    return that.run(function () {});
   }
   else {
-    new cron(config.notifier.execution.rule, that.run.bind(that), null, true, "Europe/Tallinn");
+    LOG.info('Running in reccuring mode.', config.notifier.execution.rule);
+
+    var agenda = new Agenda({
+      db: {
+        address: config.db.uri
+      },
+      defaultLockLifetime: 10000
+    });
+
+    agenda.define('execute notifier', function (job, done) {
+      try {
+        return that.run(done);
+      }
+      catch (ex) {
+        LOG.error({
+          'message': 'Error running notifier',
+          'error': ex.message
+        });
+
+        done();
+      }
+    });
+
+    agenda.every(config.notifier.execution.rule, 'execute notifier');
+
+    agenda.start();
   }
 };
 
