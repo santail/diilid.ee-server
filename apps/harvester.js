@@ -246,7 +246,7 @@ Harvester.prototype.processSite = function (parser, callback) {
       'proxies': []
     });
 
-    crawler.request(url, function (err, data) {
+    crawler.request(url, createSingleUseCallback(function (err, data) {
       if (err) {
         LOG.error({
           'message': 'Error retrieving index page for ' + site + ' language ' + language + ': ' + url,
@@ -254,6 +254,7 @@ Harvester.prototype.processSite = function (parser, callback) {
         });
 
         numberOfLanguagesProcessed++;
+        crawler = null;
         return finishLanguageProcessing(err);
       }
 
@@ -280,6 +281,7 @@ Harvester.prototype.processSite = function (parser, callback) {
 
         async.parallel(functions, function (err) {
           numberOfLanguagesProcessed++;
+          crawler = null;
           return finishLanguageProcessing(err);
         });
       }
@@ -296,10 +298,11 @@ Harvester.prototype.processSite = function (parser, callback) {
           }
 
           numberOfLanguagesProcessed++;
+          crawler = null;
           return finishLanguageProcessing(err);
         }));
       }
-    });
+    }));
   }, function (err) {
     if (err) {
       LOG.error({
@@ -336,12 +339,14 @@ Harvester.prototype.processPage = function (url, parser, language, callback) {
         'error': err.message
       });
 
+      crawler = null;
       return callback(err);
     }
 
     LOG.info('Parsing page to get offers links for ' + site + ' language ' + language + ': ' + url);
 
     that.processOffers(parser, language, parser.parseResponseBody(data), createSingleUseCallback(function (err) {
+      crawler = null;
       return callback(err);
     }));
   }));
@@ -358,6 +363,7 @@ Harvester.prototype.processOffers = function (parser, language, body, callback) 
 
   LOG.info('Total links found on page', linksNumber);
 
+  /*
   async.forEachSeries(links, function (url, finishLinkProcessing) {
     LOG.debug('Checking offer', url, 'of', linksNumber, url);
 
@@ -424,6 +430,7 @@ Harvester.prototype.processOffers = function (parser, language, body, callback) 
       return callback();
     }
   });
+  */
 
   var functions = _.map(links, function (url, index) {
     return function (finishOfferProcessing) {
@@ -454,28 +461,30 @@ Harvester.prototype.processOffers = function (parser, language, body, callback) 
 
           var crawler = new Crawler();
 
-          crawler.request(url, function (err, data) {
+          crawler.request(url, createSingleUseCallback(function (err, data) {
             if (err) {
               LOG.error({
                 'message': 'Error retrieving offer for ' + site + ' language ' + language + ': ' + url,
                 'error': err.message
               });
 
+              crawler = null;
               return finishOfferProcessing(err);
             }
 
-            that.parseOffer(url, language, parser.getValidParser(url), data, finishOfferProcessing);
-          });
+            that.parseOffer(url, language, parser.getValidParser(url), data, createSingleUseCallback(function(err) {
+              crawler = null;
+              return finishOfferProcessing(err);
+            }));
+          }));
         }
       });
     };
   });
 
-  /*
-    async.waterfall(functions, function (err) {
-      return callback(err);
-    });
-  */
+  async.waterfall(functions, function (err) {
+    return callback(err);
+  });
 };
 
 Harvester.prototype.reactivateOffer = function (offer, callback) {
