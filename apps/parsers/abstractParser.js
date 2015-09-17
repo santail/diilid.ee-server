@@ -108,6 +108,7 @@ AbstractParser.prototype.parseOffer = function (body, language, callback) {
 
   // TODO Warning: tidy uses 32 bit binary instead of 64, https://github.com/vavere/htmltidy/issues/11
   // TODO Needs manual update on production for libs
+  /*
   tidy(body, {
     'doctype': 'html5',
     'tidy-mark': false,
@@ -126,6 +127,9 @@ AbstractParser.prototype.parseOffer = function (body, language, callback) {
       callback(err);
     }
   });
+  */
+
+  callback();
 };
 
 module.exports = AbstractParser;
