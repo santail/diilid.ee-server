@@ -4,7 +4,7 @@ var config = require('./config/environment'),
   Agenda = require("agenda"),
   Crawler = require("./services/Crawler"),
   LOG = require("./services/Logger"),
-  memwatch = require('memwatch'),
+  memwatch = require('memwatch-next'),
   heapdump = require('heapdump'),
   util = require("util");
 
