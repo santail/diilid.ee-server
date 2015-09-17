@@ -3,7 +3,29 @@ var config = require('./config/environment'),
   _ = require('underscore')._,
   Agenda = require("agenda"),
   Crawler = require("./services/Crawler"),
-  LOG = require("./services/Logger");
+  LOG = require("./services/Logger"),
+  memwatch = require('memwatch'),
+  heapdump = require('heapdump'),
+  util = require("util");
+
+var hd;
+memwatch.on('leak', function (info) {
+  console.error(info);
+  if (!hd) {
+    hd = new memwatch.HeapDiff();
+  }
+  else {
+    var diff = hd.end();
+    console.log(util.inspect(diff, { showHidden: true, depth: null, colors : true }));
+    hd = null;
+  }
+
+  var file = process.pid + '-' + Date.now() + '.heapsnapshot';
+  heapdump.writeSnapshot(file, function (err) {
+    if (err) console.error(err);
+    else console.error('Wrote snapshot: ' + file);
+  });
+});
 
 var Harvester = function () {
   this.db = null;
@@ -56,10 +78,27 @@ Harvester.prototype.run = function (callback) {
   LOG.debug('Switch to offers schema');
   that.db.collection('offers');
 
-  that.runPakkumisedHarvesting() && that.runHarvesting() && callback() && that.db.close();
+  async.waterfall([
+      function (done) {
+        that.runPakkumisedHarvesting(done);
+      },
+      function (status, done) {
+        that.runHarvesting(done);
+      }
+    ],
+    function (err, result) {
+      if (err) {
+        LOG.error({
+          'message': 'Error completing run',
+          'err': err.message
+        });
+      }
+
+      that.db.close();
+    });
 };
 
-Harvester.prototype.runPakkumisedHarvesting = function () {
+Harvester.prototype.runPakkumisedHarvesting = function (callback) {
   var that = this;
 
   LOG.info('Harvesting Pakkumised.ee');
@@ -100,15 +139,18 @@ Harvester.prototype.runPakkumisedHarvesting = function () {
         }));
       },
       function (err) {
-        return that.onHarvestingFinished(err, function () {});
+        return that.onHarvestingFinished(err, callback);
       }
     );
+  }
+  else {
+    callback(null, 'OK');
   }
 
   return true;
 };
 
-Harvester.prototype.runHarvesting = function () {
+Harvester.prototype.runHarvesting = function (callback) {
   var that = this;
 
   LOG.info('Harvesting preconfigured sources');
@@ -154,7 +196,7 @@ Harvester.prototype.runHarvesting = function () {
     }
   }, function (err) {
     if (err) {
-      return that.onHarvestingFinished(err, createSingleUseCallback(function () {}));
+      return that.onHarvestingFinished(err, createSingleUseCallback(callback));
     }
     else {
       if (numberOfSites === numberOfSitesProcessed) {
@@ -472,7 +514,7 @@ Harvester.prototype.processOffers = function (parser, language, body, callback) 
               return finishOfferProcessing(err);
             }
 
-            that.parseOffer(url, language, parser.getValidParser(url), data, createSingleUseCallback(function(err) {
+            that.parseOffer(url, language, parser.getValidParser(url), data, createSingleUseCallback(function (err) {
               crawler = null;
               return finishOfferProcessing(err);
             }));
@@ -610,20 +652,16 @@ Harvester.prototype.onHarvestingFinished = function (err, callback) {
     LOG.info('Harvesting finished');
   }
 
-  this.db.close();
-
-  return callback(err);
+  return callback(err, 'OK');
 };
 
-function createSingleUseCallback(callback)
-{
-    function callbackWrapper()
-    {
-        var ret = callback.apply(this, arguments);
-        callback = null;
-        return ret;
-    }
-    return callbackWrapper;
+function createSingleUseCallback(callback) {
+  function callbackWrapper() {
+    var ret = callback.apply(this, arguments);
+    callback = null;
+    return ret;
+  }
+  return callbackWrapper;
 }
 
 module.exports = Harvester;

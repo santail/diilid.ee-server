@@ -16,7 +16,7 @@ var config = {
       // 'http://46.101.248.216:8888/'
     ],
     execution: {
-      rule: '2 minutes' // every 2 minutes
+      rule: '10 minutes' // every 2 minutes
     },
     retryTimeout: 5 * 1000,
     requestInterval: 1 * 1000,
@@ -63,7 +63,7 @@ var config = {
     'www.cherry.ee': false,
     'www.chilli.ee': false,
     'www.euronics.ee': false,
-    'www.kriisis.ee': false,
+    'www.kriisis.ee': true,
     'www.onoff.ee': false
   }
 };
