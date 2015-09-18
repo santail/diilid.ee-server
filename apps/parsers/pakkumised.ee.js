@@ -23,7 +23,7 @@ function PakkumisedParser() {
       'pictures': function ($) {
         return $('#deal-image div.carousel-inner div.item a > img').map(function () {
           return $(this).attr('src');
-        });
+        }).get();
       },
       'description': {
         'short': function ($) {

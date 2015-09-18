@@ -40,6 +40,8 @@ Crawler.prototype.init = function init(options) {
 };
 
 Crawler.prototype.request = function (url, callback) {
+  console.time('Crawler.request');
+  
   var self = this,
     _options = {
       'headers': []
@@ -132,7 +134,7 @@ Crawler.prototype.request = function (url, callback) {
 
     return response.body;
   };
-  
+
   var onError = function (err, response) {
     if (err) {
       LOG.error({
@@ -175,6 +177,8 @@ Crawler.prototype.request = function (url, callback) {
       }
     }
     else {
+      console.timeEnd('Crawler.request');
+      
       return callback(err, data);
     }
   };
@@ -182,4 +186,21 @@ Crawler.prototype.request = function (url, callback) {
   request.get(url, _options, handler);
 };
 
-module.exports = Crawler;
+
+module.exports = (function(options) {
+
+  var instance = null;
+
+  // handles the prevention of additional instantiations
+  function getInstance() {
+    if( ! instance ) {
+      instance = new Crawler(options);
+    }
+    return instance;
+  }
+
+  return {
+    getInstance : getInstance
+  };
+
+})();

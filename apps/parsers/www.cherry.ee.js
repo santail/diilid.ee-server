@@ -18,7 +18,7 @@ function CherryParser() {
         'list': function ($) {
             return $('#themainthing div.offer-block div.row-of-deals div.offer-small div.info > h2 > a').map(function () {
                 return $(this).attr('href');
-            });
+            }).get();
         },
         'templates': {
             'title': function ($) {
@@ -27,7 +27,7 @@ function CherryParser() {
             'pictures': function ($) {
                 return $('#deal-image div.carousel-inner div.item a > img').map(function () {
                     return $(this).attr('src');
-                });
+                }).get();
             },
             'description': {
                 'intro': function ($) {

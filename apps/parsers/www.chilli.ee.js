@@ -20,7 +20,7 @@ function ChillyParser() {
     'list': function ($) {
       return $('div.product-container > div.product > div.product-img > a').map(function () {
         return $(this).attr('href');
-      });
+      }).get();
     },
     'templates': {
       'title': function ($) {

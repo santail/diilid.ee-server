@@ -4,7 +4,13 @@ var _ = require("underscore")._,
   async = require('async'),
   cheerio = require("cheerio"),
   tidy = require('htmltidy').tidy,
-  LOG = require("../services/Logger");
+  LOG = require("../services/Logger"),
+  memwatch = require('memwatch-next'),
+  utils = require("../services/Utils"),
+  util = require("util");
+
+
+var heapdump = require('heapdump');
 
 function AbstractParser() {
   this.config = {};
@@ -84,52 +90,138 @@ AbstractParser.prototype.getSite = function () {
   return this.config.site || '';
 };
 
-AbstractParser.prototype.parseOffer = function (body, language, callback) {
+AbstractParser.prototype._parseTemplates = function (dom, templates, language) {
+  console.time("_parseTemplates");
+
   var that = this,
-    language = language || 'est';
+    result = {};
 
-  var _apply = function apply(body, templates, language) {
-    var result = {};
-
-    async.forEachSeries(_.keys(templates), function (template, finishItemProcessing) {
-      if (typeof templates[template] === 'object') {
-        result[template] = apply(body, templates[template], language);
+  async.forEachOf(templates, function (template, key, callback) {
+      if (typeof template === 'object') {
+        result[key] = that._parseTemplates(dom, template, language);
       }
-      else if (typeof templates[template] === 'function') {
-        var value = templates[template].call(this, body, language);
-        result[template] = typeof value === "string" ? value.trim().replace(/\t/g, ' ').replace(/\s\s+/g, ' ') : value;
+      else if (typeof template === 'function') {
+        var value = template.call(that, dom, language);
+        result[key] = typeof value === "string" ? value.trim().replace(/\t/g, ' ').replace(/\s\s+/g, ' ') : value;
       }
 
-      finishItemProcessing();
+      callback();
+    },
+    function (err) {
+      if (err) {
+        LOG.error({
+          'message': 'Error applying template',
+          'error': err.message
+        });
+      }
     });
 
-    return result;
-  };
+  console.timeEnd("_parseTemplates");
+
+  return result;
+};
+
+AbstractParser.prototype.parseOffer = function (body, language, callback) {
+  console.time("AbstractParser.parseOffer");
+
+  var that = this,
+    language = language || 'est',
+    dom, offer;
+
+  // var stats = memwatch.gc();
+  // console.log(stats);
+
+  // var hd = new memwatch.HeapDiff(); // код приложения ...
 
   // TODO Warning: tidy uses 32 bit binary instead of 64, https://github.com/vavere/htmltidy/issues/11
   // TODO Needs manual update on production for libs
-  /*
-  tidy(body, {
-    'doctype': 'html5',
-    'tidy-mark': false,
-    'indent': true
-  }, function (err, body) {
-    if (!err) {
-      var offer = _apply(cheerio.load(body), that.config.templates, language);
 
-      _.extend(offer, {
-        'language': that.languages[language]
+  async.series([
+    function (done) {
+        console.time("tidy");
+
+        tidy(body, {
+          doctype: 'html5',
+          indent: true,
+          bare: true,
+          breakBeforeBr: true,
+          hideComments: true,
+          fixUri: true,
+          wrap: 0
+        }, function (err, body) {
+          if (err) {
+            LOG.error({
+              'message': 'Error cleaning up HTML',
+              'error': err.message
+            });
+          }
+
+          console.timeEnd("tidy");
+
+          return done(err);
+        });
+    },
+    function (done) {
+        console.time("cheerio");
+
+        dom = cheerio.load(body, {
+          normalizeWhitespace: true,
+          lowerCaseTags: true,
+          lowerCaseAttributeNames: true,
+          recognizeCDATA: true,
+          recognizeSelfClosing: true,
+          decodeEntities: true
+        });
+
+        console.timeEnd("cheerio");
+
+        done();
+    },
+    function (done) {
+        console.time("AbstractParser._parseTemplates");
+
+        offer = that._parseTemplates(dom, that.config.templates, language);
+
+        _.extend(offer, {
+          'language': that.languages[language]
+        });
+
+        done();
+
+        console.timeEnd("AbstractParser._parseTemplates");
+    }
+    ],
+    function (err) {
+      if (err) {
+        LOG.error({
+          'message': 'Error parsing HTML',
+          'error': err.message
+        });
+
+        return callback(err);
+      }
+
+      body = null;
+      dom = null;
+
+      console.timeEnd("AbstractParser.parseOffer");
+
+/*
+      var diff = hd.end();
+      console.log(util.inspect(diff, {
+        showHidden: true,
+        depth: null,
+        colors: true
+      }));
+
+      var file = process.pid + '-' + Date.now() + '.heapsnapshot';
+      heapdump.writeSnapshot(file, function (err) {
+        if (err) console.error(err);
+        else console.error('Wrote snapshot: ' + file);
       });
-
-      callback(err, offer);
-    }
-    else {
-      callback(err);
-    }
-  });
-  */
-
-  callback();
+*/
+      callback(null, offer);
+    });
 };
 
 module.exports = AbstractParser;

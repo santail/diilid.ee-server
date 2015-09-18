@@ -44,7 +44,7 @@ function KriisisParser() {
     'list': function ($) {
       return $('#01 > script').siblings('tr').eq(5).find('td').eq(1).find('table > tr > td table td > a').map(function () {
         return $(this).attr('href');
-      });
+      }).get();
     },
     'templates': {
       'shop': function ($) {

@@ -21,7 +21,7 @@ function OnoffParser() {
         'list': function ($) {
             return $('div.content.catalog > ul.shop_prod > li > a').map(function () {
                 return $(this).attr('href');
-            });
+            }).get();
         },
         'templates': {
             'title': function ($) {

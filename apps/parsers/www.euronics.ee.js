@@ -44,7 +44,7 @@ function EuronicsParser() {
     'list': function ($, language) {
       return $("#aspnetForm ul.oi-list.oi-grid-products > li > div > h2.name > a").map(function () {
         return $(this).attr('href');
-      });
+      }).get();
     },
     'templates': {
       'title': function ($) {

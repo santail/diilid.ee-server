@@ -7,10 +7,6 @@ var config = {
     dir: __dirname + '/public/images/',
     thumbs: []
   },
-  nodetime: {
-    accountKey: 'ddd532b852f953c005e71b17c4cfb79b640faa77',
-    appName: 'SalesTracker-Harvester'
-  },
   harvester: {
     proxies: [
       // 'http://46.101.248.216:8888/'

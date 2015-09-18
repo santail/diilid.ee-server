@@ -2,7 +2,8 @@
 
 var util = require('util'),
   urlParser = require("url"),
-  AbstractParser = require("./abstractParser");
+  AbstractParser = require("./abstractParser"),
+  utils = require("../services/Utils");
 
 function MinuvalikParser() {
   AbstractParser.call(this);
@@ -19,38 +20,38 @@ function MinuvalikParser() {
     },
     'list': function ($) {
       return $('div.deals li > a').map(function () {
-        return $(this).attr('href');
-      });
+        return utils.unleakString($(this).attr('href'));
+      }).get();
     },
     'templates': {
       'title': function ($) {
-        return $('.deal_rules_td > h1.title_deal').text();
+        return utils.unleakString($('.deal_rules_td > h1.title_deal').text());
       },
       'pictures': function ($, language) {
-        return $('.deal_rules_td .dd_video_photo > a').map(function () {
-          return that.compileImageUrl(language, $(this).attr('href'));
-        });
+        return $('.deal_rules_td .dd_video_photo > a').map(function (i, el) {
+          return that.compileImageUrl(language, utils.unleakString($(this).attr('href')));
+        }).get();
       },
       'description': {
         'intro': function ($) {
-          return $('.deal_rules_td .dd_lead').html();
+          return utils.unleakString($('.deal_rules_td .dd_lead').html());
         },
         'short': function ($) {
-          return $('.deal_rules_td .dd_descr').eq(1).html();
+          return utils.unleakString($('.deal_rules_td .dd_descr').eq(1).html());
         },
         'long': function ($) {
-          return $('.deal_rules_td .dd_descr').first().html();
+          return utils.unleakString($('.deal_rules_td .dd_descr').first().html());
         }
       },
       'price': {
         'original': function ($) {
-          return $('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.dd_basic_price').text();
+          return utils.unleakString($('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.dd_basic_price').text());
         },
         'discount': function ($) {
-          return $('.deal_rules_td > div#parent_div > div> div.dd_table_price').text();
+          return utils.unleakString($('.deal_rules_td > div#parent_div > div> div.dd_table_price').text());
         },
         'save': function ($) {
-          return $('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.fl_deals_fp_discount_row').text();
+          return utils.unleakString($('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.fl_deals_fp_discount_row').text());
         }
       }
     }

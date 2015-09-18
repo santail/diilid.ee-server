@@ -6,11 +6,6 @@ var config = require('./config/environment'),
   Messenger = require("./services/Messenger"),
   LOG = require("./services/Logger");
 
-require('nodetime').profile({
-  accountKey: 'ddd532b852f953c005e71b17c4cfb79b640faa77',
-  appName: 'SalesTracker-Notifier'
-});
-
 var Notifier = function () {
   this.db = null;
 };
