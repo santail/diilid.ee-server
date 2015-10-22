@@ -12,7 +12,7 @@ var config = {
       // 'http://46.101.248.216:8888/'
     ],
     execution: {
-      rule: '5 minutes' // every 5 minutes
+      rule: '30 minutes' // every 30 minutes
     },
     retryTimeout: 1 * 60 * 1000,
     requestInterval: 1 * 1000,
@@ -39,7 +39,7 @@ var config = {
       password: 'vkSG9667'
     },
     execution: {
-      rule: '5 minutes' // every 5 minutes
+      rule: '30 minutes' // every 30 minutes
     },
     logs: {
       'logentries': {
