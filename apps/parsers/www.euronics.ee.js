@@ -2,7 +2,8 @@
 
 var _ = require("underscore")._,
   util = require('util'),
-  AbstractParser = require("./abstractParser");
+  AbstractParser = require("./abstractParser"),
+  utils = require("../services/Utils");
 
 function EuronicsParser() {
   AbstractParser.call(this);
@@ -11,7 +12,8 @@ function EuronicsParser() {
 
   this.config = {
     'site': 'www.euronics.ee',
-    'reactivate': true,
+    'cleanup': true,
+    'reactivate': false,
     'index': {
       'rus': 'http://www.euronics.ee/products/c/143',
       'est': 'http://www.euronics.ee/tooted/c/143',
@@ -60,7 +62,8 @@ function EuronicsParser() {
         }
 
         $('div.oi-section-main-content.clear div.oi-viewport-media > ol > li > a[data-img]').each(function () {
-          pictureUrls.push(that.compileImageUrl(language, $(this).attr('href')));
+          var href = $(this).attr('href');
+          pictureUrls.push(that.compileImageUrl(language, href));
         });
 
         return pictureUrls;

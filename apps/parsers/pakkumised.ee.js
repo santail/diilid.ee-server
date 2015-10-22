@@ -12,7 +12,7 @@ function PakkumisedParser() {
     'index': {
       'est': 'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page='
     },
-    'site': 'www.pakkumised.ee',
+    'site': 'pakkumised.ee',
     'list': function ($) {
 
     },

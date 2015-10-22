@@ -3,7 +3,8 @@
 var _ = require("underscore")._,
   util = require('util'),
   urlParser = require("url"),
-  AbstractParser = require("./abstractParser");
+  AbstractParser = require("./abstractParser"),
+  utils = require("../services/Utils");
 
 function KriisisParser() {
   var that = this;
@@ -12,7 +13,8 @@ function KriisisParser() {
 
   this.config = {
     'site': 'www.kriisis.ee',
-    'reactivate': true,
+    'cleanup': true,
+    'reactivate': false,
     'index': {
       'rus': 'http://www.kriisis.ee/ru/view_rating.php',
       'est': 'http://www.kriisis.ee/view_rating.php'
@@ -42,7 +44,7 @@ function KriisisParser() {
       };
     },
     'list': function ($) {
-      return $('#01 > script').siblings('tr').eq(5).find('td').eq(1).find('table > tr > td table td > a').map(function () {
+      return $('#01 tr').eq(8).find('td').eq(1).find('table').first().find('td table td > a').map(function () {
         return $(this).attr('href');
       }).get();
     },
