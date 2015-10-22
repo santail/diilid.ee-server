@@ -4,16 +4,7 @@ function ParserFactory() {
 
 ParserFactory.prototype.getParser = function (site) {
   if (!this.parsers[site]) {
-    var path;
-
-    if (site === 'pakkumised.ee') {
-      path = __dirname + '/../parsers/pakkumised.ee.js';
-    }
-    else {
-      path = __dirname + '/../parsers/' + site + ".js";
-    }
-
-    var Parser = require(path),
+    var Parser = require(__dirname + '/../parsers/' + site + ".js"),
       parser = new Parser();
 
     this.parsers[site] = parser;
