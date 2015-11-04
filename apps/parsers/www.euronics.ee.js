@@ -1,7 +1,6 @@
 'use strict';
 
-var _ = require("underscore")._,
-  util = require('util'),
+var util = require('util'),
   AbstractParser = require("./abstractParser"),
   utils = require("../services/Utils");
 
@@ -12,8 +11,8 @@ function EuronicsParser() {
 
   this.config = {
     'site': 'www.euronics.ee',
-    'cleanup': true,
-    'reactivate': false,
+    'cleanup': false,
+    'reactivate': true,
     'index': {
       'rus': 'http://www.euronics.ee/products/c/143',
       'est': 'http://www.euronics.ee/tooted/c/143',

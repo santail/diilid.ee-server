@@ -12,8 +12,8 @@ function OnoffParser() {
 
   this.config = {
     'site': 'www.onoff.ee',
-    'cleanup': true,
-    'reactivate': false,
+    'cleanup': false,
+    'reactivate': true,
     'index': {
       'rus': 'http://www.onoff.ee/font-colorb00000predlozenija-mesjatsafont/#&price=0-1400&onpage=9999&list=1',
       'est': 'http://www.onoff.ee/font-colorb00000kuupakkumisedfont/#&price=0-1400&onpage=9999&list=1',

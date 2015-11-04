@@ -12,8 +12,8 @@ function ChillyParser() {
 
   this.config = {
     'site': 'www.chilli.ee',
-    'cleanup': true,
-    'reactivate': false,
+    'cleanup': false,
+    'reactivate': true,
     'index': {
       'rus': 'http://ru.chilli.ee/',
       'est': 'http://www.chilli.ee/'

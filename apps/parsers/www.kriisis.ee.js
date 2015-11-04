@@ -1,20 +1,19 @@
 'use strict';
 
-var _ = require("underscore")._,
-  util = require('util'),
+var util = require('util'),
   urlParser = require("url"),
   AbstractParser = require("./abstractParser"),
   utils = require("../services/Utils");
 
 function KriisisParser() {
-  var that = this;
-
   AbstractParser.call(this);
+
+  var that = this;
 
   this.config = {
     'site': 'www.kriisis.ee',
-    'cleanup': true,
-    'reactivate': false,
+    'cleanup': false,
+    'reactivate': true,
     'index': {
       'rus': 'http://www.kriisis.ee/ru/view_rating.php',
       'est': 'http://www.kriisis.ee/view_rating.php'
