@@ -40,8 +40,8 @@ Crawler.prototype.init = function init(options) {
 };
 
 Crawler.prototype.request = function (url, callback) {
-  console.time('Crawler.request');
-  
+  LOG.profile('Crawler.request');
+
   var self = this,
     _options = {
       'headers': []
@@ -177,8 +177,8 @@ Crawler.prototype.request = function (url, callback) {
       }
     }
     else {
-      console.timeEnd('Crawler.request');
-      
+      LOG.profile('Crawler.request');
+
       return callback(err, data);
     }
   };

@@ -8,8 +8,6 @@ ParserFactory.prototype.getParser = function (site) {
       parser = new Parser();
 
     this.parsers[site] = parser;
-
-    console.log('Created parser', site);
   }
 
   return this.parsers[site];

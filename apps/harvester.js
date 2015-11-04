@@ -166,12 +166,12 @@ Harvester.prototype.runPakkumisedHarvesting = function (callback) {
 Harvester.prototype.runHarvesting = function (callback) {
   var that = this;
 
-  LOG.info('Harvesting preconfigured sources');
+  LOG.debug('Harvesting preconfigured sources');
 
   var numberOfSites = _.size(config.activeSites);
 
-  LOG.info('Total sites available', numberOfSites, config.activeSites);
-  LOG.info('Processing sites');
+  LOG.debug('Total sites available', numberOfSites, config.activeSites);
+  LOG.debug('Processing sites');
 
   var activeSites = _.filter(_.keys(config.activeSites), function (site) {
     return config.activeSites[site];
@@ -186,7 +186,7 @@ Harvester.prototype.runHarvesting = function (callback) {
   async.waterfall(functions, function (err, results) {
     if (err) {
       LOG.error({
-        'message': 'Error processing active sites',
+        'message': '[STATUS] [Failed] Error processing sites',
         'error': err.message
       });
     }
@@ -198,14 +198,14 @@ Harvester.prototype.runHarvesting = function (callback) {
 Harvester.prototype.harvestSite = function (site, callback) {
   var that = this;
 
-  LOG.info('Processing site', site);
+  LOG.info('[STATUS] [OK] Processing site', site);
 
   var parser = parserFactory.getParser(site);
 
   async.waterfall([
       function (done) {
         if (parser.config.cleanup) {
-          LOG.info('Remove excisting offers for site', site, 'and read fresh data');
+          LOG.debug('Remove excisting offers for site', site, 'and read fresh data');
 
           that.db.offers.remove({
             'site': site
@@ -219,7 +219,7 @@ Harvester.prototype.harvestSite = function (site, callback) {
               return done(err);
             }
 
-            LOG.info('Offers for site', site, 'deleted');
+            LOG.info('[STATUS] [OK] [', site, '] Offers deleted');
             return done(null);
           });
         }
@@ -228,10 +228,10 @@ Harvester.prototype.harvestSite = function (site, callback) {
         }
       },
       function (done) {
-        console.time("Harvester.deactivate");
+        LOG.profile("Harvester.deactivate");
 
         if (parser.config.reactivate) {
-          LOG.info('Deactivating excisting offers for site', site, 'and read fresh data');
+          LOG.debug('Deactivating excisting offers for site', site, 'and read fresh data');
 
           that.db.offers.update({
             'site': site
@@ -251,10 +251,9 @@ Harvester.prototype.harvestSite = function (site, callback) {
 
               return done(err);
             }
-            else {
-              LOG.info('Offers for site', site, 'deactivated');
-              return done(null);
-            }
+
+            LOG.info('[STATUS] [OK] [', site, '] Offers deactivated');
+            return done(null);
           });
         }
         else {
@@ -262,9 +261,9 @@ Harvester.prototype.harvestSite = function (site, callback) {
         }
       },
       function (done) {
-        console.timeEnd("Harvester.deactivate");
+        LOG.profile("Harvester.deactivate");
 
-        console.time("Harvester.processSite");
+        LOG.profile("Harvester.processSite");
 
         that.processSite(site, function (err) {
           if (err) {
@@ -274,7 +273,7 @@ Harvester.prototype.harvestSite = function (site, callback) {
             });
           }
 
-          console.timeEnd("Harvester.processSite");
+          LOG.profile("Harvester.processSite");
 
           return done(err);
         });
@@ -283,12 +282,13 @@ Harvester.prototype.harvestSite = function (site, callback) {
     function (err, result) {
       if (err) {
         LOG.error({
-          'message': 'Error cleanup offers before processing site ' + site,
+          'message': 'Error processing site',
           'error': err.message
         });
       }
 
-      return that.onSiteProcessed(err, callback);
+      LOG.info('[STATUS] [OK] [', site, '] Site processing finished');
+      return callback(err);
     });
 };
 
@@ -297,9 +297,9 @@ Harvester.prototype.processSite = function (site, callback) {
     parser = parserFactory.getParser(site),
     languages = _.keys(parser.config.index);
 
-  LOG.info('Site', site, 'has', _.size(languages), 'languages', languages);
+  LOG.debug('Site', site, 'has', _.size(languages), 'languages', languages);
 
-  var functions = _.map(languages, function (language, index) {
+  var functions = _.map(languages, function (language) {
     return function (done) {
       that.processIndexPage(site, language, done);
     };
@@ -313,22 +313,24 @@ Harvester.prototype.processSite = function (site, callback) {
       });
     }
 
+    LOG.info('[STATUS] [OK] [', site, '] Site processed');
     return callback(err);
   });
 };
 
 Harvester.prototype.processIndexPage = function (site, language, callback) {
-  console.time('Harvester.processIndexPage');
+  LOG.profile('Harvester.processIndexPage');
 
   var that = this,
     parser = parserFactory.getParser(site),
     url = parser.config.index[language];
 
-  LOG.info("Retrieving index page:", url);
+  LOG.debug("Retrieving index page:", url);
 
   async.waterfall([
     function (done) {
-      console.time('IndexRequest');
+      LOG.profile('IndexRequest');
+
       request({
         method: 'GET',
         uri: url,
@@ -347,7 +349,7 @@ Harvester.prototype.processIndexPage = function (site, language, callback) {
           });
         }
 
-        console.timeEnd('IndexRequest');
+        LOG.profile('IndexRequest');
 
         return done(err, utils.unleakString(data));
       });
@@ -375,15 +377,15 @@ Harvester.prototype.processIndexPage = function (site, language, callback) {
           return function (finishPageProcessing) {
             LOG.info('Processing page', index + 1, 'from', pagesNumber);
 
+            dom = null;
+
             return that.processPage(pageUrl, site, language, finishPageProcessing);
           };
         });
 
-        LOG.info('Parsing pages for', site, 'language', language, ':', url);
+        LOG.debug('Parsing pages for', site, 'language', language, ':', url);
 
-        async.series(functions, function (err, results) {
-          return done(err, results);
-        });
+        async.series(functions, done);
       }
       else {
         var links = parser.getOfferLinks(dom, language),
@@ -391,18 +393,9 @@ Harvester.prototype.processIndexPage = function (site, language, callback) {
 
         dom = null;
 
-        LOG.info('Total links found on page', linksNumber);
+        LOG.debug('Total links found on page', linksNumber);
 
-        that.processOffers(site, language, links, function (err) {
-          if (err) {
-            LOG.error({
-              'message': 'Error processing offers for ' + site + 'language ' + language + ': ' + url,
-              'error': err.message
-            });
-          }
-
-          return done(err);
-        });
+        that.processOffers(site, language, links, done);
       }
     }
   ], function (err, result) {
@@ -413,14 +406,14 @@ Harvester.prototype.processIndexPage = function (site, language, callback) {
       });
     }
 
-    console.timeEnd('Harvester.processIndexPage');
+    LOG.profile('Harvester.processIndexPage');
 
     callback(err);
   });
 };
 
 Harvester.prototype.processPage = function (url, site, language, callback) {
-  console.time('Harvester.processPage');
+  LOG.profile('Harvester.processPage');
 
   var that = this,
     parser = parserFactory.getParser(site);
@@ -457,6 +450,8 @@ Harvester.prototype.processPage = function (url, site, language, callback) {
             });
           }
 
+          data = null;
+
           done(err, dom);
         });
     },
@@ -464,7 +459,9 @@ Harvester.prototype.processPage = function (url, site, language, callback) {
         var links = parser.getOfferLinks(dom, language),
           linksNumber = _.size(links);
 
-        LOG.info('Total links found on page', linksNumber);
+        LOG.debug('Total links found on page', linksNumber);
+
+        dom = null;
 
         done(null, links);
     },
@@ -472,14 +469,14 @@ Harvester.prototype.processPage = function (url, site, language, callback) {
         that.processOffers(site, language, links, done);
     }],
     function (err, result) {
-      console.timeEnd('Harvester.processPage');
+      LOG.profile('Harvester.processPage');
 
       callback(err, result);
     });
 };
 
 Harvester.prototype.processOffers = function (site, language, links, callback) {
-  console.time('Harvester.processOffers');
+  LOG.profile('Harvester.processOffers');
 
   var that = this;
 
@@ -500,7 +497,7 @@ Harvester.prototype.processOffers = function (site, language, links, callback) {
         var parser = parserFactory.getParser(site);
 
         if (parser.config.reactivate && offer) {
-          LOG.info('Offer #Id', offer._id, offer.url, 'has been already parsed. Reactivating.');
+          LOG.debug('Offer #Id', offer._id, offer.url, 'has been already parsed. Reactivating.');
 
           that.db.offers.findAndModify({
             query: {
@@ -520,22 +517,24 @@ Harvester.prototype.processOffers = function (site, language, links, callback) {
               });
             }
 
+            LOG.info('[STATUS] [OK] [', site, '] [', url , '] Offer reactivated');
+
             return finishOfferProcessing(err);
           });
         }
         else if (offer) {
-          LOG.debug('Offer', url, 'has been already parsed. Skipped.');
+          LOG.info('[STATUS] [OK] [', site, '] [', url , '] Offer exists. Skipped.');
 
           return finishOfferProcessing();
         }
         else {
-          console.time('Harvester.processOffer');
+          LOG.profile('Harvester.processOffer');
 
           LOG.debug('Retrieving offer for', site, 'language', language, ':', url);
 
           async.waterfall([
             function (done) {
-              console.time('Retrieve offer');
+              LOG.profile('Retrieve offer');
                 request.get(url, {
                   headers: {
                     'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
@@ -551,13 +550,13 @@ Harvester.prototype.processOffers = function (site, language, links, callback) {
                     });
                   }
 
-                  console.timeEnd('Retrieve offer');
+                  LOG.profile('Retrieve offer');
 
                   done(err, data);
                 });
             },
             function (data, done) {
-              console.time('Parse offer DOM');
+              LOG.profile('Parse offer DOM');
 
                 var parser = parserFactory.getParser(site);
 
@@ -569,13 +568,15 @@ Harvester.prototype.processOffers = function (site, language, links, callback) {
                     });
                   }
 
-                  console.timeEnd('Parse offer DOM');
+                  LOG.profile('Parse offer DOM');
+
+                  data = null;
 
                   done(err, dom);
                 });
             },
             function (dom, done) {
-                console.time("parser.ParseOffer");
+                LOG.profile("parser.ParseOffer");
 
                 var parser = parserFactory.getParser(site);
 
@@ -587,7 +588,9 @@ Harvester.prototype.processOffers = function (site, language, links, callback) {
                     });
                   }
 
-                  console.timeEnd("parser.ParseOffer");
+                  LOG.profile("parser.ParseOffer");
+
+                  dom = null;
 
                   return done(err, offer);
                 });
@@ -606,14 +609,18 @@ Harvester.prototype.processOffers = function (site, language, links, callback) {
                   'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
                 });
 
+                offer = null;
+
                 done(null, _offer);
             },
             function (offer, done) {
-              console.time("Harvester.saveOffer");
+              LOG.profile("Harvester.saveOffer");
 
               LOG.debug('Saving offer', offer);
 
               that.db.offers.save(offer, function (err, saved) {
+                offer = null;
+
                 if (err || !saved) {
                   LOG.error({
                     'message': 'Error saving offer',
@@ -623,16 +630,18 @@ Harvester.prototype.processOffers = function (site, language, links, callback) {
                   return done(err);
                 }
 
-                LOG.info('Offer', saved.url, 'saved with id ' + saved._id);
+                LOG.info('[STATUS] [OK] [', site, '] [', saved.url , '] Offer saved with id ' + saved._id);
 
-                console.timeEnd("Harvester.saveOffer");
+                LOG.profile("Harvester.saveOffer");
 
                 return done(null, saved);
               });
             }
            ],
-            function (err, offer) {
-              console.timeEnd('Harvester.processOffer');
+            function (err, saved) {
+              LOG.profile('Harvester.processOffer');
+
+              saved = null;
 
               return finishOfferProcessing(err);
             });
@@ -641,7 +650,7 @@ Harvester.prototype.processOffers = function (site, language, links, callback) {
     };
   });
 
-  async.waterfall(functions, function (err, results) {
+  async.parallelLimit(functions, 5, function (err, results) {
     if (err) {
       LOG.error({
         'message': 'Error processing offers for ' + site + ' language ' + language,
@@ -649,24 +658,10 @@ Harvester.prototype.processOffers = function (site, language, links, callback) {
       });
     }
 
-    console.time('Harvester.processOffers');
+    LOG.profile('Harvester.processOffers');
 
     return callback(err, results);
   });
-};
-
-Harvester.prototype.onSiteProcessed = function (err, callback) {
-  if (err) {
-    LOG.error({
-      'message': 'Error processing site',
-      'error': err.message
-    });
-  }
-  else {
-    LOG.info('Site processed successfully');
-  }
-
-  return callback(err);
 };
 
 Harvester.prototype.onHarvestingFinished = function (err, callback) {
@@ -675,11 +670,11 @@ Harvester.prototype.onHarvestingFinished = function (err, callback) {
       'message': 'Harvesting failed',
       'error': err.message
     });
-  }
-  else {
-    LOG.info('Harvesting finished');
+
+    return callback(err, 'NOK');
   }
 
+  LOG.info('[STATUS] [OK] Harvesting finished');
   return callback(err, 'OK');
 };
 
