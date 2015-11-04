@@ -25,7 +25,7 @@ AbstractParser.prototype.parseResponseBody = function (data, callback) {
 
   async.waterfall([
     function (done) {
-        console.time("tidy");
+        LOG.profile("tidy");
 
         // TODO Warning: tidy uses 32 bit binary instead of 64, https://github.com/vavere/htmltidy/issues/11
         // TODO Needs manual update on production for libs
@@ -40,7 +40,7 @@ AbstractParser.prototype.parseResponseBody = function (data, callback) {
           hideComments: false,
           fixUri: false,
           wrap: 0
-        }, function (err, data) {
+        }, function (err, body) {
           if (err) {
             LOG.error({
               'message': 'Error cleaning up HTML',
@@ -48,17 +48,20 @@ AbstractParser.prototype.parseResponseBody = function (data, callback) {
             });
           }
 
-          console.timeEnd("tidy");
+          LOG.profile("tidy");
 
-          return done(err, data);
+          data = null;
+          tidy = null;
+
+          return done(err, body);
         });
     },
-    function (data, done) {
-        console.time("cheerio");
+    function (body, done) {
+        LOG.profile("cheerio");
 
         var cheerio = require("cheerio");
 
-        var dom = cheerio.load(data, {
+        var dom = cheerio.load(body, {
           normalizeWhitespace: true,
           lowerCaseTags: true,
           lowerCaseAttributeNames: true,
@@ -67,11 +70,14 @@ AbstractParser.prototype.parseResponseBody = function (data, callback) {
           decodeEntities: true
         });
 
-        console.timeEnd("cheerio");
+        body = null;
+        cheerio = null;
 
-        done(null, dom);
+        LOG.profile("cheerio");
+
+        return done(null, dom);
     }],
-    function (err, result) {
+    function (err, dom) {
       if (err) {
         LOG.error({
           'message': 'Error parsing response body',
@@ -79,30 +85,30 @@ AbstractParser.prototype.parseResponseBody = function (data, callback) {
         });
       }
 
-      return callback(err, result);
+      return callback(err, dom);
     });
 };
 
 AbstractParser.prototype.getPagingParameters = function (language, dom) {
   var that = this;
 
-  LOG.info('Checking if paging exists.', language, dom);
+  LOG.debug('Checking if paging exists.', language, dom);
 
   if (that.config.paging) {
     var paging = that.config.paging.call(that, language, dom);
 
     if (_.size(paging) > 0) {
-      LOG.info('Paging found. Total pages: ', _.size(paging.pages));
+      LOG.debug('Paging found. Total pages: ', _.size(paging.pages));
       LOG.debug('Paging properties:', paging);
 
       return paging;
     }
 
-    LOG.info('Paging not found.');
+    LOG.debug('Paging not found.');
     return false;
   }
 
-  LOG.info('Paging is not configured.');
+  LOG.debug('Paging is not configured.');
   return false;
 };
 
@@ -120,15 +126,15 @@ AbstractParser.prototype.getOfferLinks = function (dom, language) {
   });
 };
 
-AbstractParser.prototype.compileImageUrl = function (language, link) {
+AbstractParser.prototype.compileImageUrl = function compileImageUrl(language, link) {
   return link;
 };
 
-AbstractParser.prototype.compilePageUrl = function (language, link) {
+AbstractParser.prototype.compilePageUrl = function compilePageUrl(language, link) {
   return link;
 };
 
-AbstractParser.prototype.compileOfferUrl = function (language, link) {
+AbstractParser.prototype.compileOfferUrl = function compileOfferUrl(language, link) {
   return link;
 };
 
@@ -136,14 +142,14 @@ AbstractParser.prototype.getSite = function () {
   return this.config.site || '';
 };
 
-AbstractParser.prototype.parse = function (dom, language, callback) {
-  console.time("AbstractParser.parseOffer");
+AbstractParser.prototype.parse = function parse(dom, language, callback) {
+  LOG.profile("AbstractParser.parseOffer");
 
   var that = this,
     templates = _.extend({}, that.config.templates);
 
-  var _parseTemplates = function (dom, templates, language) {
-    console.time("AbstractParser._parseTemplates");
+  function _parseTemplates(dom, templates, language) {
+    LOG.profile("AbstractParser._parseTemplates");
 
     var result = {};
 
@@ -162,23 +168,22 @@ AbstractParser.prototype.parse = function (dom, language, callback) {
       }
     }
 
-    console.timeEnd("AbstractParser._parseTemplates");
+    LOG.profile("AbstractParser._parseTemplates");
 
     return result;
-  };
+  }
 
   var offer = _parseTemplates(dom, templates, language);
 
-  console.log(offer);
+  dom = null;
 
   _.extend(offer, {
     'language': that.languages[language]
   });
 
-  console.timeEnd("AbstractParser.parseOffer");
+  LOG.profile("AbstractParser.parseOffer");
 
   callback(null, offer);
-
 };
 
 module.exports = AbstractParser;

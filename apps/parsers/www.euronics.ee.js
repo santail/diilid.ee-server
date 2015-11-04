@@ -24,8 +24,8 @@ function EuronicsParser() {
 
       var paging = {
         'pattern': '/nr/{pageNumber}',
-        'first': pagination.first().text(),
-        'last': pagination.last().text(),
+        'first': utils.unleakString(pagination.first().text()),
+        'last': utils.unleakString(pagination.last().text()),
         'pages': function () {
           var pages = [];
 
@@ -45,36 +45,31 @@ function EuronicsParser() {
     },
     'list': function ($, language) {
       return $("#aspnetForm ul.oi-list.oi-grid-products > li > div > h2.name > a").map(function () {
-        return $(this).attr('href');
+        return utils.unleakString($(this).attr('href'));
       }).get();
     },
     'templates': {
       'title': function ($) {
-        return $('div.oi-section-main-content.clear div.oi-main-article-header > h1').text();
+        return utils.unleakString($('div.oi-section-main-content.clear div.oi-main-article-header > h1').text());
       },
       'pictures': function ($, language) {
         var pictureUrls = [];
 
-        var mainPictureUrl = $('div.oi-section-main-content.clear div.oi-product-media > p.thumb > a').attr('href');
+        var mainPictureUrl = utils.unleakString($('div.oi-section-main-content.clear div.oi-product-media > p.thumb > a').attr('href'));
 
         if (mainPictureUrl) {
           pictureUrls.push(that.compileImageUrl(language, mainPictureUrl));
         }
 
         $('div.oi-section-main-content.clear div.oi-viewport-media > ol > li > a[data-img]').each(function () {
-          var href = $(this).attr('href');
+          var href = utils.unleakString($(this).attr('href'));
           pictureUrls.push(that.compileImageUrl(language, href));
         });
 
         return pictureUrls;
       },
-      'description': {
-        'short': function ($) {
-          return $('div.oi-section-main-content.clear div.oi-product-description > div.oi-description > div[class!="oi-fb-like"]').html();
-        },
-        'long': function ($) {
-          return '';
-        }
+      'short': function ($) {
+        return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-description > div[class!="oi-fb-like"]').html());
       }
     }
   };

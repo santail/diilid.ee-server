@@ -32,27 +32,23 @@ function MinuvalikParser() {
           return that.compileImageUrl(language, utils.unleakString($(this).attr('href')));
         }).get();
       },
-      'description': {
-        'intro': function ($) {
-          return utils.unleakString($('.deal_rules_td .dd_lead').html());
-        },
-        'short': function ($) {
-          return utils.unleakString($('.deal_rules_td .dd_descr').eq(1).html());
-        },
-        'long': function ($) {
-          return utils.unleakString($('.deal_rules_td .dd_descr').first().html());
-        }
+      'intro': function ($) {
+        return utils.unleakString($('.deal_rules_td .dd_lead').html());
       },
-      'price': {
-        'original': function ($) {
-          return utils.unleakString($('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.dd_basic_price').text());
-        },
-        'discount': function ($) {
-          return utils.unleakString($('.deal_rules_td > div#parent_div > div> div.dd_table_price').text());
-        },
-        'save': function ($) {
-          return utils.unleakString($('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.fl_deals_fp_discount_row').text());
-        }
+      'short': function ($) {
+        return utils.unleakString($('.deal_rules_td .dd_descr').eq(1).html());
+      },
+      'long': function ($) {
+        return utils.unleakString($('.deal_rules_td .dd_descr').first().html());
+      },
+      'original': function ($) {
+        return utils.unleakString($('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.dd_basic_price').text());
+      },
+      'discount': function ($) {
+        return utils.unleakString($('.deal_rules_td > div#parent_div > div> div.dd_table_price').text());
+      },
+      'save': function ($) {
+        return utils.unleakString($('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.fl_deals_fp_discount_row').text());
       }
     }
   };

@@ -19,14 +19,14 @@ function KriisisParser() {
       'rus': 'http://www.kriisis.ee/ru/view_rating.php',
       'est': 'http://www.kriisis.ee/view_rating.php'
     },
-    'paging': function (language, $) {
+    'paging': function paging_func(language, $) {
       var pagination = $('div.pstrnav > a');
 
       var paging = {
         'pattern': '?page={pageNumber}',
-        'first': pagination.first().attr('href').replace(/.*page=(\d)/, "$1"),
-        'last': pagination.last().attr('href').replace(/.*page=(\d)/, "$1"),
-        'pages': function () {
+        'first': utils.unleakString(pagination.first().attr('href')).replace(/.*page=(\d)/, "$1"),
+        'last': utils.unleakString(pagination.last().attr('href')).replace(/.*page=(\d)/, "$1"),
+        'pages': function pages() {
           var pages = [];
 
           for (var pageNumber = 1; pageNumber <= this.last; pageNumber++) {
@@ -43,51 +43,31 @@ function KriisisParser() {
         'pages': paging.pages()
       };
     },
-    'list': function ($) {
-      return $('#01 tr').eq(8).find('td').eq(1).find('table').first().find('td table td > a').map(function () {
-        return $(this).attr('href');
+    'list': function list($) {
+      return $('#01 tr').eq(8).find('td').eq(1).find('table').first().find('td table td > a').map(function list_iterator() {
+        return utils.unleakString($(this).attr('href'));
       }).get();
     },
     'templates': {
-      'shop': function ($) {
-        return $('#01 > tr').eq(5).find('td').eq(1).find('table').first().find('tr > td > table').first().find('p').text().replace(/Pood: |Магазин: /, '');
+      'shop': function shop($) {
+        return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > table td:first-child > table:first-child td:first-child > p').text()).replace(/Pood: |Магазин: /, '');
       },
-      'title': function ($, language) {
-        var $paragraphs = $('#01 > tr').eq(5).children('td').eq(1).children('p');
 
-        if (_.size($paragraphs) > 4) {
-          $paragraphs.first().remove();
-        }
-
-        var rows = $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(2);
-
+      'pictures': function pictures($) {
+        return [utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > table td:first-child > table:nth-child(3) td:first-child > img').attr('src'))];
+      },
+      'short': function short($, language) {
         if (language === 'rus') {
-          return rows.find('b').first().text();
+          return utils.unleakString($('#01 > tr').eq(5).find('td').eq(1).children('p').eq(2).find('b:first-child').text());
         }
 
-        return rows.text();
+        return utils.unleakString($('#01 > tr').eq(5).find('td').eq(1).children('p').eq(2).text());
       },
-      'pictures': function ($) {
-        return [$('#01 > tr').eq(5).find('td').eq(1).find('table').first().find('tr > td > table').eq(2).find('tr > td > img').attr('src')];
+      'sales': function sales($) {
+        return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p:nth-child(4)').text()).replace(/Hind: |Цена: /, '');
       },
-      'description': {
-        'short': function ($, language) {
-          var rows = $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(2);
-
-          if (language === 'rus') {
-            return rows.find('b').first().text();
-          }
-
-          return rows.text();
-        }
-      },
-      'price': {
-        'sales': function ($) {
-          return $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(1).text().replace(/Hind: |Цена: /, '');
-        }
-      },
-      'period': function ($) {
-        return $('#01 > tr').eq(5).find('td').eq(1).children('p').eq(0).text().replace(/Kampaania periood: |Период кампании: /, '');
+      'period': function period($) {
+        return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p:nth-child(3)').text()).replace(/Kampaania periood: |Период кампании: /, '');
       }
     }
   };
@@ -95,13 +75,13 @@ function KriisisParser() {
 
 util.inherits(KriisisParser, AbstractParser);
 
-KriisisParser.prototype.compilePageUrl = function (language, link) {
+KriisisParser.prototype.compilePageUrl = function compilePageUrl(language, link) {
   var that = this;
 
   return that.config.index[language] + link;
 };
 
-KriisisParser.prototype.compileOfferUrl = function (language, link) {
+KriisisParser.prototype.compileOfferUrl = function compileOfferUrl(language, link) {
   var that = this;
 
   return urlParser.resolve(that.config.index[language], link);

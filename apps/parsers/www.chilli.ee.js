@@ -2,7 +2,8 @@
 
 var util = require('util'),
   urlParser = require("url"),
-  AbstractParser = require("./abstractParser");
+  AbstractParser = require("./abstractParser"),
+  utils = require("../services/Utils");
 
 function ChillyParser() {
   AbstractParser.call(this);
@@ -24,40 +25,38 @@ function ChillyParser() {
     },
     'templates': {
       'title': function ($) {
-        return $('.product-container.single-product div.product > div.product-desc > h1').text();
+        return utils.unleakString($('.product-container.single-product div.product > div.product-desc > h1').text());
       },
       'pictures': function ($, language) {
         var pictureUrls = [];
 
         $('.product-container.single-product div.product > div.product-img ul > li > img').each(function () {
-          pictureUrls.push(that.compileImageUrl(language, $(this).attr('src')));
+          pictureUrls.push(that.compileImageUrl(language, utils.unleakString($(this).attr('src'))));
         });
 
         $('div.main-content div.gallery > img').each(function () {
-          pictureUrls.push(that.compileImageUrl(language, $(this).attr('src')));
+          pictureUrls.push(that.compileImageUrl(language, utils.unleakString($(this).attr('src'))));
         });
 
         return pictureUrls;
       },
-      'description': {
-        'long': function ($) {
-          return $('div.main-content .content').eq(1).html();
-        },
-        'condition': function ($) {
-          return $('div.main-content .content').first().html();
-        }
+      'long': function ($) {
+        return utils.unleakString($('div.main-content .content').eq(1).html());
       },
-      'price': {
-        'original': function ($) {
-          $('.product-container.single-product div.product > div.product-desc > div.bottom > div.price-box > p.special-price > span.old-price > span.old-price-text').remove();
+      'condition': function ($) {
+        return utils.unleakString($('div.main-content .content').first().html());
 
-          return $('.product-container.single-product div.product > div.product-desc > div.bottom > div.price-box > p.special-price > span.old-price').text().replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').trim();
-        },
-        'discount': function ($) {
-          $('.product-container.single-product div.product > div.product-desc > div.bottom > div.price-box > p.special-price > span.old-price').remove();
+      },
+      'original': function ($) {
+        $('.product-container.single-product div.product > div.product-desc > div.bottom > div.price-box > p.special-price > span.old-price > span.old-price-text').remove();
 
-          return $('.product-container.single-product div.product > div.product-desc > div.bottom > div.price-box > p.special-price').text().replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').trim();
-        }
+        return utils.unleakString($('.product-container.single-product div.product > div.product-desc > div.bottom > div.price-box > p.special-price > span.old-price').text()).replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').trim();
+      },
+      'discount': function ($) {
+        $('.product-container.single-product div.product > div.product-desc > div.bottom > div.price-box > p.special-price > span.old-price').remove();
+
+        return utils.unleakString($('.product-container.single-product div.product > div.product-desc > div.bottom > div.price-box > p.special-price').text()).replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').trim();
+
       }
     }
   };
