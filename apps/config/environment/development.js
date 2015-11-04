@@ -69,7 +69,7 @@ var config = {
     accountName: 'SalesTracker',
     accountAccessKey: '09feqqad1hhn',
     applicationName: 'SalesTracker',
-    tierName: 'Harvester TEST',
+    tierName: 'Harvester DEV',
     nodeName: 'process' // The controller will automatically append the node name with a unique number
   }
 };
