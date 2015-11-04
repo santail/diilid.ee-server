@@ -21,9 +21,10 @@ var config = {
         'token': '35014ffd-cc1b-409c-9adb-75a639b58dde'
       },
       "loggly": {
-        "subdomain": "nikolaimuhhin",
-        "token": "baaf8934-7b4a-45ab-aa1f-688fa3e67f92",
-        "tags": ["harvester: test"]
+          token: "86ec85e9-fada-4720-a27a-12fcf0d921a5",
+          subdomain: "salestracker",
+          tags: ["Harvester TEST"],
+          json:true
       },
       'level': 'info'
     }
