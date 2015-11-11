@@ -20,6 +20,7 @@
     "mailgun-js": "^0.7.1",
     "memwatch-next": "^0.2.9",
     "mongojs": "^1.3.0",
+    "monq": "^0.3.3",
     "nash": "^2.0.3",
     "newrelic": "^1.22.0",
     "node-logentries": "^0.1.4",
