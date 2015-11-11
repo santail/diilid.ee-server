@@ -1,7 +1,7 @@
 var config = {
   db: {
     uri: 'mongodb://' + process.env.IP + ':27017/deals_development',
-    collections: ["offers", "notifications", "wishes"]
+    collections: ["offers_queue", "offers", "notifications", "wishes"]
   },
   images: {
     dir: __dirname + '/public/images/',
