@@ -143,45 +143,48 @@ AbstractParser.prototype.getSite = function () {
 };
 
 AbstractParser.prototype.parse = function parse(dom, language, callback) {
-  LOG.profile("AbstractParser.parseOffer");
+  var offer = (function (that, dom, language) {
+    LOG.profile("AbstractParser.parseOffer");
 
-  var that = this,
-    templates = _.extend({}, that.config.templates);
+    var templates = _.extend({}, that.config.templates);
 
-  function _parseTemplates(dom, templates, language) {
-    LOG.profile("AbstractParser._parseTemplates");
+    function _parseTemplates(dom, templates, language) {
+      LOG.profile("AbstractParser._parseTemplates");
 
-    var result = {};
+      var result = {};
 
-    for (var key in templates) {
+      for (var key in templates) {
 
-      if (templates.hasOwnProperty(key)) {
-        var template = templates[key];
+        if (templates.hasOwnProperty(key)) {
+          var template = templates[key];
 
-        if (typeof template === 'object') {
-          result[key] = _parseTemplates(dom, template, language);
-        }
-        else if (typeof template === 'function') {
-          var value = template.call(null, dom, language);
-          result[key] = typeof value === "string" ? utils.unleakString(value).trim().replace(/\t/g, ' ').replace(/\s\s+/g, ' ') : value;
+          if (typeof template === 'object') {
+            result[key] = _parseTemplates(dom, template, language);
+          }
+          else if (typeof template === 'function') {
+            var value = template.call(null, dom, language);
+            result[key] = typeof value === "string" ? utils.unleakString(value).trim().replace(/\t/g, ' ').replace(/\s\s+/g, ' ') : value;
+          }
         }
       }
+
+      LOG.profile("AbstractParser._parseTemplates");
+
+      return result;
     }
 
-    LOG.profile("AbstractParser._parseTemplates");
+    var result = _parseTemplates(dom, templates, language);
+
+    dom = null;
+
+    _.extend(result, {
+      'language': that.languages[language]
+    });
+
+    LOG.profile("AbstractParser.parseOffer");
 
     return result;
-  }
-
-  var offer = _parseTemplates(dom, templates, language);
-
-  dom = null;
-
-  _.extend(offer, {
-    'language': that.languages[language]
-  });
-
-  LOG.profile("AbstractParser.parseOffer");
+  })(this, dom, language);
 
   callback(null, offer);
 };
