@@ -23,12 +23,12 @@ function KriisisParser() {
 
       var paging = {
         'pattern': '?page={pageNumber}',
-        'first': utils.unleakString(pagination.first().attr('href')).replace(/.*page=(\d)/, "$1"),
+        'first': 1,
         'last': utils.unleakString(pagination.last().attr('href')).replace(/.*page=(\d)/, "$1"),
         'pages': function pages() {
           var pages = [];
 
-          for (var pageNumber = 1; pageNumber <= this.last; pageNumber++) {
+          for (var pageNumber = this.first; pageNumber <= this.last; pageNumber++) {
             pages.push(that.compilePageUrl(language, this.pattern.replace('{pageNumber}', pageNumber)));
           }
 
