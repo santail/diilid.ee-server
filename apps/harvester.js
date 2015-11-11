@@ -1,5 +1,6 @@
 var config = require('./config/environment'),
   mongojs = require('mongojs'),
+  monq = require('monq'),
   async = require('async'),
   _ = require('underscore')._,
   Agenda = require("agenda"),
@@ -9,8 +10,7 @@ var config = require('./config/environment'),
   heapdump = require('heapdump'),
   util = require("util"),
   utils = require("./services/Utils"),
-  ParserFactory = require("./services/ParserFactory"),
-  parserFactory = new ParserFactory();
+  parserFactory = require("./services/ParserFactory");
 
 var hd;
 memwatch.on('leak', function (info) {
@@ -44,7 +44,13 @@ memwatch.on('leak', function (info) {
 });
 
 var Harvester = function () {
-  this.db = null;
+  LOG.debug('Connecting to database', config.db.uri);
+
+  this.db = mongojs(config.db.uri, config.db.collections);
+  this.db.collection('offers');
+
+  var client = monq(config.db.uri, { safe: true });
+  this.queue = client.queue('offers_queue');
 };
 
 Harvester.prototype.start = function (forceMode) {
@@ -87,13 +93,6 @@ Harvester.prototype.start = function (forceMode) {
 Harvester.prototype.run = function () {
   var that = this;
 
-  LOG.debug('Connecting to database', config.db.uri);
-
-  that.db = mongojs(config.db.uri, config.db.collections);
-
-  LOG.debug('Switch to offers schema');
-  that.db.collection('offers');
-
   async.series([
       function (done) {
         that.runPakkumisedHarvesting(done);
@@ -111,8 +110,6 @@ Harvester.prototype.run = function () {
       }
 
       LOG.info('Run finished with result', result);
-
-      that.db.close();
     });
 };
 
@@ -128,7 +125,7 @@ Harvester.prototype.runPakkumisedHarvesting = function (callback) {
 
   var pageNumber = 0,
     pageRepeats = false,
-    lastId = null;
+    lastUrl = null;
 
   async.whilst(
     function () {
@@ -139,7 +136,7 @@ Harvester.prototype.runPakkumisedHarvesting = function (callback) {
 
       var pageUrl = 'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page=' + pageNumber + '&keyword=';
 
-      that.processPage(pageUrl, 'pakkumised.ee', 'est', utils.createSingleUseCallback(function (err, deals) {
+      that.processPage(pageUrl, 'pakkumised.ee', 'est', function (err, links) {
         if (err) {
           LOG.error({
             'message': 'Error processing page from pakkumised.ee ' + pageUrl,
@@ -147,15 +144,15 @@ Harvester.prototype.runPakkumisedHarvesting = function (callback) {
           });
         }
 
-        if (!_.isEmpty(deals) && lastId !== _.last(_.keys(deals))) {
-          lastId = _.last(_.keys(deals));
+        if (!_.isEmpty(links) && lastUrl !== _.last(links)) {
+          lastUrl = _.last(links);
         }
         else {
           pageRepeats = true;
         }
 
         return finishPageProcessing(err);
-      }));
+      });
     },
     function (err) {
       return that.onHarvestingFinished(err, callback);
@@ -418,7 +415,7 @@ Harvester.prototype.processPage = function (url, site, language, callback) {
   var that = this,
     parser = parserFactory.getParser(site);
 
-  LOG.info('Requesting page for', site, 'language', language, ':', url);
+  LOG.info('Processing page for', site, 'language', language, ':', url);
 
   async.waterfall([
     function (done) {
@@ -442,7 +439,7 @@ Harvester.prototype.processPage = function (url, site, language, callback) {
           });
     },
     function (data, done) {
-        parser.parseResponseBody(data, function (err, dom) {
+        parser.parseResponseBody(data, function (err, body) {
           if (err) {
             LOG.error({
               'message': 'Error parsing response body to DOM',
@@ -452,216 +449,48 @@ Harvester.prototype.processPage = function (url, site, language, callback) {
 
           data = null;
 
-          done(err, dom);
+          done(err, body);
         });
     },
-    function (dom, done) {
-        var links = parser.getOfferLinks(dom, language),
+    function (body, done) {
+        var links = parser.getOfferLinks(body, language),
           linksNumber = _.size(links);
 
         LOG.debug('Total links found on page', linksNumber);
 
-        dom = null;
+        body = null;
 
         done(null, links);
     },
-    function (links, done) {
-        that.processOffers(site, language, links, done);
+    function (links, doneEnquing) {
+      (function (site, language, links) {
+        var functions = _.map(links, function (link) {
+          return function (done) {
+            that.queue.enqueue('offer_update_event', { 'site': site, 'language': language, 'link': link }, function (err, job) {
+              if (err) {
+
+              }
+
+              done(err, link);
+            });
+          };
+        });
+
+        async.series(functions, function (err, links) {
+          if (err) {
+
+          }
+
+          doneEnquing(err, links);
+        });
+
+      }) (site, language, links);
     }],
     function (err, result) {
       LOG.profile('Harvester.processPage');
 
       callback(err, result);
     });
-};
-
-Harvester.prototype.processOffers = function (site, language, links, callback) {
-  LOG.profile('Harvester.processOffers');
-
-  var that = this;
-
-  var functions = _.map(links, function (url, index) {
-    return function (finishOfferProcessing) {
-      that.db.offers.findOne({
-        url: url
-      }, function (err, offer) {
-        if (err) {
-          LOG.error({
-            'message': 'Error checking offer by url ' + url,
-            'error': err.message
-          });
-
-          return finishOfferProcessing(err);
-        }
-
-        var parser = parserFactory.getParser(site);
-
-        if (parser.config.reactivate && offer) {
-          LOG.debug('Offer #Id', offer._id, offer.url, 'has been already parsed. Reactivating.');
-
-          that.db.offers.findAndModify({
-            query: {
-              _id: offer._id
-            },
-            update: {
-              $set: {
-                active: true
-              }
-            },
-            'new': false
-          }, function (err, doc, lastErrorObject) {
-            if (err) {
-              LOG.error({
-                'message': 'Error reactivating offer #Id ' + offer._id,
-                'error': err.message
-              });
-            }
-
-            LOG.info('[STATUS] [OK] [', site, '] [', url , '] Offer reactivated');
-
-            return finishOfferProcessing(err);
-          });
-        }
-        else if (offer) {
-          LOG.info('[STATUS] [OK] [', site, '] [', url , '] Offer exists. Skipped.');
-
-          return finishOfferProcessing();
-        }
-        else {
-          LOG.profile('Harvester.processOffer');
-
-          LOG.debug('Retrieving offer for', site, 'language', language, ':', url);
-
-          async.waterfall([
-            function (done) {
-              LOG.profile('Retrieve offer');
-                request.get(url, {
-                  headers: {
-                    'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
-                    'accept-language': 'en-US,en;q=0.8',
-                    'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'
-                  },
-                  'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-                }, function (err, response, data) {
-                  if (err) {
-                    LOG.error({
-                      'message': 'Error retrieving offer for ' + site + ' language ' + language + ': ' + url,
-                      'error': err.message
-                    });
-                  }
-
-                  LOG.profile('Retrieve offer');
-
-                  done(err, data);
-                });
-            },
-            function (data, done) {
-              LOG.profile('Parse offer DOM');
-
-                var parser = parserFactory.getParser(site);
-
-                parser.parseResponseBody(data, function (err, dom) {
-                  if (err) {
-                    LOG.error({
-                      'message': 'Error parsing response body to DOM',
-                      'error': err.message
-                    });
-                  }
-
-                  LOG.profile('Parse offer DOM');
-
-                  data = null;
-
-                  done(err, dom);
-                });
-            },
-            function (dom, done) {
-                LOG.profile("parser.ParseOffer");
-
-                var parser = parserFactory.getParser(site);
-
-                parser.parse(dom, language, function (err, offer) {
-                  if (err) {
-                    LOG.error({
-                      'message': 'Error parsing data for ' + site + ' language ' + language + ': ' + url,
-                      'error': err.message
-                    });
-                  }
-
-                  LOG.profile("parser.ParseOffer");
-
-                  dom = null;
-
-                  return done(err, offer);
-                });
-            },
-            function (offer, done) {
-                var runningTime = new Date(),
-                  _offer = {
-                    'url': url,
-                    'site': site,
-                    'active': true
-                  };
-
-                _.extend(_offer, offer);
-
-                _.extend(_offer, {
-                  'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
-                });
-
-                offer = null;
-
-                done(null, _offer);
-            },
-            function (offer, done) {
-              LOG.profile("Harvester.saveOffer");
-
-              LOG.debug('Saving offer', offer);
-
-              that.db.offers.save(offer, function (err, saved) {
-                offer = null;
-
-                if (err || !saved) {
-                  LOG.error({
-                    'message': 'Error saving offer',
-                    'error': err.message
-                  });
-
-                  return done(err);
-                }
-
-                LOG.info('[STATUS] [OK] [', site, '] [', saved.url , '] Offer saved with id ' + saved._id);
-
-                LOG.profile("Harvester.saveOffer");
-
-                return done(null, saved);
-              });
-            }
-           ],
-            function (err, saved) {
-              LOG.profile('Harvester.processOffer');
-
-              saved = null;
-
-              return finishOfferProcessing(err);
-            });
-        }
-      });
-    };
-  });
-
-  async.parallelLimit(functions, 5, function (err, results) {
-    if (err) {
-      LOG.error({
-        'message': 'Error processing offers for ' + site + ' language ' + language,
-        'error': err.message
-      });
-    }
-
-    LOG.profile('Harvester.processOffers');
-
-    return callback(err, results);
-  });
 };
 
 Harvester.prototype.onHarvestingFinished = function (err, callback) {
@@ -677,8 +506,5 @@ Harvester.prototype.onHarvestingFinished = function (err, callback) {
   LOG.info('[STATUS] [OK] Harvesting finished');
   return callback(err, 'OK');
 };
-
-var app = new Harvester();
-app.run();
 
 module.exports = Harvester;
