@@ -17,4 +17,4 @@ ParserFactory.prototype.getPakkumisedParser = function () {
   return this.getParser('pakkumised.ee');
 };
 
-module.exports = ParserFactory;
+module.exports =  new ParserFactory();
