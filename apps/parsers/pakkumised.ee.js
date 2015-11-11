@@ -49,15 +49,19 @@ AbstractParser.prototype.getOfferLinks = function (data, language) {
   });
 };
 
-PakkumisedParser.prototype.parseResponseBody = function (data) {
+PakkumisedParser.prototype.parseResponseBody = function (data, callback) {
+  LOG.debug('Parsing response');
+
   try {
-    return JSON.parse(data);
+    return callback(null, JSON.parse(data));
   }
   catch (ex) {
     LOG.error({
       'message': 'Error parsing JSON',
       'error': ex.message
     });
+
+    callback(new Error(ex.message));
   }
 };
 
