@@ -462,35 +462,41 @@ Harvester.prototype.processPage = function (url, site, language, callback) {
 
         done(null, links);
     },
-    function (links, doneEnquing) {
-      (function (site, language, links) {
-        var functions = _.map(links, function (link) {
-          return function (done) {
-            that.queue.enqueue('offer_update_event', { 'site': site, 'language': language, 'link': link }, function (err, job) {
-              if (err) {
-
-              }
-
-              done(err, link);
-            });
-          };
-        });
-
-        async.series(functions, function (err, links) {
-          if (err) {
-
-          }
-
-          doneEnquing(err, links);
-        });
-
-      }) (site, language, links);
+    function (links, done) {
+      that.processOffers(site, language, links, done);
     }],
     function (err, result) {
       LOG.profile('Harvester.processPage');
 
       callback(err, result);
     });
+};
+
+Harvester.prototype.processOffers = function (site, language, links, callback) {
+  (function (that, site, language, links) {
+    var functions = _.map(links, function (link) {
+      return function (done) {
+        that.queue.enqueue('offer_update_event', { 'site': site, 'language': language, 'link': link }, function (err, job) {
+          if (err) {
+
+          }
+
+           LOG.info('[STATUS] [OK] [', site, '] [', link , '] Offer enqueued for processing');
+
+          done(err, link);
+        });
+      };
+    });
+
+    async.series(functions, function (err, links) {
+      if (err) {
+
+      }
+
+      callback(err, links);
+    });
+
+  }) (this, site, language, links);
 };
 
 Harvester.prototype.onHarvestingFinished = function (err, callback) {
