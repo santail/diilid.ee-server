@@ -317,7 +317,7 @@ Harvester.prototype.processSite = function processSite(site, callback) {
     });
 };
 
-Harvester.prototype.processIndexPage = function processIndexPage(site, language, callback) {
+Harvester.prototype.processIndexPage = function processIndexPageFunction(site, language, callback) {
   LOG.profile('Harvester.processIndexPage');
 
   var that = this,
