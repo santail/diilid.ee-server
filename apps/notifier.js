@@ -2,20 +2,19 @@
 
 var config = require('./config/environment'),
   _ = require('underscore')._,
+  mongojs = require('mongojs'),
   Agenda = require("agenda"),
   Messenger = require("./services/Messenger"),
   LOG = require("./services/Logger");
 
 var Notifier = function () {
-  this.db = null;
+  this.db = mongojs(config.db.uri, config.db.collections);
+  this.db.collection('wishes');
 };
 
 Notifier.prototype.run = function () {
   var that = this,
     messenger = new Messenger();
-
-  that.db = require('mongojs').connect(config.db.uri, config.db.collections);
-  that.db.collection('wishes');
 
   that.db.wishes.find(function (err, wishes) {
     if (err) {
@@ -88,4 +87,6 @@ Notifier.prototype.start = function (forceMode) {
   }
 };
 
-module.exports = Notifier;
+
+var notifier = new Notifier();
+notifier.start();

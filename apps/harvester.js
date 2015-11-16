@@ -180,7 +180,7 @@ Harvester.prototype.runHarvesting = function runHarvesting(callback) {
     };
   });
 
-  async.waterfall(functions, 
+  async.waterfall(functions,
     function handleProcessingSitesError(err, results) {
       if (err) {
         LOG.error({
@@ -188,7 +188,7 @@ Harvester.prototype.runHarvesting = function runHarvesting(callback) {
           'error': err.message
         });
       }
-  
+
       return that.onHarvestingFinished(err, callback);
     });
 };
@@ -303,7 +303,7 @@ Harvester.prototype.processSite = function processSite(site, callback) {
     };
   });
 
-  async.waterfall(functions, 
+  async.waterfall(functions,
     function handlerProcessSiteError(err, results) {
       if (err) {
         LOG.error({
@@ -311,7 +311,7 @@ Harvester.prototype.processSite = function processSite(site, callback) {
           'error': err.message
         });
       }
-  
+
       LOG.info('[STATUS] [OK] [', site, '] Site processed');
       return callback(err);
     });
@@ -397,7 +397,7 @@ Harvester.prototype.processIndexPage = function processIndexPage(site, language,
         that.processOffers(site, language, links, done);
       }
     }
-  ], 
+  ],
   function handleProcessIndexPageError(err, result) {
     if (err) {
       LOG.error({
@@ -471,25 +471,25 @@ Harvester.prototype.processPage = function (url, site, language, callback) {
           return function processLink(done) {
             that.queue.enqueue('offer_update_event', { 'site': site, 'language': language, 'link': link }, function linksEnqueued(err, job) {
               if (err) {
-    
+
               }
-    
+
                LOG.info('[STATUS] [OK] [', site, '] [', link , '] Offer enqueued for processing');
-    
+
               done(err, link);
             });
           };
         });
-    
-        async.series(functions, 
+
+        async.series(functions,
           function handleProcessLinksError(err, links) {
             if (err) {
-      
+
             }
-      
+
             callback(err, links);
           });
-    
+
       }) (that, site, language, links, done);
     }],
     function (err, result) {
@@ -513,4 +513,6 @@ Harvester.prototype.onHarvestingFinished = function onHarvestingFinished(err, ca
   return callback(err, 'OK');
 };
 
-module.exports = Harvester;
+
+var harvester = new Harvester();
+harvester.start();
