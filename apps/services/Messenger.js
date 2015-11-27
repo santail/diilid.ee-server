@@ -16,7 +16,9 @@ Messenger.prototype.sendEmail = function (email, offers) {
     apiKey: config.notifier.mailgun.api_key,
     domain: config.notifier.mailgun.domain
   });
+  
   console.log('Sending email to', email);
+  
   var data = {
     from: 'notifier-robot@salestracker.eu',
     to: email,

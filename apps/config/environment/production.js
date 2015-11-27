@@ -35,9 +35,9 @@ var config = {
       AuthToken: 'd7450e5f6822e896440007633e88d8ee',
       from: '+37259120110'
     },
-    gmail: {
-      user: 'nikolai.muhhin',
-      password: 'vkSG9667'
+    mailgun: {
+      api_key: 'key-ae63224be01baeeec348c3c1808f058a',
+      domain: 'sandbox128a26d04fa443169a9f8a674e69d3bb.mailgun.org'
     },
     execution: {
       rule: '3 hours' // every 3 hours
