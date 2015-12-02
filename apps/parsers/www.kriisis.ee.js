@@ -1,19 +1,20 @@
 'use strict';
 
-var util = require('util'),
+var _ = require("underscore")._,
+  util = require('util'),
   urlParser = require("url"),
   AbstractParser = require("./abstractParser"),
   utils = require("../services/Utils");
 
 function KriisisParser() {
-  AbstractParser.call(this);
-
   var that = this;
+
+  AbstractParser.call(this);
 
   this.config = {
     'site': 'www.kriisis.ee',
-    'cleanup': false,
-    'reactivate': true,
+    'cleanup': true,
+    'reactivate': false,
     'index': {
       'rus': 'http://www.kriisis.ee/ru/view_rating.php',
       'est': 'http://www.kriisis.ee/view_rating.php'
@@ -23,12 +24,12 @@ function KriisisParser() {
 
       var paging = {
         'pattern': '?page={pageNumber}',
-        'first': 1,
-        'last': utils.unleakString(pagination.last().attr('href')).replace(/.*page=(\d)/, "$1"),
+        'first': pagination.first().attr('href').replace(/.*page=(\d)/, "$1"),
+        'last': pagination.last().attr('href').replace(/.*page=(\d)/, "$1"),
         'pages': function pages() {
           var pages = [];
 
-          for (var pageNumber = this.first; pageNumber <= this.last; pageNumber++) {
+          for (var pageNumber = 1; pageNumber <= this.last; pageNumber++) {
             pages.push(that.compilePageUrl(language, this.pattern.replace('{pageNumber}', pageNumber)));
           }
 
@@ -49,24 +50,57 @@ function KriisisParser() {
     },
     'templates': {
       'shop': function shop($) {
-        return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > table td:first-child > table:first-child td:first-child > p').text()).replace(/Pood: |Магазин: /, '');
+        return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > table td:first-child > table:first-child td:first-child > p').text().replace(/Pood: |Магазин: /, ''));
       },
+      'title': function ($, language) {
+        var description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').next('p');
 
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 1) {
+          description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').next('p');
+        }
+
+        return utils.unleakString(description.children('strong:first-child').text());
+      },
       'pictures': function pictures($) {
         return [utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > table td:first-child > table:nth-child(3) td:first-child > img').attr('src'))];
       },
-      'short': function short($, language) {
-        if (language === 'rus') {
-          return utils.unleakString($('#01 > tr').eq(5).find('td').eq(1).children('p').eq(2).find('b:first-child').text());
+      'details': function short($, language) {
+        var description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').next('p');
+
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 1) {
+          description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').next('p');
         }
 
-        return utils.unleakString($('#01 > tr').eq(5).find('td').eq(1).children('p').eq(2).text());
+        description.children('strong:first-child').remove();
+        description.children('br').remove();
+
+        if (language === 'rus') {
+          description.children('b').remove();
+        }
+
+        return description.text();
       },
       'sales': function sales($) {
-        return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p:nth-child(4)').text()).replace(/Hind: |Цена: /, '');
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 1) {
+          return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').text().replace(/Hind: |Цена: /, ''));
+        }
+
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 2) {
+          return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(5)').text().replace(/Hind: |Цена: /, ''));
+        }
+
+        return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').text().replace(/Hind: |Цена: /, ''));
       },
       'period': function period($) {
-        return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p:nth-child(3)').text()).replace(/Kampaania periood: |Период кампании: /, '');
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 1) {
+          return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').text().replace(/Kampaania periood: |Период кампании: /, ''));
+        }
+
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 2) {
+          return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').text().replace(/Kampaania periood: |Период кампании: /, ''));
+        }
+
+        return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(2)').text().replace(/Kampaania periood: |Период кампании: /, ''));
       }
     }
   };
