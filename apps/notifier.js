@@ -16,9 +16,10 @@ Notifier.prototype.run = function () {
   var that = this,
     messenger = new Messenger();
 
-  that.db.wishes.find(function (err, wishes) {
+  that.db.wishes.find({}, function (err, wishes) {
     if (err) {
-      console.log('Error retrieving wishes');
+      console.log('Error retrieving wishes', err);
+      return;
     }
 
     console.log('Found', _.size(wishes), 'wishes, Processing');
@@ -35,12 +36,13 @@ Notifier.prototype.run = function () {
         },
         function (err, offers) {
           if (err) {
-
+            console.log('Error retrieving offers', err);
+            return;
           }
 
           messenger.sendEmail(wish.email, offers);
 
-          if (wish.hasPhone) {
+          if (wish.phone) {
             messenger.sendSms(wish.phone, offers);
           }
 
