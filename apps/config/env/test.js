@@ -21,10 +21,10 @@ var config = {
         'token': '35014ffd-cc1b-409c-9adb-75a639b58dde'
       },
       "loggly": {
-          token: "86ec85e9-fada-4720-a27a-12fcf0d921a5",
-          subdomain: "salestracker",
-          tags: ["Harvester TEST"],
-          json:true
+        token: "86ec85e9-fada-4720-a27a-12fcf0d921a5",
+        subdomain: "salestracker",
+        tags: ["Harvester TEST"],
+        json: true
       },
       'level': 'info'
     }

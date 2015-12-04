@@ -1,4 +1,4 @@
-var config = require('./config/environment'),
+var config = require('./config/env'),
   async = require('async'),
   _ = require('underscore')._,
   request = require('request'),

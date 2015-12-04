@@ -20,11 +20,11 @@ var config = {
       'logentries': {
         'token': '8f74bbd5-354c-4f71-a9d9-ffc3d4d179b3'
       },
-      "loggly":  {
-          token: "86ec85e9-fada-4720-a27a-12fcf0d921a5",
-          subdomain: "salestracker",
-          tags: ["Harvester PRODUCTION"],
-          json:true
+      "loggly": {
+        token: "86ec85e9-fada-4720-a27a-12fcf0d921a5",
+        subdomain: "salestracker",
+        tags: ["Harvester PRODUCTION"],
+        json: true
       },
       'level': 'info'
     }
