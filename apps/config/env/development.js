@@ -1,6 +1,6 @@
 var config = {
   db: {
-    uri: 'mongodb://' + process.env.IP + ':27017/deals_development',
+    uri: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/salestracker-dev',
     collections: ["offers_queue", "offers", "notifications", "wishes"]
   },
   images: {
@@ -8,14 +8,26 @@ var config = {
     thumbs: []
   },
   harvester: {
-    proxies: [
-      // 'http://46.101.248.216:8888/'
-    ],
     execution: {
-      rule: '10 minutes' // every 2 minutes
+      rule: '1 minute' // every 2 minutes
     },
-    retryTimeout: 5 * 1000,
-    requestInterval: 1 * 1000,
+    logs: {
+      'logentries': {
+        'token': '8ea9fd5d-1960-40ba-b5ec-7a00a21186bd'
+      },
+      "loggly": {
+        token: "86ec85e9-fada-4720-a27a-12fcf0d921a5",
+        subdomain: "salestracker",
+        tags: ["Harvester DEV"],
+        json: true
+      },
+      'level': 'info'
+    }
+  },
+  processor: {
+    execution: {
+      rule: '1 minute' // every 2 minutes
+    },
     logs: {
       'logentries': {
         'token': '8ea9fd5d-1960-40ba-b5ec-7a00a21186bd'
@@ -59,8 +71,8 @@ var config = {
     'www.minuvalik.ee': false,
     'www.cherry.ee': false,
     'www.chilli.ee': false,
-    'www.euronics.ee': true,
-    'www.kriisis.ee': false,
+    'www.euronics.ee': false,
+    'www.kriisis.ee': true,
     'www.onoff.ee': false
   },
   'appdynamics': {

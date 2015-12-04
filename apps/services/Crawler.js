@@ -1,6 +1,6 @@
 "use strict";
 
-var config = require('../config/environment'),
+var config = require('../config/env'),
   _ = require("underscore")._,
   request = require('request'),
   LOG = require("./Logger");

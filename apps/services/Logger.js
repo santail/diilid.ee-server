@@ -1,5 +1,5 @@
 "use strict";
-var config = require('../config/environment');
+var config = require('../config/env');
 
 var winston = require('winston');
 

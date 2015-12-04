@@ -53,13 +53,15 @@ function KriisisParser() {
         return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > table td:first-child > table:first-child td:first-child > p').text().replace(/Pood: |Магазин: /, ''));
       },
       'title': function ($, language) {
-        var description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').next('p');
-
         if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 1) {
-          description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').next('p');
+          return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').next('p').children('strong:first-child').text());
         }
 
-        return utils.unleakString(description.children('strong:first-child').text());
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 2) {
+          return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(5)').next('p').children('strong:first-child').text());
+        }
+
+        return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').next('p').children('strong:first-child').text());
       },
       'pictures': function pictures($) {
         return [utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > table td:first-child > table:nth-child(3) td:first-child > img').attr('src'))];
@@ -68,7 +70,11 @@ function KriisisParser() {
         var description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').next('p');
 
         if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 1) {
-          description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').next('p');
+         description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').next('p');
+        }
+
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 2) {
+          description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(5)').next('p');
         }
 
         description.children('strong:first-child').remove();
@@ -78,7 +84,7 @@ function KriisisParser() {
           description.children('b').remove();
         }
 
-        return description.text();
+        return utils.unleakString(description.text());
       },
       'sales': function sales($) {
         if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 1) {

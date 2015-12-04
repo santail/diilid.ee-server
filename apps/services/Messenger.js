@@ -1,4 +1,4 @@
-var config = require('../config/environment'),
+var config = require('../config/env'),
   _ = require('underscore')._,
   Mailgun = require('mailgun-js'),
   twilio = require('twilio')(config.notifier.twilio.AccountSID, config.notifier.twilio.AuthToken);

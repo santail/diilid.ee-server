@@ -32,7 +32,7 @@ var config = {
   notifier: {
     twilio: {
       AccountSID: 'AC47db10149694cab9cf625c58803650d3',
-      AuthToken: '4f0ae099ee487367e6f9d6b6e5c7bd8d',
+      AuthToken: 'd7450e5f6822e896440007633e88d8ee',
       from: '+37259120110'
     },
     mailgun: {

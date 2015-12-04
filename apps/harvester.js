@@ -1,4 +1,4 @@
-var config = require('./config/environment'),
+var config = require('./config/env'),
   mongojs = require('mongojs'),
   monq = require('monq'),
   async = require('async'),
