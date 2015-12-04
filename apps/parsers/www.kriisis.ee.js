@@ -53,11 +53,11 @@ function KriisisParser() {
         return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > table td:first-child > table:first-child td:first-child > p').text().replace(/Pood: |Магазин: /, ''));
       },
       'title': function ($, language) {
-        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 1) {
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 1) {
           return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').next('p').children('strong:first-child').text());
         }
 
-        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 2) {
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 2) {
           return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(5)').next('p').children('strong:first-child').text());
         }
 
@@ -69,11 +69,11 @@ function KriisisParser() {
       'details': function short($, language) {
         var description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').next('p');
 
-        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 1) {
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 1) {
          description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').next('p');
         }
 
-        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 2) {
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 2) {
           description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(5)').next('p');
         }
 
@@ -87,22 +87,22 @@ function KriisisParser() {
         return utils.unleakString(description.text());
       },
       'sales': function sales($) {
-        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 1) {
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 1) {
           return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').text().replace(/Hind: |Цена: /, ''));
         }
 
-        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 2) {
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 2) {
           return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(5)').text().replace(/Hind: |Цена: /, ''));
         }
 
         return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').text().replace(/Hind: |Цена: /, ''));
       },
       'period': function period($) {
-        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 1) {
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 1) {
           return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').text().replace(/Kampaania periood: |Период кампании: /, ''));
         }
 
-        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:first-child > font').length === 2) {
+        if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 2) {
           return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').text().replace(/Kampaania periood: |Период кампании: /, ''));
         }
 
