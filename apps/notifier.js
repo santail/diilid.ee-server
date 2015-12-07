@@ -45,8 +45,6 @@ Notifier.prototype.run = function () {
           if (wish.phone) {
             messenger.sendSms(wish.phone, offers);
           }
-
-          that.db.close();
         });
     });
   });
