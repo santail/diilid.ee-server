@@ -67,6 +67,15 @@ function EuronicsParser() {
 
         return pictureUrls;
       },
+      'original': function  ($) {
+        return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-bottom > ul > li:nth-child(2) > p > span.old-price').text().replace(/Норм. цена |Normal price |Norm hind /, ''));
+      },
+      'sales': function ($) {
+        return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-bottom > ul > li:nth-child(2) > p > span.new-price').text());
+      },
+      'discount': function ($) {
+        return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-bottom > ul > li:nth-child(2) > p > span.discount').text());
+      },
       'short': function ($) {
         return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-description > div[class!="oi-fb-like"]').html());
       }
