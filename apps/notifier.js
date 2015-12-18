@@ -3,13 +3,13 @@
 var config = require('./config/env'),
   _ = require('underscore')._,
   mongojs = require('mongojs'),
+  monq = require('monq'),
   Agenda = require("agenda"),
   Messenger = require("./services/Messenger"),
   LOG = require("./services/Logger");
 
 var Notifier = function () {
   this.db = mongojs(config.db.uri, config.db.collections);
-  this.db.collection('wishes');
 };
 
 Notifier.prototype.run = function () {
@@ -18,25 +18,31 @@ Notifier.prototype.run = function () {
 
   that.db.wishes.find({}, function (err, wishes) {
     if (err) {
-      console.log('Error retrieving wishes', err);
+      LOG.error({
+        'message': 'Error getting wishes',
+        'error': err.message
+      });
       return;
     }
 
-    console.log('Found', _.size(wishes), 'wishes, Processing');
+    LOG.info('[STATUS] [OK] Found ' + _.size(wishes) + ' wishes, Processing.');
 
     _.each(wishes, function (wish) {
 
-      console.log('Searching for offers containing', wish.contains);
+      LOG.info('[STATUS] [OK] Searching for offers containing ' + wish.contains);
 
       that.db.offers.find({
           $text: {
             $search: wish.contains,
-            $language: wish.language
+            $language: 'none'
           }
         },
         function (err, offers) {
           if (err) {
-            console.log('Error retrieving offers', err);
+            LOG.error({
+              'message': 'Error getting offers',
+              'error': err.message
+            });
             return;
           }
 
