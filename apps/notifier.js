@@ -34,7 +34,7 @@ Notifier.prototype.run = function () {
       that.db.offers.find({
           $text: {
             $search: wish.contains,
-            $language: 'none'
+            $language: wish.language
           }
         },
         function (err, offers) {
