@@ -47,7 +47,6 @@ var Harvester = function () {
   LOG.debug('Connecting to database', config.db.uri);
 
   this.db = mongojs(config.db.uri, config.db.collections);
-  this.db.collection('offers');
 
   var client = monq(config.db.uri, { safe: true });
   this.queue = client.queue('offers_queue');
