@@ -1,7 +1,7 @@
 var config = {
   db: {
     uri: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/deals_development',
-    collections: ["offers_queue", "offers", "notifications", "wishes"]
+    collections: ["jobs", "offers", "sites", "wishes"]
   },
   images: {
     dir: __dirname + '/public/images/',

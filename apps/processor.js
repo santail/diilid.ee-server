@@ -9,7 +9,6 @@ var config = require('./config/env'),
 
 
 var db = mongojs(config.db.uri, config.db.collections);
-db.collection('offers');
 
 var client = monq(config.db.uri, {
   safe: true
