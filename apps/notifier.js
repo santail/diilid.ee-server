@@ -47,6 +47,11 @@ Notifier.prototype.run = function () {
             return;
           }
 
+          if (_.size(offers) === 0) {
+            LOG.info(util.format('[STATUS] [OK] No offers containing "%s" found', _.size(offers), wish.contains));
+            return;
+          }
+
           LOG.info(util.format('[STATUS] [OK] Found %s offers containing "%s"', _.size(offers), wish.contains));
 
           messenger.sendEmail(wish.email, offers);
