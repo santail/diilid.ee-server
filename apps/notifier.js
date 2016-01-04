@@ -1,6 +1,7 @@
 'use strict';
 
 var config = require('./config/env'),
+  util = require("util"),
   _ = require('underscore')._,
   mongojs = require('mongojs'),
   monq = require('monq'),
@@ -25,11 +26,11 @@ Notifier.prototype.run = function () {
       return;
     }
 
-    LOG.info('[STATUS] [OK] Found ' + _.size(wishes) + ' wishes, Processing.');
+    LOG.info(util.format('[STATUS] [OK] Found %d wishes. Processing.', _.size(wishes)));
 
     _.each(wishes, function (wish) {
 
-      LOG.info('[STATUS] [OK] Searching for offers containing ' + wish.contains);
+      LOG.info(util.format('[STATUS] [OK] Searching for offers containing "%s"', wish.contains));
 
       that.db.offers.find({
           $text: {
@@ -45,6 +46,8 @@ Notifier.prototype.run = function () {
             });
             return;
           }
+
+          LOG.info(util.format('[STATUS] [OK] Found %s offers containing "%s"', _.size(offers), wish.contains));
 
           messenger.sendEmail(wish.email, offers);
 

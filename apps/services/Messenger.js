@@ -1,6 +1,8 @@
 var config = require('../config/env'),
+  util = require("util"),
   _ = require('underscore')._,
   Mailgun = require('mailgun-js'),
+  LOG = require("./Logger"),
   twilio = require('twilio')(config.notifier.twilio.AccountSID, config.notifier.twilio.AuthToken);
 
 function Messenger() {
@@ -16,9 +18,9 @@ Messenger.prototype.sendEmail = function (email, offers) {
     apiKey: config.notifier.mailgun.api_key,
     domain: config.notifier.mailgun.domain
   });
-  
-  console.log('Sending email to', email);
-  
+
+  LOG.info(util.format('[STATUS] [Sending] [email] [%s] Sending email', email));
+
   var data = {
     from: 'notifier-robot@salestracker.eu',
     to: email,
@@ -26,15 +28,17 @@ Messenger.prototype.sendEmail = function (email, offers) {
     html: that.compileEmailBody(offers)
   };
 
-  //Invokes the method to send emails given the above data with the helper library
   mailgun.messages().send(data, function (err, body) {
-    //If there is an error, render the error page
     if (err) {
-      console.log("got an error: ", err);
+      LOG.error({
+        'message': util.format('[STATUS] [Failed] [email] [%s] Sending email', email),
+        'error': err.message
+      });
+
+      return;
     }
-    else {
-      console.log(body);
-    }
+
+    LOG.info(util.format('[STATUS] [OK] [email] [%s] Succesfully sent.', email));
   });
 };
 
@@ -47,7 +51,16 @@ Messenger.prototype.sendSms = function (phone, offers) {
       body: that.compileSmsBody(offers)
     },
     function (err, response) {
-      console.log(err || response);
+      if (err) {
+        LOG.error({
+          'message': util.format('[STATUS] [Failed] [SMS] [%s] Sending sms', phone),
+          'error': err.message
+        });
+
+        return;
+      }
+
+      LOG.info(util.format('[STATUS] [OK] [SMS] [%s] Succesfully sent.', phone));
     });
 };
 
