@@ -19,7 +19,7 @@ Messenger.prototype.sendEmail = function (email, offers) {
     domain: config.notifier.mailgun.domain
   });
 
-  LOG.info(util.format('[STATUS] [Sending] [email] [%s] Sending email', email));
+  LOG.debug(util.format('[STATUS] [Sending] [email] [%s] Sending email', email));
 
   var data = {
     from: 'notifier-robot@salestracker.eu',
@@ -45,6 +45,8 @@ Messenger.prototype.sendEmail = function (email, offers) {
 Messenger.prototype.sendSms = function (phone, offers) {
   var that = this;
 
+  LOG.debug(util.format('[STATUS] [Sending] [SMS] [%s] Sending SMS', phone));
+
   twilio.sendMessage({
       to: phone,
       from: config.notifier.twilio.from,
@@ -66,7 +68,7 @@ Messenger.prototype.sendSms = function (phone, offers) {
 
 Messenger.prototype.compileEmailBody = function (offers) {
 
-  var body = "<h1>Offers:</h1>";
+  var body = "<h1>SalesTracker.eu has found something</h1> what could be potentially interesting to you";
 
   _.each(offers, function (offer) {
     body += '<p><a href="' + offer.url + '" title="' + offer.title + '" />' + offer.title + '</a> ' + offer.site + '</p>';
@@ -84,7 +86,13 @@ Messenger.prototype.compileEmailBody = function (offers) {
 };
 
 Messenger.prototype.compileSmsBody = function (offers) {
-  return "<h1>Offers:" + _.size(offers) + "</h1>";
+  var body = "";
+
+  _.each(offers, function (offer) {
+    body += util.format("%s: %s: %s\r\n", offer.discount, offer.title, offer.site);
+  });
+
+  return body;
 };
 
 module.exports = Messenger;
