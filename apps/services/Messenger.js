@@ -89,7 +89,7 @@ Messenger.prototype.compileSmsBody = function (offers) {
   var body = "";
 
   _.each(offers, function (offer) {
-    body += util.format("%s: %s: %s\r\n", offer.discount, offer.title, offer.site);
+    body += util.format("%s: %s: %s\r\n\r\n", offer.sales, offer.title, offer.shop);
   });
 
   return body;

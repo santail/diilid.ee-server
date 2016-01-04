@@ -14,10 +14,19 @@ function AbstractParser() {
     'est': 'fi',
     'eng': 'en'
   };
+
+  this.paging = {
+    hasNextPage: function hasNextPage() {},
+    nextPage: function nextPage() {}
+  };
 }
 
 AbstractParser.prototype.isPakkumised = function () {
   return this.isInPakkumised;
+};
+
+AbstractParser.prototype.getPaging = function () {
+  return this.paging;
 };
 
 AbstractParser.prototype.parseResponseBody = function (data, callback) {
@@ -95,7 +104,7 @@ AbstractParser.prototype.getPagingParameters = function (language, dom) {
   LOG.debug('Checking if paging exists.', language, dom);
 
   if (that.config.paging) {
-    var paging = that.config.paging.call(that, language, dom);
+    var paging = that.config.paging.applyParameters.call(that, language, dom);
 
     if (_.size(paging) > 0) {
       LOG.debug('Paging found. Total pages: ', _.size(paging.pages));
@@ -158,7 +167,10 @@ AbstractParser.prototype.parse = function parse(dom, language, callback) {
         if (templates.hasOwnProperty(key)) {
           var template = templates[key];
 
-          if (typeof template === 'object') {
+          if (typeof template === 'string') {
+            result[key] = template;
+          }
+          else if (typeof template === 'object') {
             result[key] = _parseTemplates(dom, template, language);
           }
           else if (typeof template === 'function') {
