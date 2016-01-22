@@ -97,6 +97,9 @@ Harvester.prototype.run = function () {
         that.runPakkumisedHarvesting(done);
       },
       function (done) {
+        that.runPrismamarketHarvesting(done);
+      },
+      function (done) {
         that.runHarvesting(done);
       }
     ],
@@ -136,6 +139,53 @@ Harvester.prototype.runPakkumisedHarvesting = function (callback) {
       var pageUrl = 'http://pakkumised.ee/acts/offers/js_load.php?act=offers.js_load&category_id=0&page=' + pageNumber + '&keyword=';
 
       that.processPage(pageUrl, 'pakkumised.ee', 'est', function (err, links) {
+        if (err) {
+          LOG.error({
+            'message': 'Error processing page from pakkumised.ee ' + pageUrl,
+            'error': err.message
+          });
+        }
+
+        if (!_.isEmpty(links) && lastUrl !== _.last(links)) {
+          lastUrl = _.last(links);
+        }
+        else {
+          pageRepeats = true;
+        }
+
+        return finishPageProcessing(err);
+      });
+    },
+    function (err) {
+      return that.onHarvestingFinished(err, callback);
+    }
+  );
+};
+
+Harvester.prototype.runPrismamarketHarvesting = function (callback) {
+    var that = this;
+
+  LOG.info('Harvesting Pakkumised.ee');
+
+  if (!config.prismamarket) {
+    LOG.info('Prismamarket.ee is switched off');
+    return callback(null);
+  }
+
+  var pageNumber = 0,
+    pageRepeats = false,
+    lastUrl = null;
+
+  async.whilst(
+    function () {
+      return !pageRepeats;
+    },
+    function (finishPageProcessing) {
+      pageNumber++;
+
+      var pageUrl = 'https://www.prismamarket.ee/api/?path=entry%2Fads&entry_type=PT&language=fi&limit=24&page=' + pageNumber + '&category_ids=16928&sort_order=relevancy&sort_dir=desc';
+
+      that.processPage(pageUrl, 'www.prismamarket.ee', 'est', function (err, links) {
         if (err) {
           LOG.error({
             'message': 'Error processing page from pakkumised.ee ' + pageUrl,
