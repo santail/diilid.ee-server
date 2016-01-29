@@ -133,10 +133,10 @@ AbstractParser.prototype.getOffers = function (dom, language) {
 
   return _.map(links, function (link) {
     return {
-     id: that.compileOfferUrl(language, link),
-     site: that.config.site,
-     language: language,
-     url: that.compileOfferUrl(language, link)
+     'id': that.compileOfferUrl(language, link),
+     'site': that.config.site,
+     'language': that.languages[language],
+     'url': that.compileOfferUrl(language, link)
     };
   });
 };
