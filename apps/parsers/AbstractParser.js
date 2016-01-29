@@ -13,7 +13,8 @@ function AbstractParser() {
   this.languages = {
     'rus': 'ru',
     'est': 'fi',
-    'eng': 'en'
+    'eng': 'en',
+    'fin': 'fi'
   };
 
   this.paging = {
