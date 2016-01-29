@@ -2,7 +2,7 @@
 
 var util = require('util'),
   urlParser = require("url"),
-  AbstractParser = require("./abstractParser"),
+  AbstractParser = require("./AbstractParser"),
   utils = require("../services/Utils");
 
 function OnoffParser() {
@@ -15,9 +15,9 @@ function OnoffParser() {
     'cleanup': false,
     'reactivate': true,
     'index': {
-      'rus': 'http://www.onoff.ee/font-colorb00000predlozenija-mesjatsafont/#&price=0-1400&onpage=9999&list=1',
-      'est': 'http://www.onoff.ee/font-colorb00000kuupakkumisedfont/#&price=0-1400&onpage=9999&list=1',
-      'eng': 'http://www.onoff.ee/font-colorb00000monthly-offersfont-eng/#&price=0-1400&onpage=9999&list=1'
+      'rus': 'http://www.onoff.ee/font-colorb00000predlozenija-mesjatsafont/',
+      'est': 'http://www.onoff.ee/font-colorb00000votame-kohe-allafont-est/',
+      'eng': 'http://www.onoff.ee/font-colorb00000monthly-offersfont-eng/'
     },
     'list': function ($) {
       return $('div.content.catalog > ul.shop_prod > li > a').map(function () {

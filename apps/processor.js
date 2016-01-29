@@ -10,38 +10,33 @@ var config = require('./config/env'),
 
 var db = mongojs(config.db.uri, config.db.collections);
 
-var client = monq(config.db.uri, {
-  safe: true
-});
+var client = monq(config.db.uri, { safe: true });
 var worker = client.worker(['offers_queue']);
 
 worker.register({
-  'offer_update_event': function handleOfferUpdateEvent(params, done) {
+  'offer_update_event': function handleOfferUpdateEvent(event, done) {
 
-    var url = params.link,
-      site = params.site,
-      language = params.language;
+    var id = event.id,
+      site = event.site;
 
-    console.log(process.pid);
+    var parser = parserFactory.getParser(site);
 
     LOG.profile('Harvester.processOffers');
 
     db.offers.findOne({
-      url: url
+      id: id
     }, function findOfferResult(err, offer) {
       if (err) {
         LOG.error({
-          'message': 'Error checking offer by url ' + url,
+          'message': 'Error checking offer by #id ' + id,
           'error': err.message
         });
 
         return done(err);
       }
 
-      var parser = parserFactory.getParser(site);
-
       if (parser.config.reactivate && offer) {
-        LOG.debug('Offer #Id', offer._id, offer.url, 'has been already parsed. Reactivating.');
+        LOG.info('Offer #Id', offer._id, offer.id, 'has been already parsed. Reactivating.');
 
         db.offers.findAndModify({
           query: {
@@ -61,134 +56,50 @@ worker.register({
             });
           }
 
-          LOG.info('[STATUS] [OK] [', site, '] [', url, '] Offer reactivated');
+          LOG.info('[STATUS] [OK] [', site, '] [', id, '] Offer reactivated');
 
           return done(err);
         });
       }
       else if (offer) {
-        LOG.info('[STATUS] [OK] [', site, '] [', url, '] Offer exists. Skipped.');
+        LOG.info('[STATUS] [OK] [', site, '] [', id, '] Offer exists. Skipped.');
 
         return done();
       }
       else {
         LOG.profile('Harvester.processOffer');
 
-        LOG.debug('Retrieving offer for', site, 'language', language, ':', url);
-
-        async.waterfall([
-        function requestOffer(done) {
-              LOG.profile('Retrieve offer');
-              request.get(url, {
-                headers: {
-                  'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
-                  'accept-language': 'en-US,en;q=0.8',
-                  'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'
-                },
-                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-              }, function requestOfferResult(err, response, data) {
-                if (err) {
-                  LOG.error({
-                    'message': 'Error retrieving offer for ' + site + ' language ' + language + ': ' + url,
-                    'error': err.message
-                  });
-                }
-
-                LOG.profile('Retrieve offer');
-
-                done(err, data);
-              });
-        },
-        function parseResponseBody(data, done) {
-              LOG.profile('Parse offer DOM');
-
-              var parser = parserFactory.getParser(site);
-
-              parser.parseResponseBody(data, function parseResponseBodyResult(err, dom) {
-                if (err) {
-                  LOG.error({
-                    'message': 'Error parsing response body to DOM',
-                    'error': err.message
-                  });
-                }
-
-                LOG.profile('Parse offer DOM');
-
-                data = null;
-
-                done(err, dom);
-              });
-        },
-        function parseOffer(dom, done) {
-              LOG.profile("parser.ParseOffer");
-
-              var parser = parserFactory.getParser(site);
-
-              parser.parse(dom, language, function parseOfferResult(err, offer) {
-                if (err) {
-                  LOG.error({
-                    'message': 'Error parsing data for ' + site + ' language ' + language + ': ' + url,
-                    'error': err.message
-                  });
-                }
-
-                LOG.profile("parser.ParseOffer");
-
-                dom = null;
-
-                return done(err, offer);
-              });
-        },
-        function extendOffer(offer, done) {
-              var runningTime = new Date(),
-                _offer = {
-                  'url': url,
-                  'site': site,
-                  'active': true
-                };
-
-              _.extend(_offer, offer);
-
-              _.extend(_offer, {
-                'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
-              });
-
-              offer = null;
-
-              done(null, _offer);
-        },
-        function saveOffer(offer, done) {
-              LOG.profile("Harvester.saveOffer");
-
-              LOG.debug('Saving offer', offer);
-
-              db.offers.save(offer, function saveOfferResult(err, saved) {
-                offer = null;
-
-                if (err || !saved) {
-                  LOG.error({
-                    'message': 'Error saving offer',
-                    'error': err.message
-                  });
-
-                  return done(err);
-                }
-
-                LOG.info('[STATUS] [OK] [', site, '] [', saved.url, '] Offer saved with id ' + saved._id);
-
-                LOG.profile("Harvester.saveOffer");
-
-                return done(null, saved);
-              });
-        }
-       ],
-          function handleProcessOfferError(err, saved) {
-            LOG.profile('Harvester.processOffer');
-
-            saved = null;
+        parser.fetchOffer(event, function (err, offer) {
+          if (err) {
+            LOG.error({
+              'message': 'Error fetching offer',
+              'error': err.message
+            });
 
             return done(err);
+          }
+
+          LOG.info('[STATUS] [OK] [', site, '] Saving offer with id ', parser.getOfferId(offer));
+
+          db.offers.save(offer, function saveOfferResult(err, saved) {
+            console.log(saved);
+
+            if (err || !saved) {
+              LOG.error({
+                'message': 'Error saving offer',
+                'error': err
+              });
+
+              return done(err);
+            }
+
+            LOG.info('[STATUS] [OK] [', site, '] Offer saved with id ', parser.getOfferId(saved));
+
+            LOG.profile("Harvester.saveOffer");
+
+            return done(err, saved);
           });
+        });
       }
     });
   }

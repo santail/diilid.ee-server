@@ -1,7 +1,7 @@
 'use strict';
 
 var util = require('util'),
-  AbstractParser = require("./abstractParser"),
+  AbstractParser = require("./AbstractParser"),
   utils = require("../services/Utils");
 
 function EuronicsParser() {
