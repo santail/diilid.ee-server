@@ -62,7 +62,6 @@ Harvester.prototype.start = function () {
       defaultLockLifetime: 10000
     });
 
-/*
     agenda.define('execute harvester', function (job, done) {
       try {
         return that.run(done);
@@ -80,9 +79,6 @@ Harvester.prototype.start = function () {
     agenda.every(config.harvester.execution.rule, 'execute harvester');
 
     agenda.start();
-
-    */
-    that.run()
 };
 
 Harvester.prototype.run = function () {
