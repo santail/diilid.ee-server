@@ -2,7 +2,7 @@
 
 var util = require('util'),
   urlParser = require("url"),
-  AbstractParser = require("./abstractParser"),
+  AbstractParser = require("./AbstractParser"),
   utils = require("../services/Utils");
 
 function MinuvalikParser() {
@@ -12,8 +12,8 @@ function MinuvalikParser() {
 
   this.config = {
     'site': 'www.minuvalik.ee',
-    'cleanup': false,
-    'reactivate': true,
+    'cleanup': true,
+    'reactivate': false,
     'index': {
       'rus': 'https://www.minuvalik.ee/ru/?c=all',
       'est': 'https://www.minuvalik.ee/?c=all'
@@ -49,7 +49,8 @@ function MinuvalikParser() {
       },
       'save': function ($) {
         return utils.unleakString($('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.fl_deals_fp_discount_row').text());
-      }
+      },
+      'shop': 'Minuvalik.ee'
     }
   };
 }

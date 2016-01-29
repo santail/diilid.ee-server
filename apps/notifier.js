@@ -1,6 +1,7 @@
 'use strict';
 
 var config = require('./config/env'),
+  async=require("async"),
   util = require("util"),
   _ = require('underscore')._,
   mongojs = require('mongojs'),
@@ -14,54 +15,18 @@ var Notifier = function () {
 };
 
 Notifier.prototype.run = function () {
-  var that = this,
-    messenger = new Messenger();
+  var that = this;
 
-  that.db.wishes.find({}, function (err, wishes) {
-    if (err) {
-      LOG.error({
-        'message': 'Error getting wishes',
-        'error': err.message
-      });
-      return;
+  that.db.wishes.aggregate([
+    {
+      $group: {
+        _id: "$email",
+        wishes: {
+          $push: "$$ROOT"
+        }
+      }
     }
-
-    LOG.info(util.format('[STATUS] [OK] Found %d wishes. Processing.', _.size(wishes)));
-
-    _.each(wishes, function (wish) {
-
-      LOG.info(util.format('[STATUS] [OK] Searching for offers containing "%s"', wish.contains));
-
-      that.db.offers.find({
-          $text: {
-            $search: wish.contains,
-            $language: wish.language
-          }
-        },
-        function (err, offers) {
-          if (err) {
-            LOG.error({
-              'message': 'Error getting offers',
-              'error': err.message
-            });
-            return;
-          }
-
-          if (_.size(offers) === 0) {
-            LOG.info(util.format('[STATUS] [OK] No offers containing "%s" found', wish.contains));
-            return;
-          }
-
-          LOG.info(util.format('[STATUS] [OK] %d offers containing "%s" found', _.size(offers), wish.contains));
-
-          messenger.sendEmail(wish.email, offers);
-
-          if (wish.phone) {
-            messenger.sendSms(wish.phone, offers);
-          }
-        });
-    });
-  });
+   ], that.aggregateResult.bind(that));
 };
 
 Notifier.prototype.start = function (forceMode) {
@@ -101,6 +66,84 @@ Notifier.prototype.start = function (forceMode) {
   }
 };
 
+Notifier.prototype.aggregateResult = function aggregateResult(err, res) {
+  var that = this,
+    messenger = new Messenger();
+
+  if (err) {
+    LOG.error({
+      'message': 'Error getting wishes',
+      'error': err.message
+    });
+    return;
+  }
+
+  LOG.info(util.format('[STATUS] [OK] Found %d emails. Processing.', _.size(res)));
+
+  _.each(res, function iterateResult(result) {
+
+    console.log(res);
+
+    var email = result._id,
+      wishes = result.wishes,
+      notifications = [];
+
+    LOG.info(util.format('[STATUS] [OK] Found %d wishes. Processing.', _.size(wishes)));
+
+    var functions = _.map(wishes, function (wish) {
+      return function (done) {
+        LOG.info(util.format('[STATUS] [OK] Searching for offers containing "%s"', wish.contains));
+
+        that.db.offers.find({
+            $text: {
+              $search: wish.contains,
+              $language: wish.language
+            }
+          },
+          function (err, offers) {
+            if (err) {
+              LOG.error({
+                'message': 'Error getting offers',
+                'error': err.message
+              });
+              return done(err);
+            }
+
+            if (_.size(offers) === 0) {
+              LOG.info(util.format('[STATUS] [OK] No offers containing "%s" found', wish.contains));
+              return done();
+            }
+
+            LOG.info(util.format('[STATUS] [OK] %d offers containing "%s" found', _.size(offers), wish.contains));
+
+            var content = {
+              contains: wish.contains,
+              offers: offers
+            };
+
+            if (wish.phone) {
+              content.phone = wish.phone;
+            }
+
+            notifications.push(content);
+
+            done();
+          });
+        };
+      });
+
+      async.series(functions, function (err) {
+        if (err) {
+          LOG.error({
+            'message': 'Error enqueueing offers for site ',
+            'error': err.message
+          });
+        }
+
+        messenger.sendNotification(email, notifications);
+      });
+  });
+};
 
 var notifier = new Notifier();
 notifier.start();

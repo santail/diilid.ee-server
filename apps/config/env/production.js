@@ -54,8 +54,8 @@ var config = {
       'level': 'info'
     }
   },
-  pakkumised: false,
   activeSites: {
+    'www.pakkumised.ee': false,
     'www.minuvalik.ee': true,
     'www.cherry.ee': true,
     'www.chilli.ee': true,

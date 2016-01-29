@@ -12,7 +12,7 @@ var config = {
       // 'http://46.101.248.216:8888/'
     ],
     execution: {
-      rule: '2 minutes' // every 2 minutes
+      rule: '30 seconds' // every 2 minutes
     },
     retryTimeout: 5 * 1000,
     requestInterval: 1 * 1000,
@@ -54,9 +54,9 @@ var config = {
       'level': 'debug'
     }
   },
-  pakkumised: false,
   activeSites: {
-    'www.minuvalik.ee': false,
+    'www.pakkumised.ee': true,
+    'www.minuvalik.ee': true,
     'www.cherry.ee': false,
     'www.chilli.ee': false,
     'www.euronics.ee': false,

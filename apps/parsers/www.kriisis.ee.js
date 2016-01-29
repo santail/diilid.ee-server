@@ -3,7 +3,7 @@
 var _ = require("underscore")._,
   util = require('util'),
   urlParser = require("url"),
-  AbstractParser = require("./abstractParser"),
+  AbstractParser = require("./AbstractParser"),
   utils = require("../services/Utils");
 
 function KriisisParser() {
@@ -13,35 +13,38 @@ function KriisisParser() {
 
   this.config = {
     'site': 'www.kriisis.ee',
-    'cleanup': true,
-    'reactivate': false,
+    'cleanup': false,
+    'reactivate': true,
     'index': {
       'rus': 'http://www.kriisis.ee/ru/view_rating.php',
       'est': 'http://www.kriisis.ee/view_rating.php'
     },
-    'paging': function paging_func(language, $) {
-      var pagination = $('div.pstrnav > a');
+    'paging': {
+      finit: true,
+      applyParameters: function paging_func(language, $) {
+        var pagination = $('div.pstrnav > a');
 
-      var paging = {
-        'pattern': '?page={pageNumber}',
-        'first': pagination.first().attr('href').replace(/.*page=(\d)/, "$1"),
-        'last': pagination.last().attr('href').replace(/.*page=(\d)/, "$1"),
-        'pages': function pages() {
-          var pages = [];
+        var paging = {
+          'pattern': '?page={pageNumber}',
+          'first': pagination.first().attr('href').replace(/.*page=(\d)/, "$1"),
+          'last': pagination.last().attr('href').replace(/.*page=(\d)/, "$1"),
+          'pages': function pages() {
+            var pages = [];
 
-          for (var pageNumber = 1; pageNumber <= this.last; pageNumber++) {
-            pages.push(that.compilePageUrl(language, this.pattern.replace('{pageNumber}', pageNumber)));
+            for (var pageNumber = 1; pageNumber <= this.last; pageNumber++) {
+              pages.push(that.compilePageUrl(language, this.pattern.replace('{pageNumber}', pageNumber)));
+            }
+
+            return pages;
           }
+        };
 
-          return pages;
-        }
-      };
-
-      return {
-        'first': paging.first,
-        'last': paging.last,
-        'pages': paging.pages()
-      };
+        return {
+          'first': paging.first,
+          'last': paging.last,
+          'pages': paging.pages()
+        };
+      }
     },
     'list': function list($) {
       return $('#01 tr').eq(8).find('td').eq(1).find('table').first().find('td table td > a').map(function list_iterator() {

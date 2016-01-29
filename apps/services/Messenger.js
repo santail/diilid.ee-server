@@ -11,6 +11,10 @@ function Messenger() {
 
 Messenger.prototype.init = function () {};
 
+Messenger.prototype.sendNotification = function (email, notification) {
+  console.log(email, notification);
+};
+
 Messenger.prototype.sendEmail = function (email, offers) {
   var that = this;
 

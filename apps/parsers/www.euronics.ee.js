@@ -18,29 +18,32 @@ function EuronicsParser() {
       'est': 'http://www.euronics.ee/tooted/c/143',
       'eng': 'http://www.euronics.ee/products-en/c/143'
     },
-    'paging': function (language, $) {
-      var pagination = $('div.oi-pagination ol li.page');
+    'paging': {
+      'finit': true,
+      'applyParameters': function (language, $) {
+        var pagination = $('div.oi-pagination ol li.page');
 
-      var paging = {
-        'pattern': '/nr/{pageNumber}',
-        'first': utils.unleakString(pagination.first().text()),
-        'last': utils.unleakString(pagination.last().text()),
-        'pages': function () {
-          var pages = [];
+        var paging = {
+          'pattern': '/nr/{pageNumber}',
+          'first': utils.unleakString(pagination.first().text()),
+          'last': utils.unleakString(pagination.last().text()),
+          'pages': function () {
+            var pages = [];
 
-          for (var pageNumber = 1; pageNumber <= this.last; pageNumber++) {
-            pages.push(that.compilePageUrl(language, this.pattern.replace('{pageNumber}', pageNumber)));
+            for (var pageNumber = 1; pageNumber <= this.last; pageNumber++) {
+              pages.push(that.compilePageUrl(language, this.pattern.replace('{pageNumber}', pageNumber)));
+            }
+
+            return pages;
           }
+        };
 
-          return pages;
-        }
-      };
-
-      return {
-        'first': paging.first,
-        'last': paging.last,
-        'pages': paging.pages()
-      };
+        return {
+          'first': paging.first,
+          'last': paging.last,
+          'pages': paging.pages()
+        };
+      }
     },
     'list': function ($, language) {
       return $("#aspnetForm ul.oi-list.oi-grid-products > li > div > h2.name > a").map(function () {
@@ -78,7 +81,8 @@ function EuronicsParser() {
       },
       'short': function ($) {
         return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-description > div[class!="oi-fb-like"]').html());
-      }
+      },
+      'shop': 'euronics.ee'
     }
   };
 }

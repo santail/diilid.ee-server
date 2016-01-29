@@ -2,11 +2,11 @@
 
 var util = require('util'),
   urlParser = require("url"),
-  AbstractParser = require("./abstractParser"),
+  NoPagingAppliedParser = require("./NoPagingAppliedParser"),
   utils = require("../services/Utils");
 
 function CherryParser() {
-  AbstractParser.call(this);
+  NoPagingAppliedParser.call(this);
 
   this.config = {
     'site': 'www.cherry.ee',
@@ -50,7 +50,7 @@ function CherryParser() {
   };
 }
 
-util.inherits(CherryParser, AbstractParser);
+util.inherits(CherryParser, NoPagingAppliedParser);
 
 CherryParser.prototype.compileOfferUrl = function (language, link) {
   var that = this;
