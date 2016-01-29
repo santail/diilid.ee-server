@@ -192,7 +192,7 @@ PrismamarketParser.prototype.getOffers = function (data, language) {
     pageNumber: data.message.categories[0].page,
     offers: _.map(data.message.categories[0].entries, function (link) {
       return _.extend(link, {
-       'id': link.ean,
+       'id': that.languages[language] + '_' + link.ean,
        'site': that.config.site,
        'language': that.languages[language]
       });
