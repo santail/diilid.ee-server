@@ -55,12 +55,13 @@ var config = {
     }
   },
   activeSites: {
-    'www.pakkumised.ee': true,
-    'www.minuvalik.ee': true,
+    'www.pakkumised.ee': false,
+    'www.prismamarket.ee': false,
+    'www.minuvalik.ee': false,
     'www.cherry.ee': false,
     'www.chilli.ee': false,
     'www.euronics.ee': false,
-    'www.kriisis.ee': true,
+    'www.kriisis.ee': false,
     'www.onoff.ee': false
   },
   'appdynamics': {
