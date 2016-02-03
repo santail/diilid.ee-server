@@ -16,7 +16,7 @@ function OnoffParser() {
     'reactivate': true,
     'index': {
       'rus': 'http://www.onoff.ee/font-colorb00000predlozenija-mesjatsafont/',
-      'est': 'http://www.onoff.ee/font-colorb00000votame-kohe-allafont-est/',
+      'est': 'http://www.onoff.ee/font-colorb00000kuupakkumisedfont/',
       'eng': 'http://www.onoff.ee/font-colorb00000monthly-offersfont-eng/'
     },
     'list': function ($) {
