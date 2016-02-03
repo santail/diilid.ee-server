@@ -259,8 +259,6 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
           var pages = pagingParams.pages,
             pagesNumber = _.size(pages);
 
-          pages = pages.slice(0, 1);
-
           var functions = _.map(pages, function (pageUrl, index) {
             return function (finishPageProcessing) {
               LOG.info('[STATUS] [OK] [', site, '] [', language, '] Processing page ' + (index + 1) + ' of ' + pagesNumber);
