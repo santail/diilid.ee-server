@@ -196,10 +196,6 @@ AbstractParser.prototype.parse = function parse(dom, language, callback) {
 
     dom = null;
 
-    _.extend(result, {
-      'language': that.languages[language]
-    });
-
     LOG.profile("AbstractParser.parseOffer");
 
     return result;
@@ -262,6 +258,8 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
           var pagingParams = that.getPagingParameters(language, dom);
           var pages = pagingParams.pages,
             pagesNumber = _.size(pages);
+
+          pages = pages.slice(0, 1);
 
           var functions = _.map(pages, function (pageUrl, index) {
             return function (finishPageProcessing) {
@@ -469,9 +467,12 @@ AbstractParser.prototype.fetchOffer = function (event, callback) {
         'id': id,
         'url': url,
         'site': site,
+        'language': language,
         'active': true,
         'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
       });
+
+      console.log(offer);
 
       done(null, offer);
     }],

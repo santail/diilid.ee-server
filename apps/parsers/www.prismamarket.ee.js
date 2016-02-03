@@ -210,9 +210,9 @@ AbstractParser.prototype.fetchOffer = function (event, callback) {
   var runningTime = new Date();
 
   var offer = {
-    'id': event.id,
-    'site': event.site,
-    'language': event.language,
+    'id': id,
+    'site': site,
+    'language': language,
     'active': true,
     'title': event.name,
     'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear(),
