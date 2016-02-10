@@ -56,7 +56,7 @@ var config = {
   },
   activeSites: {
     'www.pakkumised.ee': false,
-    'www.prismamarket.ee': false,
+    'www.prismamarket.ee': true,
     'www.minuvalik.ee': true,
     'www.cherry.ee': true,
     'www.chilli.ee': true,
