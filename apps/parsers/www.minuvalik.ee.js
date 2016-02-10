@@ -61,7 +61,9 @@ util.inherits(MinuvalikParser, AbstractParser);
 MinuvalikParser.prototype.compileImageUrl = function (language, link) {
   var that = this;
 
-  language = _.invert(that.languages)[language];
+  console.log(language, that.languages_reverse[language]);
+
+  language = that.languages_reverse[language];
 
   return urlParser.resolve(that.config.index[language], link);
 };

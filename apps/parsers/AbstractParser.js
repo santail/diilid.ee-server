@@ -17,6 +17,13 @@ function AbstractParser() {
     'fin': 'fi'
   };
 
+  this.languages_reverse = {
+    'ru': 'rus',
+    'et': 'est',
+    'en': 'eng',
+    'fi': 'est'
+  };
+
   this.paging = {
     hasNextPage: function hasNextPage() {},
     nextPage: function nextPage() {}

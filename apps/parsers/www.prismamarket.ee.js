@@ -12,6 +12,13 @@ function PrismamarketParser() {
 
   var that = this;
 
+  this.languages_reverse = {
+    'ru': 'rus',
+    'et': 'est',
+    'en': 'eng',
+    'fi': 'fin'
+  };
+
   this.config = {
     'site': 'www.prismamarket.ee',
     'cleanup': false,
