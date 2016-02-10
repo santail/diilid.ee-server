@@ -72,7 +72,7 @@ PrismamarketParser.prototype.gatherOffers = function (language, processOffer, ca
 
           var totalPages = result.totalPages;
 
-          if (pageNumber === totalPages) {
+          if ((pageNumber + 1) === totalPages) {
             pageRepeats = true;
 
             LOG.info('[STATUS] [OK] [', site, '] [', language, '] Total pages ' + totalPages);
@@ -118,7 +118,7 @@ PrismamarketParser.prototype.processPage = function (url, language, processOffer
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
             'Accept-Encoding': 'gzip, deflate, sdch',
             'Accept-Language': 'en-US,en;q=0.8,ru;q=0.6,et;q=0.4',
-            'Cookie': 'is_new_user=1; __utma=237651078.667620623.1450433379.1453300390.1453300479.5; __utmz=237651078.1450433378.1.1.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided); _ga=GA1.2.667620623.1450433379; _session_id=fcdad62500d270a5b83fb32ee58c0b41'
+            'Cookie': 'is_new_user=1; _session_id=f75f4c398e0259d5b1545026ca7cf2a5'
           }
         },
         function (err, response, data) {
@@ -200,7 +200,7 @@ PrismamarketParser.prototype.getOffers = function (data, language) {
   };
 };
 
-AbstractParser.prototype.fetchOffer = function (event, callback) {
+PrismamarketParser.prototype.fetchOffer = function (event, callback) {
   var id = event.id,
     site = event.site,
     language = event.language;
