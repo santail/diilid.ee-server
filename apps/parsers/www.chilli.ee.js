@@ -3,7 +3,8 @@
 var util = require('util'),
   urlParser = require("url"),
   AbstractParser = require("./AbstractParser"),
-  utils = require("../services/Utils");
+  utils = require("../services/Utils"),
+  _ = require("underscore")._;
 
 function ChillyParser() {
   AbstractParser.call(this);
@@ -71,6 +72,9 @@ ChillyParser.prototype.compileOfferUrl = function (language, link) {
 
 ChillyParser.prototype.compileImageUrl = function (language, link) {
   var that = this;
+  
+  language = _.invert(that.languages)[language];
+  
   return urlParser.resolve(that.config.index[language], link);
 };
 

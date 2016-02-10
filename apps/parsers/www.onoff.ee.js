@@ -3,7 +3,8 @@
 var util = require('util'),
   urlParser = require("url"),
   AbstractParser = require("./AbstractParser"),
-  utils = require("../services/Utils");
+  utils = require("../services/Utils"),
+  _ = require("underscore")._;
 
 function OnoffParser() {
   AbstractParser.call(this);
@@ -72,6 +73,9 @@ util.inherits(OnoffParser, AbstractParser);
 
 OnoffParser.prototype.compileImageUrl = function (language, link) {
   var that = this;
+
+  language = _.invert(that.languages)[language];
+
   return urlParser.resolve(that.config.index[language], link);
 };
 

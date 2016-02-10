@@ -3,7 +3,8 @@
 var util = require('util'),
   urlParser = require("url"),
   AbstractParser = require("./AbstractParser"),
-  utils = require("../services/Utils");
+  utils = require("../services/Utils"),
+  _ = require("underscore")._;
 
 function MinuvalikParser() {
   AbstractParser.call(this);
@@ -59,6 +60,9 @@ util.inherits(MinuvalikParser, AbstractParser);
 
 MinuvalikParser.prototype.compileImageUrl = function (language, link) {
   var that = this;
+
+  language = _.invert(that.languages)[language];
+
   return urlParser.resolve(that.config.index[language], link);
 };
 
