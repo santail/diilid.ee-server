@@ -2,8 +2,8 @@
   "offers": {
     "est": {
       "http://www.onoff.ee/audio-ja-video/kolarid-est/yamaha-ns555/": {
-        "save": "228",
-        "original": "249 €",
+        "price": "228",
+        "original_price": "249 €",
         "discount": "-8%",
         "long": "* KOGUS 1 TK * Magneetiliselt varjestatud * Võimsus (RMS / Maks.) 100W / 250W * Sagedus 35 Hz - 35 kHz * Tundlikkus 88 dB * Takistus 6 oomi",
         "pictures": [
@@ -16,8 +16,8 @@
     },
     "rus": {
       "http://www.onoff.ee/audio-i-hi-fi-tehnika/kolonki-rus/yamaha-ns555/": {
-        "save": "228",
-        "original": "249 €",
+        "price": "228",
+        "original_price": "249 €",
         "discount": "-8%",
         "short": "<tr> <td class=\"l_name\"><strong>Narva Fama keskus</strong>:</td> <td class=\"l_value\">2шт.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr> <tr> <td class=\"l_name\"><strong>Saaremaa Auriga keskus</strong>:</td> <td class=\"l_value\">6шт.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr> <tr> <td class=\"l_name\"><strong>Tallinn Mustika keskus</strong>:</td> <td class=\"l_value\">2шт.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr> <tr> <td class=\"l_name\"><strong>Tallinn Sikupilli keskus</strong>:</td> <td class=\"l_value\">2шт.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr> <tr> <td class=\"l_name\"><strong>Tallinn Tähesaju City</strong>:</td> <td class=\"l_value\">2шт.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr> <tr> <td class=\"l_name\"><strong>Tartu Lõunakeskus</strong>:</td> <td class=\"l_value\">2шт.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr> <tr> <td class=\"l_name\"><strong>Viljandi Männimäe keskus</strong>:</td> <td class=\"l_value\">2шт.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr>",
         "long": "* KOGUS 1 TK * Magneetiliselt varjestatud * Võimsus (RMS / Maks.) 100W / 250W * Sagedus 35 Hz - 35 kHz * Tundlikkus 88 dB * Takistus 6 oomi",
@@ -36,8 +36,8 @@
           "http://www.onoff.ee/images/items/504/1472165/330x330/1.jpg",
           "http://www.onoff.ee/images/items/504/1472165/330x330/2.jpg"
         ],
-        "save": "228",
-        "original": "249 €",
+        "price": "228",
+        "original_price": "249 €",
         "short": "<tr> <td class=\"l_name\"><strong>Narva Fama keskus</strong>:</td> <td class=\"l_value\">2pc.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr> <tr> <td class=\"l_name\"><strong>Saaremaa Auriga keskus</strong>:</td> <td class=\"l_value\">6pc.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr> <tr> <td class=\"l_name\"><strong>Tallinn Mustika keskus</strong>:</td> <td class=\"l_value\">2pc.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr> <tr> <td class=\"l_name\"><strong>Tallinn Sikupilli keskus</strong>:</td> <td class=\"l_value\">2pc.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr> <tr> <td class=\"l_name\"><strong>Tallinn Tähesaju City</strong>:</td> <td class=\"l_value\">2pc.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr> <tr> <td class=\"l_name\"><strong>Tartu Lõunakeskus</strong>:</td> <td class=\"l_value\">2pc.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr> <tr> <td class=\"l_name\"><strong>Viljandi Männimäe keskus</strong>:</td> <td class=\"l_value\">2pc.</td> </tr> <tr class=\"l_text\"> <td colspan=\"2\"><!--<div><br></div>--></td> </tr>",
         "title": "YAMAHA NS-555"
       }

@@ -41,14 +41,14 @@ function MinuvalikParser() {
       'long': function ($) {
         return utils.unleakString($('.deal_rules_td .dd_descr').first().html());
       },
-      'original': function ($) {
+      'original_price': function ($) {
         return utils.unleakString($('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.dd_basic_price').text());
       },
-      'discount': function ($) {
+      'price': function ($) {
         return utils.unleakString($('.deal_rules_td > div#parent_div > div> div.dd_table_price').text());
       },
-      'save': function ($) {
-        return utils.unleakString($('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.fl_deals_fp_discount_row').text());
+      'discount': function ($) {
+        return utils.unleakString($('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.fl_deals_fp_discount_row').text().replace(/alates |от /, ''));
       },
       'shop': 'Minuvalik.ee'
     }

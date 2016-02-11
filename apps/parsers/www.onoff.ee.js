@@ -52,10 +52,10 @@ function OnoffParser() {
         return utils.unleakString($('div.center_box__right > div.content.catalog > div.prod_in > div.prod_in__text').text());
 
       },
-      'original': function ($) {
+      'original_price': function ($) {
         return $('div.center_box__right > div.content.catalog > div.prod_in td.old_price > span').text();
       },
-      'save': function ($) {
+      'price': function ($) {
         var container = $('div.center_box__right > div.content.catalog > div.prod_in > form > div.shop_prod__price').first();
 
         container.children('span').remove();

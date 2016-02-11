@@ -70,10 +70,10 @@ function EuronicsParser() {
 
         return pictureUrls;
       },
-      'original': function  ($) {
+      'original_price': function  ($) {
         return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-bottom > ul > li > p > span.old-price').text().replace(/Норм. цена |Normal price |Norm hind /, ''));
       },
-      'sales': function ($) {
+      'price': function ($) {
         return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-bottom > ul > li > p > span.new-price').text());
       },
       'discount': function ($) {

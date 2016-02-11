@@ -89,7 +89,7 @@ function KriisisParser() {
 
         return utils.unleakString(description.text());
       },
-      'sales': function sales($) {
+      'price': function sales($) {
         if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 1) {
           return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').text().replace(/Hind: |Цена: /, ''));
         }

@@ -50,10 +50,10 @@ function ChillyParser() {
 
         return utils.unleakString(text);
       },
-      'original': function ($) {
+      'original_price': function ($) {
         return utils.unleakString($('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p > span').text().trim());
       },
-      'save': function ($) {
+      'price': function ($) {
         $('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p > span').remove();
 
         return $('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p').text().trim();

@@ -2,11 +2,11 @@
 
 var util = require('util'),
   urlParser = require("url"),
-  NoPagingAppliedParser = require("./NoPagingAppliedParser"),
+  AbstractParser = require("./AbstractParser"),
   utils = require("../services/Utils");
 
 function CherryParser() {
-  NoPagingAppliedParser.call(this);
+  AbstractParser.call(this);
 
   this.config = {
     'site': 'www.cherry.ee',
@@ -31,18 +31,15 @@ function CherryParser() {
         }).get();
       },
       'intro': function ($) {
-        // TODO needs to be cleared out
         return utils.unleakString($('#themainthing div.offer-details div.offer-contents div.left-side div#long_text_container').html());
       },
       'long': function ($) {
-        // TODO needs to be cleared out
         return utils.unleakString($('#themainthing div.offer-details div.offer-contents div.left-side > ul.pink-bullets').text());
-
       },
-      'original': function ($) {
+      'original_price': function ($) {
         return utils.unleakString($('div#deal-info > div.price-old').text()).replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').replace(/Tavahind: |Обычная цена: /, '').trim();
       },
-      'discount': function ($) {
+      'price': function ($) {
         return utils.unleakString($('div#deal-info > div.price-big').text()).replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').trim();
       }
 
@@ -50,7 +47,7 @@ function CherryParser() {
   };
 }
 
-util.inherits(CherryParser, NoPagingAppliedParser);
+util.inherits(CherryParser, AbstractParser);
 
 CherryParser.prototype.compileOfferUrl = function (language, link) {
   var that = this;

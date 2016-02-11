@@ -14,8 +14,8 @@
           "http://www.chilli.ee/upload/th_f7abff371696783baeeb0663f822cd44_1434612649.jpg",
           "http://www.chilli.ee/upload/th_e46f9b66e6a8a7248cad4bf599d9f56d_1434612649.jpg"
         ],
-        "save": "12.95€",
-        "original": "23.99€",
+        "price": "12.95€",
+        "original_price": "23.99€",
         "title": "Nordic Cake rikkaliku täidisega 2.5 kg kringel -46%"
       },
       "http://uus.chilli.ee/vaata-pakkumist/grand-rose-spa-hotell-04": {
@@ -27,8 +27,8 @@
           "http://chilli.ee/upload/128bb74c63288b0551154f359499a5cb_1454489372.jpg",
           "http://chilli.ee/upload/0d6efcbbcbaff9b3cb3578099dd1bc5a_1454489372.jpg"
       ],
-        "save": "79.95 - 99.95€",
-        "original": "152.00 - 222.00€"
+        "price": "79.95 - 99.95€",
+        "original_price": "152.00 - 222.00€"
       }
     },
     "rus": {
@@ -45,8 +45,8 @@
           "http://www.chilli.ee/upload/th_f7abff371696783baeeb0663f822cd44_1434612649.jpg",
           "http://www.chilli.ee/upload/th_e46f9b66e6a8a7248cad4bf599d9f56d_1434612649.jpg"
         ],
-        "save": "12.95€",
-        "original": "23.99€",
+        "price": "12.95€",
+        "original_price": "23.99€",
         "title": "C разнообразной начинкой, тающие во рту крендели по 2,5 кг -46%"
       },
       "http://ru.uus.chilli.ee/vaata-pakkumist/grand-rose-spa-hotell-04": {
@@ -58,8 +58,8 @@
           "http://chilli.ee/upload/128bb74c63288b0551154f359499a5cb_1454489372.jpg",
           "http://chilli.ee/upload/0d6efcbbcbaff9b3cb3578099dd1bc5a_1454489372.jpg"
       ],
-        "save": "79.95 - 99.95€",
-        "original": "152.00 - 222.00€"
+        "price": "79.95 - 99.95€",
+        "original_price": "152.00 - 222.00€"
       }
     }
   }

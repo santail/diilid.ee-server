@@ -7,7 +7,7 @@
         "pictures": [
           "http://www.kriisis.ee/testing/files/15-02-2016/147253.jpg"
         ],
-        "sales": "0.79€",
+        "price": "0.79€",
         "shop": "Maxima X",
         "title": "Hele õlu Alexander"
       },
@@ -17,7 +17,7 @@
         "pictures": [
           "http://www.kriisis.ee/testing/files/02-03-2016/146992.jpg"
         ],
-        "sales": "1.84€",
+        "price": "1.84€",
         "shop": "Prisma",
         "title": "Regatt Koorejäätis"
       },
@@ -26,7 +26,7 @@
         "pictures": [
                 "http://www.kriisis.ee/testing/files/12-07-2015/128314.jpg"
               ],
-        "sales": "1.99€",
+        "price": "1.99€",
         "shop": "Comarket",
         "title": "Nõo Moskva täissuitsuvorst 250 g",
         "details": ""
@@ -39,7 +39,7 @@
         "pictures": [
           "http://www.kriisis.ee/testing/files/15-02-2016/147253.jpg"
         ],
-        "sales": "0.79€",
+        "price": "0.79€",
         "shop": "Maxima X",
         "title": "Светлое пиво"
       },
@@ -49,7 +49,7 @@
         "pictures": [
           "http://www.kriisis.ee/testing/files/02-03-2016/146992.jpg"
         ],
-        "sales": "1.84€",
+        "price": "1.84€",
         "shop": "Prisma",
         "title": "Мороженое"
       },
@@ -58,7 +58,7 @@
         "pictures": [
           "http://www.kriisis.ee/testing/files/12-07-2015/128314.jpg"
           ],
-        "sales": "1.99€",
+        "price": "1.99€",
         "shop": "Comarket",
         "title": "Копченая колбаса Moskva",
         "details": "Nõo Moskva täissuitsuvorst 250 g"
