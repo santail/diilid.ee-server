@@ -264,6 +264,12 @@ Harvester.prototype.processSite = function (site, callback) {
         'error': err.message
       });
 
+      pmx.notify({
+        success : false,
+        'message': 'Error processing site ' + site,
+        'error': err.message
+      });
+
       return callback(err);
     }
 
