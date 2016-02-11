@@ -3,8 +3,7 @@
 var util = require('util'),
   urlParser = require("url"),
   AbstractParser = require("./AbstractParser"),
-  utils = require("../services/Utils"),
-  _ = require("underscore")._;
+  utils = require("../services/Utils");
 
 function MinuvalikParser() {
   AbstractParser.call(this);
@@ -13,8 +12,8 @@ function MinuvalikParser() {
 
   this.config = {
     'site': 'www.minuvalik.ee',
-    'cleanup': true,
-    'reactivate': false,
+    'cleanup': false,
+    'reactivate': true,
     'index': {
       'rus': 'https://www.minuvalik.ee/ru/?c=all',
       'est': 'https://www.minuvalik.ee/?c=all'

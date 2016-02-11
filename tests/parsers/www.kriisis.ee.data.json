@@ -1,0 +1,68 @@
+{
+  "offers": {
+    "est": {
+      "http://www.kriisis.ee/allahindlus?id=673031": {
+        "details": "5,2%, 568 ml",
+        "period": "09.02.2016 - 15.02.2016",
+        "pictures": [
+          "http://www.kriisis.ee/testing/files/15-02-2016/147253.jpg"
+        ],
+        "sales": "0.79€",
+        "shop": "Maxima X",
+        "title": "Hele õlu Alexander"
+      },
+      "http://www.kriisis.ee/view_sale.php?id=672772": {
+        "details": "480 g (3.73/kg)",
+        "period": "04.02.2016 - 02.03.2016",
+        "pictures": [
+          "http://www.kriisis.ee/testing/files/02-03-2016/146992.jpg"
+        ],
+        "sales": "1.84€",
+        "shop": "Prisma",
+        "title": "Regatt Koorejäätis"
+      },
+      "http://www.kriisis.ee/view_sale.php?id=654249": {
+        "period": "02.07.2015 - 12.07.2015",
+        "pictures": [
+                "http://www.kriisis.ee/testing/files/12-07-2015/128314.jpg"
+              ],
+        "sales": "1.99€",
+        "shop": "Comarket",
+        "title": "Nõo Moskva täissuitsuvorst 250 g",
+        "details": ""
+      }
+    },
+    "rus": {
+      "http://www.kriisis.ee/ru/view_sale.php?id=673031": {
+        "details": "5,2%, 568 ml Hele õlu Alexander",
+        "period": "09.02.2016 - 15.02.2016",
+        "pictures": [
+          "http://www.kriisis.ee/testing/files/15-02-2016/147253.jpg"
+        ],
+        "sales": "0.79€",
+        "shop": "Maxima X",
+        "title": "Светлое пиво"
+      },
+      "http://www.kriisis.ee/ru/view_sale.php?id=672772": {
+        "details": "480 g (3.73/kg) Regatt Koorejäätis",
+        "period": "04.02.2016 - 02.03.2016",
+        "pictures": [
+          "http://www.kriisis.ee/testing/files/02-03-2016/146992.jpg"
+        ],
+        "sales": "1.84€",
+        "shop": "Prisma",
+        "title": "Мороженое"
+      },
+      "http://www.kriisis.ee/ru/view_sale.php?id=654249": {
+        "period": "02.07.2015 - 12.07.2015",
+        "pictures": [
+          "http://www.kriisis.ee/testing/files/12-07-2015/128314.jpg"
+          ],
+        "sales": "1.99€",
+        "shop": "Comarket",
+        "title": "Копченая колбаса Moskva",
+        "details": "Nõo Moskva täissuitsuvorst 250 g"
+      }
+    }
+  }
+}

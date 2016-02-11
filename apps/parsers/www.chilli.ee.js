@@ -3,8 +3,7 @@
 var util = require('util'),
   urlParser = require("url"),
   AbstractParser = require("./AbstractParser"),
-  utils = require("../services/Utils"),
-  _ = require("underscore")._;
+  utils = require("../services/Utils");
 
 function ChillyParser() {
   AbstractParser.call(this);
@@ -16,8 +15,8 @@ function ChillyParser() {
     'cleanup': false,
     'reactivate': true,
     'index': {
-      'rus': 'http://ru.chilli.ee/?old-design=1',
-      'est': 'http://www.chilli.ee/?old-design=1'
+      'rus': 'http://ru.chilli.ee/',
+      'est': 'http://www.chilli.ee/'
     },
     'list': function ($) {
       return $('div.product-container > div.product > div.product-img > a').map(function () {
@@ -26,38 +25,38 @@ function ChillyParser() {
     },
     'templates': {
       'title': function ($) {
-        return utils.unleakString($('.product-container.single-product div.product > div.product-desc > h1').text());
+        return utils.unleakString($('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > h1').text());
       },
       'pictures': function ($, language) {
         var pictureUrls = [];
 
-        $('.product-container.single-product div.product > div.product-img ul > li > img').each(function () {
-          pictureUrls.push(that.compileImageUrl(language, utils.unleakString($(this).attr('src'))));
+        $('body > div.listing-details > div.listing-main.grid-container > div.listing-images > div.image-gallery a').each(function () {
+          pictureUrls.push(that.compileImageUrl(language, utils.unleakString($(this).attr('href'))));
         });
 
-        $('div.main-content div.gallery > img').each(function () {
+        $('body > div.listing-details > div:nth-child(3) > div.listing-description > div.listing-media > img').each(function () {
           pictureUrls.push(that.compileImageUrl(language, utils.unleakString($(this).attr('src'))));
         });
 
         return pictureUrls;
       },
       'long': function ($) {
-        return utils.unleakString($('div.main-content .content').eq(1).html());
+        return utils.unleakString($('body > div.listing-details > div:nth-child(3) > div.listing-description > p:nth-child(5)').html());
       },
-      'condition': function ($) {
-        return utils.unleakString($('div.main-content .content').first().html());
+      'details': function ($) {
+        var text = $('body > div.listing-details > div:nth-child(3) > div.listing-description > ul:nth-child(2)').html();
 
+        text += $('body > div.listing-details > div:nth-child(3) > div.listing-description > ul:nth-child(3)').html();
+
+        return utils.unleakString(text);
       },
       'original': function ($) {
-        $('.product-container.single-product div.product > div.product-desc > div.bottom > div.price-box > p.special-price > span.old-price > span.old-price-text').remove();
-
-        return utils.unleakString($('.product-container.single-product div.product > div.product-desc > div.bottom > div.price-box > p.special-price > span.old-price').text()).replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').trim();
+        return utils.unleakString($('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p > span').text().trim());
       },
-      'discount': function ($) {
-        $('.product-container.single-product div.product > div.product-desc > div.bottom > div.price-box > p.special-price > span.old-price').remove();
+      'save': function ($) {
+        $('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p > span').remove();
 
-        return utils.unleakString($('.product-container.single-product div.product > div.product-desc > div.bottom > div.price-box > p.special-price').text()).replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').trim();
-
+        return $('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p').text().trim();
       }
     }
   };
@@ -67,14 +66,15 @@ util.inherits(ChillyParser, AbstractParser);
 
 ChillyParser.prototype.compileOfferUrl = function (language, link) {
   var that = this;
+
   return urlParser.resolve(that.config.index[language], link);
 };
 
 ChillyParser.prototype.compileImageUrl = function (language, link) {
   var that = this;
-  
+
   language = that.languages_reverse[language];
-  
+
   return urlParser.resolve(that.config.index[language], link);
 };
 

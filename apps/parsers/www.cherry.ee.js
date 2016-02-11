@@ -40,7 +40,7 @@ function CherryParser() {
 
       },
       'original': function ($) {
-        return utils.unleakString($('div#deal-info > div.price-old').text()).replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').trim();
+        return utils.unleakString($('div#deal-info > div.price-old').text()).replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').replace(/Tavahind: |Обычная цена: /, '').trim();
       },
       'discount': function ($) {
         return utils.unleakString($('div#deal-info > div.price-big').text()).replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').trim();
