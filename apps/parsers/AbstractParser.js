@@ -81,7 +81,7 @@ AbstractParser.prototype.parseResponseBody = function (data, callback) {
           lowerCaseAttributeNames: true,
           recognizeCDATA: true,
           recognizeSelfClosing: true,
-          decodeEntities: true
+          decodeEntities: false
         });
 
         body = null;
@@ -409,7 +409,10 @@ AbstractParser.prototype.fetchOffer = function (event, callback) {
   async.waterfall([
     function requestOffer(done) {
       LOG.profile('Retrieve offer');
-      request.get(url, {
+
+      request({
+        method: "GET",
+        uri: url,
         headers: {
           'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
           'accept-language': 'en-US,en;q=0.8',
@@ -476,8 +479,6 @@ AbstractParser.prototype.fetchOffer = function (event, callback) {
         'active': true,
         'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
       });
-
-      console.log(offer);
 
       done(null, offer);
     }],
