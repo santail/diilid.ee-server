@@ -82,8 +82,6 @@ Notifier.prototype.aggregateResult = function aggregateResult(err, res) {
 
   _.each(res, function iterateResult(result) {
 
-    console.log(res);
-
     var email = result._id,
       wishes = result.wishes,
       notifications = [];
