@@ -40,7 +40,7 @@ function ChillyParser() {
 
         return pictureUrls;
       },
-      'long': function ($) {
+      'description': function ($) {
         return utils.unleakString($('body > div.listing-details > div:nth-child(3) > div.listing-description > p:nth-child(5)').html());
       },
       'details': function ($) {

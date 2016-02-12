@@ -79,7 +79,7 @@ function EuronicsParser() {
       'discount': function ($) {
         return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-bottom > ul > li > p > span.discount').text());
       },
-      'short': function ($) {
+      'description': function ($) {
         return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-description > div[class!="oi-fb-like"]').html());
       },
       'shop': 'euronics.ee'

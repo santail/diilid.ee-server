@@ -30,10 +30,10 @@ function CherryParser() {
           return utils.unleakString($(this).attr('src'));
         }).get();
       },
-      'intro': function ($) {
+      'description': function ($) {
         return utils.unleakString($('#themainthing div.offer-details div.offer-contents div.left-side div#long_text_container').html());
       },
-      'long': function ($) {
+      'details': function ($) {
         return utils.unleakString($('#themainthing div.offer-details div.offer-contents div.left-side > ul.pink-bullets').text());
       },
       'original_price': function ($) {

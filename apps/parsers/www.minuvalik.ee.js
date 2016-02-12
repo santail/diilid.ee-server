@@ -32,13 +32,13 @@ function MinuvalikParser() {
           return that.compileImageUrl(language, utils.unleakString($(this).attr('href')));
         }).get();
       },
-      'intro': function ($) {
+      'additional': function ($) {
         return utils.unleakString($('.deal_rules_td .dd_lead').html());
       },
-      'short': function ($) {
+      'description': function ($) {
         return utils.unleakString($('.deal_rules_td .dd_descr').eq(1).html());
       },
-      'long': function ($) {
+      'details': function ($) {
         return utils.unleakString($('.deal_rules_td .dd_descr').first().html());
       },
       'original_price': function ($) {
