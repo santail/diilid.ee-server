@@ -12,13 +12,15 @@ function Messenger() {
 Messenger.prototype.init = function () {};
 
 Messenger.prototype.send = function (notifications) {
+  var that = this;
+
   console.log(notifications);
 
   _.each(notifications, function (notification) {
-    this.sendEmail(notification.email, notification.offers);
+    that.sendEmail(notification.email, notification.offers);
 
     if (notification.phone) {
-      this.sendSms(notification.phone, notification.offers);
+      that.sendSms(notification.phone, notification.offers);
     }
   });
 };
