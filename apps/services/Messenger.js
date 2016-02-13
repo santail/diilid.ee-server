@@ -11,14 +11,16 @@ function Messenger() {
 
 Messenger.prototype.init = function () {};
 
-Messenger.prototype.send = function (notification) {
-  console.log(notification);
+Messenger.prototype.send = function (notifications) {
+  console.log(notifications);
 
-  this.sendEmail(notification.email, notification.offers);
+  _.each(notifications, function (notification) {
+    this.sendEmail(notification.email, notification.offers);
 
-  if (notification.phone) {
-    this.sendSms(notification.phone, notification.offers);
-  }
+    if (notification.phone) {
+      this.sendSms(notification.phone, notification.offers);
+    }
+  });
 };
 
 Messenger.prototype.sendEmail = function (email, offers) {
@@ -84,15 +86,7 @@ Messenger.prototype.compileEmailBody = function (offers) {
     body += '<p><a href="' + offer.url + '" title="' + offer.title + '" />' + offer.title + '</a> ' + offer.site + '</p>';
   });
 
-  return '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' + '<tr>' + '<td align="center">' + '<center style="max-width: 600px; width: 100%;">' + '<!--[if gte mso 9]>' + '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0"><tr><td>' + '<![endif]-->' + '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' + '<tr>' + '<td>' + '<!--[if gte mso 9]>' + '<table border="0" cellpadding="0" cellspacing="0">' + '<tr><td align="center">' + '<table border="0" cellpadding="0" cellspacing="0" width="300"     align="center"><tr><td>' + '<![endif]-->'
-    +'<!-- Блок номер 1 -->'
-    + '<span style="display:inline-block; width:300px;">' + body + '</span>'
-    + '<!-- Блок номер 1 -->'
-    + '<!--[if gte mso 9]>' + '</td></tr></table>' + '</td>' + '<td align="center">' + '<table border="0" cellpadding="0" cellspacing="0" align="center"><tr><td>' + '<![endif]-->'
-    + '<!-- Блок номер 2 -->'
-    + '<span style="display:inline-block; width:300px;">' + 'Контент блока' + '</span>'
-    + '<!-- Блок номер 2 -->'
-    + '<!--[if gte mso 9]>' + '</td></tr></table>' + '</td>' + '</tr></table>' + '<![endif]-->' + '</td>' + '</tr>' + '</table>' + '<!--[if gte mso 9]>' + '</td>' + '</tr>' + '</table>' + '<![endif]-->' + '</center>   ' + '</td>' + '</tr>' + '</table>';
+  return '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' + '<tr>' + '<td align="center">' + '<center style="max-width: 600px; width: 100%;">' + '<!--[if gte mso 9]>' + '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0"><tr><td>' + '<![endif]-->' + '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' + '<tr>' + '<td>' + '<!--[if gte mso 9]>' + '<table border="0" cellpadding="0" cellspacing="0">' + '<tr><td align="center">' + '<table border="0" cellpadding="0" cellspacing="0" width="300"     align="center"><tr><td>' + '<![endif]-->' + '<!-- Блок номер 1 -->' + '<span style="display:inline-block; width:300px;">' + body + '</span>' + '<!-- Блок номер 1 -->' + '<!--[if gte mso 9]>' + '</td></tr></table>' + '</td>' + '<td align="center">' + '<table border="0" cellpadding="0" cellspacing="0" align="center"><tr><td>' + '<![endif]-->' + '<!-- Блок номер 2 -->' + '<span style="display:inline-block; width:300px;">' + 'Контент блока' + '</span>' + '<!-- Блок номер 2 -->' + '<!--[if gte mso 9]>' + '</td></tr></table>' + '</td>' + '</tr></table>' + '<![endif]-->' + '</td>' + '</tr>' + '</table>' + '<!--[if gte mso 9]>' + '</td>' + '</tr>' + '</table>' + '<![endif]-->' + '</center>   ' + '</td>' + '</tr>' + '</table>';
 };
 
 Messenger.prototype.compileSmsBody = function (offers) {
