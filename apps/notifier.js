@@ -83,8 +83,7 @@ Notifier.prototype.aggregateResult = function aggregateResult(err, res) {
   _.each(res, function iterateResult(result) {
 
     var email = result._id,
-      wishes = result.wishes,
-      notifications = [];
+      wishes = result.wishes;
 
     LOG.info(util.format('[STATUS] [OK] Found %d wishes. Processing.', _.size(wishes)));
 
@@ -114,23 +113,22 @@ Notifier.prototype.aggregateResult = function aggregateResult(err, res) {
 
             LOG.info(util.format('[STATUS] [OK] %d offers containing "%s" found', _.size(offers), wish.contains));
 
-            var content = {
+            var notification = {
+              email: email,
               contains: wish.contains,
               offers: offers
             };
 
             if (wish.phone) {
-              content.phone = wish.phone;
+              notification.phone = wish.phone;
             }
 
-            notifications.push(content);
-
-            done();
+            done(null, notification);
           });
         };
       });
 
-      async.series(functions, function (err) {
+      async.series(functions, function (err, notifications) {
         if (err) {
           LOG.error({
             'message': 'Error enqueueing offers for site ',
@@ -138,7 +136,7 @@ Notifier.prototype.aggregateResult = function aggregateResult(err, res) {
           });
         }
 
-        messenger.sendNotification(email, notifications);
+        messenger.send(notifications);
       });
   });
 };

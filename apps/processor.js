@@ -82,8 +82,6 @@ worker.register({
           LOG.info('[STATUS] [OK] [', site, '] Saving offer with id ', parser.getOfferId(offer));
 
           db.offers.save(offer, function saveOfferResult(err, saved) {
-            console.log(saved);
-
             if (err || !saved) {
               LOG.error({
                 'message': 'Error saving offer',

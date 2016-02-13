@@ -11,8 +11,14 @@ function Messenger() {
 
 Messenger.prototype.init = function () {};
 
-Messenger.prototype.sendNotification = function (email, notification) {
-  console.log(email, notification);
+Messenger.prototype.send = function (notification) {
+  console.log(notification);
+
+  this.sendEmail(notification.email, notification.offers);
+
+  if (notification.phone) {
+    this.sendSms(notification.phone, notification.offers);
+  }
 };
 
 Messenger.prototype.sendEmail = function (email, offers) {
