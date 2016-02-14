@@ -62,7 +62,8 @@ var config = {
     'www.chilli.ee': true,
     'www.euronics.ee': true,
     'www.kriisis.ee': true,
-    'www.onoff.ee': true
+    'www.onoff.ee': true,
+    'www.selver.ee': true
   },
   'appdynamics': {
     controllerHostName: 'paid130.saas.appdynamics.com',
