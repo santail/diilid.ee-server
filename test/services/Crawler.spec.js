@@ -3,7 +3,7 @@ var request = require('request'),
   should = require('should'),
   Crawler = require('../../apps/services/Crawler');
 
-describe('Crawler service', function () {
+describe.skip('Crawler service', function () {
 
   beforeEach(function() {
 		this.request = sinon.stub(request, 'get');
