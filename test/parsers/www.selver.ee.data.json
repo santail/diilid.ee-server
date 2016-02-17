@@ -3,9 +3,9 @@
     "est": {
       "http://www.selver.ee/keskmiselt-vurtsikas-sampinjoniletso-bonduelle-450-g": {
         "pictures": [
-          "http//m1.selver.ee/media/catalog/product/cache/1/image/800x/d59bd2a068f4c8c3ce8deca80ed0c2f4/5/9/5900281002982.jpg"
+          "http//m1.selver.ee/media/catalog/product/cache/1/image/800x/32f7925e8bac497a1d65183a10e7db32/5/9/5900281002982.jpg"
         ],
-        "price": "1.19",
+        "price": "1,19 €",
         "original_price": "1,59 €",
         "shop": "Selver",
         "title": "Keskmiselt vürtsikas šampinjoniletšo, BONDUELLE, 450 g",
@@ -13,9 +13,9 @@
       },
       "http://www.selver.ee/patareid-d-panasonic-2-tk-1": {
         "pictures": [
-          "http//m1.selver.ee/media/catalog/product/cache/1/image/800x/b26d4b50364c3045a73a324b7db1ad1c/5/4/5410853045120.jpg"
+          "http//m1.selver.ee/media/catalog/product/cache/1/image/800x/43c40180888385aae88264a1f5475892/5/4/5410853045120.jpg"
         ],
-        "price": "3.29",
+        "price": "3,29 €",
         "original_price": "4,59 €",
         "shop": "Selver",
         "title": "Patareid LR20EGE/D, PANASONIC, 2 tk",
@@ -23,13 +23,23 @@
       },
       "http://www.selver.ee/kehaemulsioon-sugavniisutav-tundlikule-neutrogena-250-ml": {
         "pictures": [
-          "http//m1.selver.ee/media/catalog/product/cache/1/image/800x/f4dd60f81d5459f8bdf3a693c7df76fa/3/5/3574660717723.jpg"
+          "http//m1.selver.ee/media/catalog/product/cache/1/image/800x/07da45b557b80abebc6e53da65261f3a/3/5/3574660717723.jpg"
         ],
-        "price": "4.29",
+        "price": "4,29 €",
         "original_price": "5,99 €",
         "shop": "Selver",
         "title": "Kehaemulsioon sügavniisutav tundlikule, NEUTROGENA, 250 ml",
         "description": "Neutrogena sügavniisutav ihupiim tundlikule nahale. Kuiva naha probleeme leevendav toime on kliiniliselt tõestatud. Niisutab hetkega, nahk on silmanähtavalt siledam, pehmem. Vähendab karedust ja kuivust juba esimesel kasutamisel.Kasutades igapäevaselt paistab nahk kaunis ja terve. Eriti kiirelt imenduv tekstuur. Ei sisalda lõhnaaineid, ei tekita allergilisi reaktsioone."
+      },
+      "http://www.selver.ee/multimahlajook-star-wars-ullatusmunaga-suprise-drinks-300-ml-1": {
+        "description": "Multimahlajook + üllatusmuna",
+        "original_price": "1,29 €",
+        "pictures": [
+          "http//m2.selver.ee/media/catalog/product/cache/1/image/800x/0ee0b02feb2d48d6d15c8f7c3d53228c/4/7/4742493000193.jpg"
+        ],
+        "price": "0,89 €",
+        "shop": "Selver",
+        "title": "Multimahlajook Star Wars üllatusmunaga, SUPRISE DRINKS, 300 ml"
       }
     }
   }

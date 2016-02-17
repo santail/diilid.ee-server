@@ -52,19 +52,19 @@ function SelverParser() {
         return 'Selver';
       },
       'title': function ($, language) {
-        return utils.unleakString($('#simple-product-wrapper > div.product-essential.row div.page-title > h1').text());
+        return utils.unleakString($('div.product-essential.row div.page-title > h1').text());
       },
       'description': function ($) {
-        return utils.unleakString($('#simple-product-wrapper > div.product-essential.row div > span[itemprop="description"]').text());
+        return utils.unleakString($('div.product-essential.row div > span[itemprop="description"]').text());
       },
       'pictures': function ($, language) {
         return [utils.unleakString(that.compileImageUrl(language, $('#main-image-default > a').attr('href')))];
       },
       'price': function ($) {
-        return utils.unleakString($('#simple-product-wrapper > div.product-essential.row div p.special-price span[itemprop="price"]').attr('content'));
+        return utils.unleakString($('div.product-essential div.price-box:first-child p.special-price span.price > span:nth-child(1)').text());
       },
       'original_price': function ($) {
-        return utils.unleakString($('#simple-product-wrapper > div.product-essential.row div p.old-price > span.price > span:first-child').text());
+        return utils.unleakString($('div.product-essential div.price-box:nth-child(1) p.old-price span.price > span:nth-child(1)').text());
       }
     }
   };
