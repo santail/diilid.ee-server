@@ -44,7 +44,8 @@ worker.register({
           },
           update: {
             $set: {
-              active: true
+              active: true,
+              modified: new Date().toISOString()
             }
           },
           'new': false

@@ -185,8 +185,7 @@ Harvester.prototype.harvestSite = function (site, callback) {
             'site': site
           }, {
             $set: {
-              active: false,
-              modified: new Date()
+              active: false
             }
           }, {
             'multi': true,
