@@ -125,7 +125,7 @@ PrismamarketParser.prototype.processPage = function (url, language, processOffer
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
             'Accept-Encoding': 'gzip, deflate, sdch',
             'Accept-Language': 'en-US,en;q=0.8,ru;q=0.6,et;q=0.4',
-            'Cookie': 'is_new_user=1; _session_id=f75f4c398e0259d5b1545026ca7cf2a5'
+            'Cookie': 'is_new_user=1; _session_id=b426f59445bc396cfbbb78f8f0668beb'
           }
         },
         function (err, response, data) {
