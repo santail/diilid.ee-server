@@ -15,8 +15,8 @@ function ChillyParser() {
     'cleanup': false,
     'reactivate': true,
     'index': {
-      'rus': 'http://ru.chilli.ee/',
-      'est': 'http://www.chilli.ee/'
+      'rus': 'http://ru.chilli.ee/?old-design=1',
+      'est': 'http://www.chilli.ee/?old-design=1'
     },
     'list': function ($) {
       return $('div.product-container > div.product > div.product-img > a').map(function () {
