@@ -93,7 +93,7 @@ agenda.define('execute procurer', function (job, done) {
   });
 });
 
-agenda.every(config.procurer.execution.rule, 'execute procurer');
 agenda.every(config.harvester.execution.rule, 'execute harvester');
+agenda.every(config.procurer.execution.rule, 'execute procurer');
 
 agenda.start();
