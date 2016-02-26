@@ -7,6 +7,11 @@ var config = {
     dir: __dirname + '/public/images/',
     thumbs: []
   },
+  procurer: {
+    execution: {
+      rule: '30 seconds' // every 2 minutes
+    }
+  },
   harvester: {
     proxies: [
       // 'http://46.101.248.216:8888/'
@@ -56,13 +61,14 @@ var config = {
   },
   activeSites: {
     'www.pakkumised.ee': false,
-    'www.prismamarket.ee': false,
-    'www.minuvalik.ee': false,
+    'www.e-maxima.ee': false,
     'www.cherry.ee': false,
     'www.chilli.ee': false,
     'www.euronics.ee': false,
     'www.kriisis.ee': false,
+    'www.minuvalik.ee': false,
     'www.onoff.ee': false,
+    'www.prismamarket.ee': false,
     'www.selver.ee': false
   },
   'appdynamics': {
