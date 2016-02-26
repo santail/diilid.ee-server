@@ -220,11 +220,11 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
     url = that.config.index[language];
 
   LOG.info(util.format('[STATUS] [OK] [%s] [%s] Gathering offers from %s', site, language, url));
-  
+
   async.waterfall([
       function stepRetrieveIndexPage(done) {
         LOG.profile('IndexRequest');
-  
+
         request({
           method: 'GET',
           uri: url,
@@ -242,9 +242,9 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
               'error': err.message
             });
           }
-  
+
           LOG.profile('IndexRequest');
-  
+
           return done(err, utils.unleakString(data));
         });
       },
@@ -256,7 +256,7 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
               'error': err.message
             });
           }
-  
+
           done(err, dom);
         });
       },
@@ -265,43 +265,43 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
           var pagingParams = that.getPagingParameters(language, dom);
           var pages = pagingParams.pages,
             pagesNumber = _.size(pages);
-  
+
           var functions = _.map(pages, function (pageUrl, index) {
             return function (finishPageProcessing) {
               LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing page %s of %s', site, language, index + 1, pagesNumber));
-  
+
               dom = null;
-  
+
               return that.processPage(pageUrl, language, processOffer, finishPageProcessing);
             };
           });
-  
+
           async.series(functions, done);
         }
         else {
           var offers = that.getOffers(dom, language),
             linksNumber = _.size(offers);
-  
+
           dom = null;
-  
+
           LOG.debug('Total links found on page', linksNumber);
-  
+
           that.processOffers(language, offers, processOffer, done);
         }
       }
-    ], 
+    ],
     function onSiteIndexPageProcessed(err, result) {
       if (err) {
         LOG.error({
           'message': util.format('Error processing index page for %s language %s', site, language),
           'error': err.message
         });
-  
+
         return callback(err);
       }
-  
+
       LOG.profile('Harvester.gatherOffers');
-  
+
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] Gathering offers from %s finished', site, language, url));
 
       return callback();
@@ -401,12 +401,12 @@ AbstractParser.prototype.processOffers = function (language, offers, processOffe
   })(this, language, offers, processOffer, callback);
 };
 
-AbstractParser.prototype.fetchOffer = function (event, callback) {
+AbstractParser.prototype.fetchOffer = function (options, callback) {
   var that = this,
-    id = event.id,
-    site = event.site,
-    language = event.language,
-    url = event.url;
+    id = options.id,
+    site = options.site,
+    language = options.language,
+    url = options.url;
 
   LOG.info(util.format('[STATUS] [OK] [%s] [%s] Retrieving offer %s', site, language, url));
 

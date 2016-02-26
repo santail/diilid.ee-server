@@ -64,7 +64,7 @@ Processor.prototype.run = function (options, callback) {
     else {
       LOG.profile('Harvester.processOffer');
 
-      parser.fetchOffer(event, function (err, offer) {
+      parser.fetchOffer(options, function (err, offer) {
         if (err) {
           LOG.error({
             'message': 'Error fetching offer',
