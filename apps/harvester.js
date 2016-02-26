@@ -47,6 +47,18 @@ var pmx = require('pmx').init({
   ports         : true  // Shows which ports your app is listening on (default: false)
 });
 
+var worker = Sessionfactory.getWorkerConnection(['offers_queue']);
+
+worker.register({
+  'harvester_run_event': function harvesterRunEventHandler(event, done) {
+    var harvester = new Harvester();
+
+    var options = _.extend(event, {});
+
+    harvester.run(options, done);
+  }
+});
+
 var Harvester = function () {
   this.db = Sessionfactory.getDbConnection('');
   this.queue = Sessionfactory.getQueueConnection('offers_queue');

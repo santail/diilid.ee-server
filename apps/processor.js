@@ -1,7 +1,19 @@
 var LOG = require("./services/Logger"),
   parserFactory = require("./services/ParserFactory"),
-  Sessionfactory = require("./services/SessionFactory");
+  Sessionfactory = require("./services/SessionFactory"),
+  _ = require('underscore')._;
 
+var worker = Sessionfactory.getWorkerConnection(['offers_queue']);
+
+worker.register({
+  'offer_fetch_event': function offerFetchEventHandler(event, done) {
+    var processor = new Processor();
+
+    var options = _.extend(event, {});
+
+    processor.run(options, done);
+  }
+});
 
 var Processor = function () {
   this.db = Sessionfactory.getDbConnection();

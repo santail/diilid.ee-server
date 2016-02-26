@@ -5,6 +5,18 @@ var
   util = require("util"),
   Sessionfactory = require("./services/SessionFactory");
 
+var worker = Sessionfactory.getWorkerConnection(['offers_queue']);
+
+worker.register({
+  'procurer_run_event': function procurerRunEventHandler(event, done) {
+    var procurer = new Procurer();
+
+    var options = _.extend(event, {});
+
+    procurer.run(options, done);
+  }
+});
+
 var Procurer = function () {
   this.db = Sessionfactory.getDbConnection();
   this.queue = Sessionfactory.getQueueConnection('offers_queue');
