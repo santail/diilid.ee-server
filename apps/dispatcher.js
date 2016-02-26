@@ -13,7 +13,7 @@ worker.register({
   'offer_fetch_event': function offerFetchEventHandler(event, done) {
     var processor = new Processor();
 
-    var options = {};
+    var options = _.extend(event, {});
 
     processor.run(options, done);
   }
@@ -23,7 +23,7 @@ worker.register({
   'procurer_run_event': function procurerRunEventHandler(event, done) {
     var procurer = new Procurer();
 
-    var options = {};
+    var options = _.extend(event, {});
 
     procurer.run(options, done);
   }
@@ -43,9 +43,7 @@ worker.register({
   'harvester_run_event': function harvesterRunEventHandler(event, done) {
     var harvester = new Harvester();
 
-    var options = {
-      "site": event.site
-    };
+    var options = _.extend(event, {});
 
     harvester.run(options, done);
   }
