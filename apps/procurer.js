@@ -17,6 +17,8 @@ worker.register({
   }
 });
 
+worker.start();
+
 var Procurer = function () {
   this.db = Sessionfactory.getDbConnection();
   this.queue = Sessionfactory.getQueueConnection('offers_queue');

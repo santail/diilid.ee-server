@@ -15,6 +15,8 @@ worker.register({
   }
 });
 
+worker.start();
+
 var Processor = function () {
   this.db = Sessionfactory.getDbConnection();
 };

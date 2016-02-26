@@ -59,6 +59,8 @@ worker.register({
   }
 });
 
+worker.start();
+
 var Harvester = function () {
   this.db = Sessionfactory.getDbConnection('');
   this.queue = Sessionfactory.getQueueConnection('offers_queue');
