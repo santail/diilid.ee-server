@@ -216,7 +216,7 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
 
   var runningTime = new Date();
 
-  if (event.reprocessing || eventtest) {
+  if (event.reprocessing || event.test) {
 
   }
   else {
