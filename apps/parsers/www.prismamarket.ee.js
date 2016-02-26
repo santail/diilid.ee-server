@@ -216,18 +216,26 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
 
   var runningTime = new Date();
 
+  if (event.reprocessing || test) {
+
+  }
+  else {
+
+  }
+
   var offer = {
     'id': id,
     'site': site,
     'language': language,
     'active': true,
+    'url': util.format('https://www.prismamarket.ee/api/?path=entry&ean=%s', event.ean),
     'title': event.name,
     'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear(),
     'campaign_start': event.campaign_start,
     'campaign_end': event.campaign_end,
     'price': event.price,
     'original_price': event.original_price,
-    'pictures': [ "https://s3-eu-west-1.amazonaws.com/balticsimages/images/320x480/" + event.image_guid + ".png"],
+    'pictures': [ util.format("https://s3-eu-west-1.amazonaws.com/balticsimages/images/320x480/%s.png", event.image_guid)],
     'subname': event.subname,
     'quantity': event.quantity,
     'unit_name': event.unit_name,
