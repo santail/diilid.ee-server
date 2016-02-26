@@ -8,11 +8,25 @@ var expect = require('chai').expect,
 _.each(conf.activeSites, function (active, site) {
   if (active) {
     var Parser = require('../../apps/parsers/' + site + '.js');
+
+    Parser.prototype.processOffers = function (language, offers, processOffer, done) {
+      expect(offers).to.not.be.empty;
+      
+      done();
+    };
+    
     var parser = new Parser();
 
     describe(parser.config.site, function () {
 
       var data = JSON.parse(fs.readFileSync(__dirname + '/' + parser.config.site + '.data.json', 'utf8'));
+
+      _.each(parser.config.index, function (url, language) {
+
+        it(language + ' should return none empty list of offer hrefs', function (done) {
+          parser.gatherOffers(language, function (offer) {}, done);
+        });
+      });
 
       _.each(data.offers, function (urls, language) {
 
@@ -31,7 +45,6 @@ _.each(conf.activeSites, function (active, site) {
                 expect(res).to.not.be.empty;
 
                 var runningTime = new Date();
-
 
                 data.site = event.site;
                 data.active = true;

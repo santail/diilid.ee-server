@@ -4,7 +4,8 @@ var _ = require("underscore")._,
   async = require('async'),
   LOG = require("../services/Logger"),
   utils = require("../services/Utils"),
-  request = require('request');
+  request = require('request'),
+  util = require("util");
 
 function AbstractParser() {
   this.config = {};
@@ -141,10 +142,10 @@ AbstractParser.prototype.getOffers = function (dom, language) {
 
   return _.map(links, function (link) {
     return {
-     'id': that.compileOfferUrl(language, link),
-     'site': that.config.site,
-     'language': that.languages[language],
-     'url': that.compileOfferUrl(language, link)
+      'id': that.compileOfferUrl(language, link),
+      'site': that.config.site,
+      'language': that.languages[language],
+      'url': that.compileOfferUrl(language, link)
     };
   });
 };
@@ -215,16 +216,15 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
   LOG.profile('Harvester.gatherOffers');
 
   var that = this,
-    site = that.config.site;
+    site = that.config.site,
+    url = that.config.index[language];
 
-  LOG.info('[STATUS] [OK] [', site, '] [', language, '] Processing started');
-
-    async.waterfall([
+  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Gathering offers from %s', site, language, url));
+  
+  async.waterfall([
       function stepRetrieveIndexPage(done) {
         LOG.profile('IndexRequest');
-
-        var url = that.config.index[language];
-
+  
         request({
           method: 'GET',
           uri: url,
@@ -242,9 +242,9 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
               'error': err.message
             });
           }
-
+  
           LOG.profile('IndexRequest');
-
+  
           return done(err, utils.unleakString(data));
         });
       },
@@ -256,7 +256,7 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
               'error': err.message
             });
           }
-
+  
           done(err, dom);
         });
       },
@@ -265,46 +265,48 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
           var pagingParams = that.getPagingParameters(language, dom);
           var pages = pagingParams.pages,
             pagesNumber = _.size(pages);
-
+  
           var functions = _.map(pages, function (pageUrl, index) {
             return function (finishPageProcessing) {
-              LOG.info('[STATUS] [OK] [', site, '] [', language, '] Processing page ' + (index + 1) + ' of ' + pagesNumber);
-
+              LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing page %s of %s', site, language, index + 1, pagesNumber));
+  
               dom = null;
-
+  
               return that.processPage(pageUrl, language, processOffer, finishPageProcessing);
             };
           });
-
+  
           async.series(functions, done);
         }
         else {
           var offers = that.getOffers(dom, language),
             linksNumber = _.size(offers);
-
+  
           dom = null;
-
+  
           LOG.debug('Total links found on page', linksNumber);
-
+  
           that.processOffers(language, offers, processOffer, done);
         }
       }
-    ], function onSiteIndexPageProcessed(err, result) {
+    ], 
+    function onSiteIndexPageProcessed(err, result) {
       if (err) {
         LOG.error({
-          'message': 'Error processing index page for ' + site + 'language ' + language ,
+          'message': util.format('Error processing index page for %s language %s', site, language),
           'error': err.message
         });
-
+  
         return callback(err);
       }
-
+  
       LOG.profile('Harvester.gatherOffers');
-
-      LOG.info('[STATUS] [OK] [', site, '] [', language, '] Processing finished');
+  
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Gathering offers from %s finished', site, language, url));
 
       return callback();
-    });
+    }
+  );
 };
 
 AbstractParser.prototype.processPage = function (url, language, processOffer, callback) {
@@ -313,7 +315,7 @@ AbstractParser.prototype.processPage = function (url, language, processOffer, ca
   var that = this,
     site = that.config.site;
 
-  LOG.debug('Processing page for', site, 'language', language, ':', url);
+  LOG.debug(util.format('Processing page for %s language %s: %s', site, language, url));
 
   async.waterfall([
     function (done) {
@@ -328,7 +330,7 @@ AbstractParser.prototype.processPage = function (url, language, processOffer, ca
           function (err, response, data) {
             if (err) {
               LOG.error({
-                'message': 'Error retrieving page for ' + site + ' language ' + language + ': ' + url,
+                'message': util.format('Error retrieving page for %s language %s: %s', site, language, url),
                 'error': err.message
               });
             }
@@ -361,7 +363,7 @@ AbstractParser.prototype.processPage = function (url, language, processOffer, ca
         done(null, offers);
     },
     function (offers, done) {
-      that.processOffers(language, offers, processOffer, done);
+        that.processOffers(language, offers, processOffer, done);
     }],
     function (err, result) {
       LOG.profile('Harvester.processPage');
@@ -377,7 +379,9 @@ AbstractParser.prototype.processOffers = function (language, offers, processOffe
 
     var functions = _.map(offers, function (offer) {
       return function (done) {
-        offer = _.extend(offer, {id: that.getOfferId(offer)});
+        offer = _.extend(offer, {
+          id: that.getOfferId(offer)
+        });
 
         processOffer(offer, done);
       };
@@ -394,7 +398,7 @@ AbstractParser.prototype.processOffers = function (language, offers, processOffe
       callback(err, links);
     });
 
-  }) (this, language, offers, processOffer, callback);
+  })(this, language, offers, processOffer, callback);
 };
 
 AbstractParser.prototype.fetchOffer = function (event, callback) {
@@ -404,83 +408,83 @@ AbstractParser.prototype.fetchOffer = function (event, callback) {
     language = event.language,
     url = event.url;
 
-  LOG.info('Retrieving offer for', site, 'language', language, ':', url);
+  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Retrieving offer %s', site, language, url));
 
   async.waterfall([
     function requestOffer(done) {
-      LOG.profile('Retrieve offer');
-
-      request({
-        method: "GET",
-        uri: url,
-        headers: {
-          'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
-          'accept-language': 'en-US,en;q=0.8',
-          'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'
-        },
-        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-      }, function requestOfferResult(err, response, data) {
-        if (err) {
-          LOG.error({
-            'message': 'Error retrieving offer for ' + site + ' language ' + language + ': ' + url,
-            'error': err.message
-          });
-        }
-
         LOG.profile('Retrieve offer');
 
-        done(err, data);
-      });
+        request({
+          method: "GET",
+          uri: url,
+          headers: {
+            'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+            'accept-language': 'en-US,en;q=0.8',
+            'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'
+          },
+          'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+        }, function requestOfferResult(err, response, data) {
+          if (err) {
+            LOG.error({
+              'message': 'Error retrieving offer for ' + site + ' language ' + language + ': ' + url,
+              'error': err.message
+            });
+          }
+
+          LOG.profile('Retrieve offer');
+
+          done(err, data);
+        });
     },
     function parseResponseBody(data, done) {
-      LOG.profile('Parse offer DOM');
-
-      that.parseResponseBody(data, function parseResponseBodyResult(err, dom) {
-        if (err) {
-          LOG.error({
-            'message': 'Error parsing response body to DOM',
-            'error': err.message
-          });
-        }
-
         LOG.profile('Parse offer DOM');
 
-        data = null;
+        that.parseResponseBody(data, function parseResponseBodyResult(err, dom) {
+          if (err) {
+            LOG.error({
+              'message': 'Error parsing response body to DOM',
+              'error': err.message
+            });
+          }
 
-        done(err, dom);
-      });
+          LOG.profile('Parse offer DOM');
+
+          data = null;
+
+          done(err, dom);
+        });
     },
     function parseOffer(dom, done) {
-      LOG.profile("parser.ParseOffer");
-
-      that.parse(dom, language, function parseOfferResult(err, offer) {
-        if (err) {
-          LOG.error({
-            'message': 'Error parsing data for ' + site + ' language ' + language + ': ' + url,
-            'error': err.message
-          });
-        }
-
         LOG.profile("parser.ParseOffer");
 
-        dom = null;
+        that.parse(dom, language, function parseOfferResult(err, offer) {
+          if (err) {
+            LOG.error({
+              'message': 'Error parsing data for ' + site + ' language ' + language + ': ' + url,
+              'error': err.message
+            });
+          }
 
-        return done(err, offer);
-      });
+          LOG.profile("parser.ParseOffer");
+
+          dom = null;
+
+          return done(err, offer);
+        });
     },
     function extendOffer(offer, done) {
-      var runningTime = new Date();
+        var runningTime = new Date();
 
-      offer = _.extend(offer, {
-        'id': id,
-        'url': url,
-        'site': site,
-        'language': language,
-        'active': true,
-        'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
-      });
+        offer = _.extend(offer, {
+          'id': id,
+          'url': url,
+          'site': site,
+          'language': language,
+          'active': true,
+          'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
+        });
 
-      done(null, offer);
+        done(null, offer);
     }],
     function handleProcessOfferError(err, offer) {
       if (err) {
@@ -497,7 +501,7 @@ AbstractParser.prototype.fetchOffer = function (event, callback) {
       LOG.debug('Saving offer', offer);
 
       return callback(err, offer);
-  });
+    });
 };
 
 module.exports = AbstractParser;
