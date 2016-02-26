@@ -1,14 +1,11 @@
-var config = require('./config/env'),
-  mongojs = require('mongojs'),
-  monq = require('monq'),
-  async = require('async'),
+var async = require('async'),
   _ = require('underscore')._,
-  Agenda = require("agenda"),
   LOG = require("./services/Logger"),
   memwatch = require('memwatch-next'),
   heapdump = require('heapdump'),
   util = require("util"),
-  parserFactory = require("./services/ParserFactory");
+  parserFactory = require("./services/ParserFactory"),
+  Sessionfactory = require("./services/SessionFactory");
 
 var hd;
 memwatch.on('leak', function (info) {
@@ -51,99 +48,13 @@ var pmx = require('pmx').init({
 });
 
 var Harvester = function () {
-  LOG.debug('Connecting to database', config.db.uri);
-
-  this.db = mongojs(config.db.uri, config.db.collections);
-
-  var client = monq(config.db.uri, { safe: true });
-  this.queue = client.queue('offers_queue');
+  this.db = Sessionfactory.getDbConnection('');
+  this.queue = Sessionfactory.getQueueConnection('offers_queue');
 };
 
-Harvester.prototype.start = function () {
-  var that = this;
-
-    LOG.info('Running in reccuring mode.', config.harvester.execution.rule);
-
-    var agenda = new Agenda({
-      db: {
-        address: config.db.uri
-      },
-      defaultLockLifetime: 10000
-    });
-
-    agenda.define('execute harvester', function (job, done) {
-      try {
-        return that.run(done);
-      }
-      catch (ex) {
-        LOG.error({
-          'message': 'Error running harvester',
-          'error': ex.message
-        });
-
-        done();
-      }
-    });
-
-    agenda.every(config.harvester.execution.rule, 'execute harvester');
-
-    agenda.start();
-};
-
-Harvester.prototype.run = function () {
-  var that = this;
-
-  async.series([
-      function (done) {
-        that.runHarvesting(done);
-      }
-    ],
-    function (err, result) {
-      if (err) {
-        LOG.error({
-          'message': 'Error completing run',
-          'err': err.message
-        });
-      }
-
-      LOG.info('Run finished with result', result);
-    });
-};
-
-Harvester.prototype.runHarvesting = function (callback) {
-  var that = this;
-
-  LOG.debug('Harvesting preconfigured sources');
-
-  var numberOfSites = _.size(config.activeSites);
-
-  LOG.debug('Total sites available', numberOfSites, config.activeSites);
-  LOG.debug('Processing sites');
-
-  var activeSites = _.filter(_.keys(config.activeSites), function (site) {
-    return config.activeSites[site];
-  });
-
-  var functions = _.map(activeSites, function (site, index) {
-    return function (done) {
-      that.harvestSite(site, done);
-    };
-  });
-
-  async.waterfall(functions, function (err, results) {
-    if (err) {
-      LOG.error({
-        'message': '[STATUS] [Failed] Error processing sites',
-        'error': err.message
-      });
-    }
-
-    return that.onHarvestingFinished(err, callback);
-  });
-};
-
-Harvester.prototype.harvestSite = function (site, callback) {
-  var that = this;
+Harvester.prototype.run = function (options, callback) {
+  var that = this,
+    site = options.site;
 
   LOG.info('[STATUS] [OK] [', site, '] Harvesting started');
 
@@ -238,7 +149,7 @@ Harvester.prototype.harvestSite = function (site, callback) {
 
       LOG.info('[STATUS] [OK] [', site, '] Harvesting finished');
 
-      return callback(err);
+      return that.onHarvestingFinished(err, callback);
     });
 };
 
@@ -283,7 +194,7 @@ Harvester.prototype.processSite = function (site, callback) {
 Harvester.prototype.processOffer = function (offer, callback) {
   var that = this;
 
-  that.queue.enqueue('offer_update_event', offer, function (err, job) {
+  that.queue.enqueue('offer_fetch_event', offer, function (err, job) {
     if (err) {
       LOG.error({
         'message': 'Error enqueueing offer ' + (offer.id ? offer.id : '') + ' for site ' + (offer.site ? offer.site : ''),
@@ -310,9 +221,8 @@ Harvester.prototype.onHarvestingFinished = function (err, callback) {
   }
 
   LOG.info('[STATUS] [OK] Harvesting finished');
+
   return callback(err, 'OK');
 };
 
-
-var harvester = new Harvester();
-harvester.start();
+module.exports = Harvester;

@@ -11,18 +11,18 @@ function Messenger() {
 
 Messenger.prototype.init = function () {};
 
-Messenger.prototype.send = function (notifications) {
+Messenger.prototype.send = function (notification, callback) {
   var that = this;
 
-  console.log(notifications);
+  console.log(notification);
 
-  _.each(notifications, function (notification) {
-    that.sendEmail(notification.email, notification.offers);
+  that.sendEmail(notification.email, notification.offers);
 
-    if (notification.phone) {
-      that.sendSms(notification.phone, notification.offers);
-    }
-  });
+  if (notification.phone) {
+    that.sendSms(notification.phone, notification.offers);
+  }
+
+  callback();
 };
 
 Messenger.prototype.sendEmail = function (email, offers) {
