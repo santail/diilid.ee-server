@@ -82,7 +82,7 @@ Processor.prototype.offerReactivate = function (id, callback) {
 };
 
 Processor.prototype.offerFetch = function (options, callback) {
-  LOG.info(util.format('[STATUS] [OK] [%s] Fetching offer with id %s', site, parser.getOfferId(options)));
+  LOG.info(util.format('[STATUS] [OK] [%s] Fetching offer with id %s', site, options.));
 
   LOG.profile('Harvester.processOffer');
 
