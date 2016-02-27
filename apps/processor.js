@@ -1,7 +1,8 @@
 var LOG = require("./services/Logger"),
   parserFactory = require("./services/ParserFactory"),
   Sessionfactory = require("./services/SessionFactory"),
-  _ = require('underscore')._;
+  _ = require('underscore')._,
+  util = require("util");
 
 var worker = Sessionfactory.getWorkerConnection(['offers_queue']);
 
@@ -24,10 +25,7 @@ var Processor = function () {
 Processor.prototype.run = function (options, callback) {
   var that = this;
 
-  var id = options.id,
-    site = options.site;
-
-  var parser = parserFactory.getParser(site);
+  var id = options.id;
 
   LOG.profile('Harvester.processOffers');
 
@@ -43,71 +41,128 @@ Processor.prototype.run = function (options, callback) {
       return callback(err);
     }
 
-    if (parser.config.reactivate && offer) {
-      LOG.info('Offer #Id', offer._id, offer.id, 'has been already parsed. Reactivating.');
-
-      that.db.offers.findAndModify({
-        query: {
-          _id: offer._id
-        },
-        update: {
-          $set: {
-            active: true,
-            modified: new Date().toISOString()
-          }
-        },
-        'new': false
-      }, function modifyOfferResult(err, doc, lastErrorObject) {
-        if (err) {
-          LOG.error({
-            'message': 'Error reactivating offer #Id ' + offer._id,
-            'error': err.message
-          });
-        }
-
-        LOG.info('[STATUS] [OK] [', site, '] [', id, '] Offer reactivated');
-
-        return callback(err);
-      });
+    if (offer && options.refresh) {
+      that.offerRefresh(offer, callback);
     }
     else if (offer) {
-      LOG.info('[STATUS] [OK] [', site, '] [', id, '] Offer exists. Skipped.');
-
-      return callback();
+      that.offerReactivate(offer._id, callback);
     }
     else {
-      LOG.profile('Harvester.processOffer');
+      that.offerFetch(options, callback);
+    }
+  });
+};
 
-      parser.fetchOffer(options, function (err, offer) {
-        if (err) {
-          LOG.error({
-            'message': 'Error fetching offer',
-            'error': err.message
-          });
+Processor.prototype.offerReactivate = function (id, callback) {
+  LOG.info(util.format('[STATUS] [OK] [%s] Reactivate offer', id));
 
-          return callback(err);
-        }
-
-        LOG.info('[STATUS] [OK] [', site, '] Saving offer with id ', parser.getOfferId(offer));
-
-        that.db.offers.save(offer, function saveOfferResult(err, saved) {
-          if (err || !saved) {
-            LOG.error({
-              'message': 'Error saving offer',
-              'error': err
-            });
-
-            return callback(err);
-          }
-
-          LOG.info('[STATUS] [OK] [', site, '] Offer saved with id ', parser.getOfferId(saved));
-
-          LOG.profile("Harvester.saveOffer");
-
-          return callback(err, saved);
-        });
+  this.db.offers.findAndModify({
+    query: {
+      _id: id
+    },
+    update: {
+      $set: {
+        active: true,
+        modified: new Date().toISOString()
+      }
+    },
+    'new': false
+  }, function offerReactivateResult(err, doc, lastErrorObject) {
+    if (err) {
+      LOG.error({
+        'message': util.format('Error reactivating offer #Id %s', id),
+        'error': err.message
       });
     }
+
+    LOG.info('[STATUS] [OK] [%s] Reactivated');
+
+    return callback(err);
+  });
+};
+
+Processor.prototype.offerFetch = function (options, callback) {
+  LOG.profile('Harvester.processOffer');
+
+  var that = this,
+    site = options.site;
+  var parser = parserFactory.getParser(site);
+
+  parser.fetchOffer(options, function (err, offer) {
+    if (err) {
+      LOG.error({
+        'message': 'Error fetching offer',
+        'error': err.message
+      });
+
+      return callback(err);
+    }
+
+    LOG.info(util.format('[STATUS] [OK] [%s] Saving offer with id %s', site, parser.getOfferId(offer)));
+
+    that.db.offers.save(offer, function saveOfferResult(err, saved) {
+      if (err || !saved) {
+        LOG.error({
+          'message': 'Error saving offer',
+          'error': err
+        });
+
+        return callback(err);
+      }
+
+      LOG.info('[STATUS] [OK] [', site, '] Offer saved with id ', parser.getOfferId(saved));
+
+      LOG.profile("Harvester.saveOffer");
+
+      return callback(err, saved);
+    });
+  });
+};
+
+Processor.prototype.offerRefresh = function (offer, callback) {
+  LOG.profile('Harvester.processOffer');
+
+  var that = this,
+    site = offer.site;
+  var parser = parserFactory.getParser(site);
+    
+  var options = _.extend(offer, {});
+  
+  parser.fetchOffer(options, function (err, offer) {
+    if (err) {
+      LOG.error({
+        'message': 'Error fetching offer',
+        'error': err.message
+      });
+
+      return callback(err);
+    }
+
+    LOG.info(util.format('[STATUS] [OK] [%s] Saving offer with id %s', site, parser.getOfferId(offer)));
+
+    that.db.offers.findAndModify({
+      query: {
+        _id: options._id
+      },
+      update: {
+        $set: _.extend(offer, {
+          active: true,
+          modified: new Date().toISOString()
+        })
+      },
+      'new': false
+    }, function offerReactivateResult(err, doc, lastErrorObject) {
+      if (err) {
+        LOG.error({
+          'message': util.format('Error reactivating offer #Id %s', options._id),
+          'error': err.message
+        });
+      }
+  
+      LOG.info(util.format('[STATUS] [OK] [%s] Reactivated', options._id));
+  
+      return callback(err);
+    });
   });
 };
 
