@@ -82,6 +82,8 @@ Processor.prototype.offerReactivate = function (id, callback) {
 };
 
 Processor.prototype.offerFetch = function (options, callback) {
+  LOG.info(util.format('[STATUS] [OK] [%s] Fetching offer with id %s', site, parser.getOfferId(options)));
+
   LOG.profile('Harvester.processOffer');
 
   var that = this,
@@ -120,6 +122,8 @@ Processor.prototype.offerFetch = function (options, callback) {
 };
 
 Processor.prototype.offerRefresh = function (offer, callback) {
+  LOG.info(util.format('[STATUS] [OK] [%s] Refreshing offer with id %s', site, offer.id));
+
   LOG.profile('Harvester.processOffer');
 
   var that = this,
