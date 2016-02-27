@@ -48,7 +48,7 @@ function SelverParser() {
       }).get();
     },
     'templates': {
-      'shop': function ($) {
+      'vendor': function ($) {
         return 'Selver';
       },
       'title': function ($, language) {

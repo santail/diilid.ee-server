@@ -11,7 +11,11 @@
         ],
         "price": "10.50 €",
         "original_price": "18.92 €",
-        "title": "16-osaline sushikomplekt Sushi Line'i suurepärastelt sushimeistritelt -44%"
+        "title": "16-osaline sushikomplekt Sushi Line'i suurepärastelt sushimeistritelt -44%",
+        "vendor": "Sushi Line"
+      },
+      "https://cherry.ee/piljard-ja-suupisted-hiiu-pubis": {
+
       }
     },
     "rus": {
@@ -24,7 +28,11 @@
         ],
         "price": "10.50 €",
         "original_price": "18.92 €",
-        "title": "Аппетитнейший комплект суши из 16 частей от мастеров Sushi Line -44%"
+        "title": "Аппетитнейший комплект суши из 16 частей от мастеров Sushi Line -44%",
+        "vendor": "Sushi Line"
+      },
+      "https://cherry.ee/ru/piljard-ja-suupisted-hiiu-pubis": {
+
       }
     }
   }

@@ -66,7 +66,8 @@ function OnoffParser() {
       },
       'discount': function ($) {
         return utils.unleakString($('div.center_box__right > div.content.catalog div.prod_in__pic div.shop_prod__procent').text());
-      }
+      },
+      'vendor': "ONOFF"
     }
   };
 }

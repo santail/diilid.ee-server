@@ -16,7 +16,8 @@
         ],
         "price": "12.95€",
         "original_price": "23.99€",
-        "title": "Nordic Cake rikkaliku täidisega 2.5 kg kringel -46%"
+        "title": "Nordic Cake rikkaliku täidisega 2.5 kg kringel -46%",
+        "vendor": "Nordic Cake"
       },
       "http://uus.chilli.ee/vaata-pakkumist/grand-rose-spa-hotell-04": {
         "title": "Lennukiga Saaremaale! Grand Rose SPA ja AVIESi eksklusiivne puhkusepakett kuni -55%",
@@ -28,7 +29,23 @@
           "http://chilli.ee/upload/0d6efcbbcbaff9b3cb3578099dd1bc5a_1454489372.jpg"
       ],
         "price": "79.95 - 99.95€",
-        "original_price": "152.00 - 222.00€"
+        "original_price": "152.00 - 222.00€",
+        "vendor": "Grand Rose SPA Hotell"
+      },
+      "http://chilli.ee/vaata-pakkumist/pusivahatamine-salongi-puhastus-fw-052": {
+        "description": "<strong>Firma FastWheels OÜ</strong> pakkub parimate hindadega kvaliteetseid teenuseid!",
+        "details": "<li>Pakkumist saab kasutada kohe peale ostmist ja kuni <strong>09.04.2016</strong></li> <li>Voucher hõlmab vastavalt Sinu valikule:<br> <br> » <strong>sõiduauto</strong> põhjalikku <strong>välispesu</strong> ja <strong>püsivaha 18.88 €</strong> (tavahind 40 €)<br> <br> » <strong>sõiduauto</strong> <strong>põhjalikku</strong> välispesu, salongi kuivpuhastust ja <strong>püsivaha</strong> 24.88 € (tavahind 53 €)</li> <li><strong><strong><strong>Välipesu: </strong></strong></strong><br> » survepesu, pigi eemaldus, leotuspesu, šampoonipesu <br> » uksevahede ja kummist porimattide puhastus<br> » velgede puhastus ja rehvide läigestamine<br> » auto kuivatamine ja klaaside puhastamine</li> <li><strong>Auto salongi kuivpuhastus:</strong><br> » salongi ja pagasiruumi puhastus <strong><strong>tolmuimejaga</strong></strong><br> » <strong>armatuuri</strong> ja teiste plast/vinüülpindade puhastamine ja hooldamine <strong><strong>spetsiaalsete vahenditega</strong></strong><br> » uksetihendite, klaaside ja mattide <strong>puhastus</strong></li> <li><strong>Vahatamine:</strong><br> » sisaldab põhjalikkun <strong>bituumeni</strong> ning <strong>rasvkihi</strong> eemaldamist autokerelt<br> » kasutatakse kvaliteetset <strong>Meguiars püsivaha</strong>, mis annab autole tugeva <strong>niiskuskaitse</strong> ja <strong>värvkattele läike</strong></li> <li><strong>Lisaks tasuta uksetihendite silkoonimine!</strong></li> <li>Kohapeal võid lisaks soetada ka <strong>klaaside vahatamise vaid 5 €</strong> (tavahind 10€), topeltvahatamisel tuleb juurde tasuda 6 €</li> <li>Palume eelnevalt külastus <strong>ette broneerida</strong> (tel. <strong>55 969 192</strong>) mainides võlusõna \"Chilli voucher\"</li> <li>Arvestada tuleb umbes <strong>3 tunniga</strong></li> <li>Pakkumine kehtib ainult <strong>sõiduautodele</strong>, maasturite puhul konsulteeri telefoni teel</li> <li>Üks inimene võib soetada <strong>ka mitu</strong> voucherit!</li>",
+        "original_price": "40.00 - 53.00€",
+        "pictures": [
+          "http://chilli.ee/upload/ccaee4b1c846096a33da9ccb8ce524b9_1455525809.jpg",
+          "http://chilli.ee/upload/99fce8f17ff817935216f547a411cd10_1455525809.jpg",
+          "http://chilli.ee/upload/6bf508b0de8168258d4712953cd0725d_1455525809.jpg",
+         "http://www.chilli.ee/upload/th_d60414a1867ec251c6ad52077aa95696_1455525809.jpg",
+          "http://www.chilli.ee/upload/th_46485a797ad0f99f0acb3f7c79c3bc4b_1455525809.jpg"
+        ],
+        "price": "18.88 - 24.88€",
+        "title": "Põhjalik auto püsivahatamine, sisepuhastus ja välipesu -53%",
+        "vendor": ""
       }
     },
     "rus": {
@@ -47,7 +64,8 @@
         ],
         "price": "12.95€",
         "original_price": "23.99€",
-        "title": "C разнообразной начинкой, тающие во рту крендели по 2,5 кг -46%"
+        "title": "C разнообразной начинкой, тающие во рту крендели по 2,5 кг -46%",
+        "vendor": "Nordic Cake"
       },
       "http://ru.uus.chilli.ee/vaata-pakkumist/grand-rose-spa-hotell-04": {
         "title": "Самолётом на Сааремаа! Эксклюзивный пакет отдыха от Grand Rose SPA и AVIES до -55%",
@@ -59,7 +77,23 @@
           "http://chilli.ee/upload/0d6efcbbcbaff9b3cb3578099dd1bc5a_1454489372.jpg"
       ],
         "price": "79.95 - 99.95€",
-        "original_price": "152.00 - 222.00€"
+        "original_price": "152.00 - 222.00€",
+        "vendor": "Grand Rose SPA Hotell"
+      },
+      "http://ru.chilli.ee/vaata-pakkumist/pusivahatamine-salongi-puhastus-fw-052": {
+        "description": "<strong>Фирма</strong> <strong>Fast Wheels OÜ</strong> предлагает качественные услуги по лучшим ценам!",
+        "details": "<li>Предложение действует <strong>сразу</strong> после приобретения и до <strong>09.04.2016</strong></li> <li>В стоимость ваучера входит:<br> <br> » <strong>обстоятельная наружная мойка автомобиля</strong> и <strong>нанесение воска 18.88 €</strong><br> <br> » <strong>обстоятельная наружная мойка автомобиля, чистка салона</strong> и <strong>нанесение воска 24.88 €</strong></li> <li><strong><strong>Наружная мойка</strong>:</strong><br> » мойка под давлением, удаление битума, замачивание, мытьё с шампунем<br> » чистка дверных проёмов и резиновых матов<br> » мойка колёс и нанесение блеска на шины<br> » сушка автомобиля и чистка стёкол</li> <li><strong>Сухая чистка салона: </strong><br> » чистка <strong>пылесосом салона</strong> и багажника машины <br> » чистка арматуры и других пласмассовых/виниловых поверхностей и их обработка <strong>специальными средствами</strong><br> » чистка дверных прокладок, стёкол и матов</li> <li><strong>Нанесение воска:</strong><br> » используется качественный <strong>Meguiars</strong> <strong>воск</strong>, который дает автомобилю сильную <strong>защиту от влажности</strong> и придает <strong>покрытию</strong><strong>блеск</strong></li> <li>Просим посещение заранее забронировать (тел. <strong>55 969 192</strong>), упоминая секретное слово ''Chilli ваучер''</li> <li>Ваучер действует только <strong>для легковых автомобилей</strong>, в случае внедорожников просим проконсультироваться по телефону</li> <li>Один человек может приобрести <strong>несколько ваучеров</strong>!</li>",
+        "original_price": "40.00 - 53.00€",
+        "pictures": [
+          "http://chilli.ee/upload/ccaee4b1c846096a33da9ccb8ce524b9_1455525809.jpg",
+          "http://chilli.ee/upload/99fce8f17ff817935216f547a411cd10_1455525809.jpg",
+          "http://chilli.ee/upload/6bf508b0de8168258d4712953cd0725d_1455525809.jpg",
+        "http://www.chilli.ee/upload/th_d60414a1867ec251c6ad52077aa95696_1455525809.jpg",
+          "http://www.chilli.ee/upload/th_46485a797ad0f99f0acb3f7c79c3bc4b_1455525809.jpg"
+        ],
+        "price": "18.88 - 24.88€",
+        "title": "Основательная мойка машины и полировка стойким воском -53%",
+        "vendor": "Fast Wheels autopesula"
       }
     }
   }

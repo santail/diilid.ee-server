@@ -70,7 +70,7 @@ function EuronicsParser() {
 
         return pictureUrls;
       },
-      'original_price': function  ($) {
+      'original_price': function ($) {
         return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-bottom > ul > li > p > span.old-price').text().replace(/Норм. цена |Normal price |Norm hind /, ''));
       },
       'price': function ($) {
@@ -82,7 +82,7 @@ function EuronicsParser() {
       'description': function ($) {
         return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-description > div[class!="oi-fb-like"]').html());
       },
-      'shop': 'euronics.ee'
+      'vendor': 'Euronics'
     }
   };
 }

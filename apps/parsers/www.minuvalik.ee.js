@@ -50,7 +50,9 @@ function MinuvalikParser() {
       'discount': function ($) {
         return utils.unleakString($('.deal_rules_td > div#parent_div div.dd_table_discount_info > span.fl_deals_fp_discount_row').text().replace(/alates |от /, ''));
       },
-      'shop': 'Minuvalik.ee'
+      'vendor': function ($) {
+        return '';
+      }
     }
   };
 }

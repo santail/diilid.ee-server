@@ -52,7 +52,7 @@ function KriisisParser() {
       }).get();
     },
     'templates': {
-      'shop': function shop($) {
+      'vendor': function shop($) {
         return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > table td:first-child > table:first-child td:first-child > p').text().replace(/Pood: |Магазин: /, ''));
       },
       'title': function ($, language) {

@@ -57,6 +57,11 @@ function ChillyParser() {
         $('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p > span').remove();
 
         return $('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p').text().trim();
+      },
+      'vendor': function ($) {
+        $('body div.content > div.main-content div.sidebar-box.shopping > div.text > h3 > a').remove();
+
+        return $('body div.content > div.main-content div.sidebar-box.shopping > div.text > h3').text().trim();
       }
     }
   };

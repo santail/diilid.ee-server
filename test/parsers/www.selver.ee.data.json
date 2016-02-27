@@ -7,7 +7,7 @@
         ],
         "price": "1,19 €",
         "original_price": "1,59 €",
-        "shop": "Selver",
+        "vendor": "Selver",
         "title": "Keskmiselt vürtsikas šampinjoniletšo, BONDUELLE, 450 g",
         "description": ""
       },
@@ -17,7 +17,7 @@
         ],
         "price": "3,29 €",
         "original_price": "4,59 €",
-        "shop": "Selver",
+        "vendor": "Selver",
         "title": "Patareid LR20EGE/D, PANASONIC, 2 tk",
         "description": "Panasonic EGE LR20 / D tüüpi alkaline (leelis) patarei 2tk. Kõrgus 61,5mm; diameeter 34,5mm; väljundpinge 1,5V. Panasonic EVOLTA seeria patareid sobivad suure voolutarbega seadmetele."
       },
@@ -27,7 +27,7 @@
         ],
         "price": "4,29 €",
         "original_price": "5,99 €",
-        "shop": "Selver",
+        "vendor": "Selver",
         "title": "Kehaemulsioon sügavniisutav tundlikule, NEUTROGENA, 250 ml",
         "description": "Neutrogena sügavniisutav ihupiim tundlikule nahale. Kuiva naha probleeme leevendav toime on kliiniliselt tõestatud. Niisutab hetkega, nahk on silmanähtavalt siledam, pehmem. Vähendab karedust ja kuivust juba esimesel kasutamisel.Kasutades igapäevaselt paistab nahk kaunis ja terve. Eriti kiirelt imenduv tekstuur. Ei sisalda lõhnaaineid, ei tekita allergilisi reaktsioone."
       },
@@ -38,7 +38,7 @@
           "http//m2.selver.ee/media/catalog/product/cache/1/image/800x/0ee0b02feb2d48d6d15c8f7c3d53228c/4/7/4742493000193.jpg"
         ],
         "price": "0,89 €",
-        "shop": "Selver",
+        "vendor": "Selver",
         "title": "Multimahlajook Star Wars üllatusmunaga, SUPRISE DRINKS, 300 ml"
       }
     }
