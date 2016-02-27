@@ -82,7 +82,7 @@ Processor.prototype.offerReactivate = function (id, callback) {
 };
 
 Processor.prototype.offerFetch = function (options, callback) {
-  LOG.info(util.format('[STATUS] [OK] [%s] Fetching offer with id %s', site, options.));
+  LOG.info(util.format('[STATUS] [OK] [%s] Fetching offer with id %s', site, options.id));
 
   LOG.profile('Harvester.processOffer');
 
@@ -129,9 +129,9 @@ Processor.prototype.offerRefresh = function (offer, callback) {
   var that = this,
     site = offer.site;
   var parser = parserFactory.getParser(site);
-    
+
   var options = _.extend(offer, {});
-  
+
   parser.fetchOffer(options, function (err, offer) {
     if (err) {
       LOG.error({
@@ -162,9 +162,9 @@ Processor.prototype.offerRefresh = function (offer, callback) {
           'error': err.message
         });
       }
-  
+
       LOG.info(util.format('[STATUS] [OK] [%s] Reactivated', options._id));
-  
+
       return callback(err);
     });
   });
