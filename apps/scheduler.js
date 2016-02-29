@@ -1,6 +1,6 @@
 var config = require('./config/env'),
   Agenda = require("agenda"),
-    async = require('async'),
+  async = require('async'),
   _ = require('underscore')._,
   LOG = require("./services/Logger"),
   util = require("util"),
@@ -19,12 +19,12 @@ agenda.define('execute harvester', function (job, done) {
   try {
 
     LOG.debug('Harvesting preconfigured sources');
-  
+
     var numberOfSites = _.size(config.activeSites);
-  
+
     LOG.debug('Total sites available', numberOfSites, config.activeSites);
     LOG.debug('Processing sites');
-  
+
     var activeSites = _.filter(_.keys(config.activeSites), function (site) {
       return config.activeSites[site];
     });
@@ -34,7 +34,7 @@ agenda.define('execute harvester', function (job, done) {
         var options = {
           "site": site
         };
-        
+
         queue.enqueue('harvester_run_event', options, function (err, job) {
           if (err) {
             LOG.error({
@@ -42,21 +42,25 @@ agenda.define('execute harvester', function (job, done) {
               'error': err.message
             });
           }
-      
-           LOG.info(util.format('[STATUS] [OK] [%s] Harvester run job enqueued', site));
+
+          LOG.info(util.format('[STATUS] [OK] [%s] Harvester run job enqueued', site));
         });
       };
     });
-  
+
     async.waterfall(functions, function (err, results) {
       if (err) {
         LOG.error({
           'message': '[STATUS] [Failed] Error processing sites',
           'error': err.message
         });
+        
+        return done(err);
       }
-  
-      return done(err);
+
+      LOG.info('[STATUS] [OK] Harvester run job enqueued');
+
+      return done();
     });
   }
   catch (ex) {
@@ -71,7 +75,7 @@ agenda.define('execute harvester', function (job, done) {
 
 agenda.define('execute procurer', function (job, done) {
   var options = {};
-  
+
   queue.enqueue('procurer_run_event', options, function (err, job) {
     if (err) {
       LOG.error({
@@ -82,7 +86,7 @@ agenda.define('execute procurer', function (job, done) {
       return done(err);
     }
 
-     LOG.info('[STATUS] [OK] Procurer run job enqueued');
+    LOG.info('[STATUS] [OK] Procurer run job enqueued');
 
     return done(err, options);
   });
