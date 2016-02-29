@@ -2,7 +2,7 @@
   "offers": {
     "est": {
       "http://www.kriisis.ee/allahindlus?id=673031": {
-        "details": "5,2%, 568 ml",
+        "description": "5,2%, 568 ml",
         "period": "09.02.2016 - 15.02.2016",
         "pictures": [
           "http://www.kriisis.ee/testing/files/15-02-2016/147253.jpg"
@@ -12,7 +12,7 @@
         "title": "Hele õlu Alexander"
       },
       "http://www.kriisis.ee/view_sale.php?id=672772": {
-        "details": "480 g (3.73/kg)",
+        "description": "480 g (3.73/kg)",
         "period": "04.02.2016 - 02.03.2016",
         "pictures": [
           "http://www.kriisis.ee/testing/files/02-03-2016/146992.jpg"
@@ -29,12 +29,12 @@
         "price": "1.99€",
         "vendor": "Comarket",
         "title": "Nõo Moskva täissuitsuvorst 250 g",
-        "details": ""
+        "description": ""
       }
     },
     "rus": {
       "http://www.kriisis.ee/ru/view_sale.php?id=673031": {
-        "details": "5,2%, 568 ml Hele õlu Alexander",
+        "description": "5,2%, 568 ml Hele õlu Alexander",
         "period": "09.02.2016 - 15.02.2016",
         "pictures": [
           "http://www.kriisis.ee/testing/files/15-02-2016/147253.jpg"
@@ -44,7 +44,7 @@
         "title": "Светлое пиво"
       },
       "http://www.kriisis.ee/ru/view_sale.php?id=672772": {
-        "details": "480 g (3.73/kg) Regatt Koorejäätis",
+        "description": "480 g (3.73/kg) Regatt Koorejäätis",
         "period": "04.02.2016 - 02.03.2016",
         "pictures": [
           "http://www.kriisis.ee/testing/files/02-03-2016/146992.jpg"
@@ -61,7 +61,7 @@
         "price": "1.99€",
         "vendor": "Comarket",
         "title": "Копченая колбаса Moskva",
-        "details": "Nõo Moskva täissuitsuvorst 250 g"
+        "description": "Nõo Moskva täissuitsuvorst 250 g"
       }
     }
   }

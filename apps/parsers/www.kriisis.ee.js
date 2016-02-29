@@ -69,7 +69,7 @@ function KriisisParser() {
       'pictures': function pictures($) {
         return [utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > table td:first-child > table:nth-child(3) td:first-child > img').attr('src'))];
       },
-      'details': function short($, language) {
+      'description': function short($, language) {
         var description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').next('p');
 
         if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 1) {
