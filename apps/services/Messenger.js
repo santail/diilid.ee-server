@@ -14,9 +14,7 @@ Messenger.prototype.init = function () {};
 Messenger.prototype.send = function (notification, callback) {
   var that = this;
 
-  console.log(notification);
-
-  that.sendEmail(notification.email, notification.offers);
+  that.sendEmail(notification);
 
   if (notification.phone) {
     that.sendSms(notification.phone, notification.offers);
@@ -25,7 +23,7 @@ Messenger.prototype.send = function (notification, callback) {
   callback();
 };
 
-Messenger.prototype.sendEmail = function (email, offers) {
+Messenger.prototype.sendEmail = function (notification) {
   var that = this;
 
   var mailgun = new Mailgun({
@@ -33,26 +31,26 @@ Messenger.prototype.sendEmail = function (email, offers) {
     domain: config.notifier.mailgun.domain
   });
 
-  LOG.debug(util.format('[STATUS] [Sending] [email] [%s] Sending email', email));
+  LOG.debug(util.format('[STATUS] [Sending] [email] [%s] Sending email', notification.email));
 
   var data = {
     from: 'notifier-robot@salestracker.eu',
-    to: email,
+    to: notification.email,
     subject: util.format('Salestracker.eu Found offers notification', ''),
-    html: that.compileEmailBody(offers)
+    html: that.compileEmailBody(notification)
   };
 
   mailgun.messages().send(data, function (err, body) {
     if (err) {
       LOG.error({
-        'message': util.format('[STATUS] [Failed] [email] [%s] Sending email', email),
+        'message': util.format('[STATUS] [Failed] [email] [%s] Sending email', notification.email),
         'error': err.message
       });
 
       return;
     }
 
-    LOG.info(util.format('[STATUS] [OK] [email] [%s] Succesfully sent.', email));
+    LOG.info(util.format('[STATUS] [OK] [email] [%s] Succesfully sent.', notification.email));
   });
 };
 
@@ -80,15 +78,74 @@ Messenger.prototype.sendSms = function (phone, offers) {
     });
 };
 
-Messenger.prototype.compileEmailBody = function (offers) {
+Messenger.prototype.compileEmailBody = function (notification) {
 
   var body = "<h1>SalesTracker.eu has found something</h1> what could be potentially interesting to you";
 
-  _.each(offers, function (offer) {
-    body += '<p><a href="' + offer.url + '" title="' + offer.title + '" />' + offer.title + '</a> ' + offer.site + '</p>';
+  body += util.format("<h2>You have been searching for '%s'</h2>", notification.contains);
+  
+  _.each(notification.offers, function (offer) {
+    body += util.format('<p><a href="%s" title="%s" />%s</a> %s %s %s</p><span>%s</span>', offer.url, offer.title, offer.title, offer.vendor, offer.price. offer.original_price, offer.description);
   });
 
-  return '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' + '<tr>' + '<td align="center">' + '<center style="max-width: 600px; width: 100%;">' + '<!--[if gte mso 9]>' + '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0"><tr><td>' + '<![endif]-->' + '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' + '<tr>' + '<td>' + '<!--[if gte mso 9]>' + '<table border="0" cellpadding="0" cellspacing="0">' + '<tr><td align="center">' + '<table border="0" cellpadding="0" cellspacing="0" width="300"     align="center"><tr><td>' + '<![endif]-->' + '<!-- Блок номер 1 -->' + '<span style="display:inline-block; width:300px;">' + body + '</span>' + '<!-- Блок номер 1 -->' + '<!--[if gte mso 9]>' + '</td></tr></table>' + '</td>' + '<td align="center">' + '<table border="0" cellpadding="0" cellspacing="0" align="center"><tr><td>' + '<![endif]-->' + '<!-- Блок номер 2 -->' + '<span style="display:inline-block; width:300px;">' + 'Контент блока' + '</span>' + '<!-- Блок номер 2 -->' + '<!--[if gte mso 9]>' + '</td></tr></table>' + '</td>' + '</tr></table>' + '<![endif]-->' + '</td>' + '</tr>' + '</table>' + '<!--[if gte mso 9]>' + '</td>' + '</tr>' + '</table>' + '<![endif]-->' + '</center>   ' + '</td>' + '</tr>' + '</table>';
+  return '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' + 
+  '<tr>' + 
+  '<td align="center">' + 
+  '<center style="max-width: 600px; width: 100%;">' + 
+  '<!--[if gte mso 9]>' + 
+  '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0">' + 
+  '<tr>' + 
+  '<td>' + 
+  '<![endif]-->' + 
+  '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' + 
+    '<tr>' + 
+      '<td>' + 
+        '<!--[if gte mso 9]>' + 
+        '<table border="0" cellpadding="0" cellspacing="0">' + 
+          '<tr>' + 
+            '<td align="center">' + 
+              '<table border="0" cellpadding="0" cellspacing="0" width="600" align="center">' + 
+                '<tr>' + 
+                  '<td>' + 
+                  '<![endif]-->' + 
+                    '<!-- Блок номер 1 -->' + 
+                    '<span style="display:inline-block; width:300px;">' + body + '</span>' + 
+                    '<!-- Блок номер 1 -->' + 
+                  '<!--[if gte mso 9]>' + 
+                  '</td>' + 
+                '</tr>' + 
+              '</table>' + 
+            '</td>' + 
+            /*
+            '<td align="center">' + 
+              '<table border="0" cellpadding="0" cellspacing="0" align="center">' + 
+                '<tr>' + 
+                  '<td>' + 
+                  '<![endif]-->' + 
+                    '<!-- Блок номер 2 -->' + 
+                    '<span style="display:inline-block; width:300px;">' + 'Контент блока' + '</span>' + 
+                    '<!-- Блок номер 2 -->' + 
+                  '<!--[if gte mso 9]>' + 
+                  '</td>' + 
+                '</tr>' + 
+              '</table>' + 
+            '</td>' + 
+            */
+          '</tr>' + 
+        '</table>' + 
+        '<![endif]-->' + 
+      '</td>' + 
+    '</tr>' + 
+  '</table>' + 
+  '<!--[if gte mso 9]>' + 
+  '</td>' + 
+  '</tr>' + 
+  '</table>' + 
+  '<![endif]-->' + 
+  '</center>' + 
+  '</td>' + 
+  '</tr>' + 
+  '</table>';
 };
 
 Messenger.prototype.compileSmsBody = function (offers) {
