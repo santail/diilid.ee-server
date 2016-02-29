@@ -41,9 +41,13 @@ agenda.define('execute harvester', function (job, done) {
               'message': 'Error enqueueing harvester run job',
               'error': err.message
             });
+            
+            return siteHarvestFinish(err);
           }
 
           LOG.info(util.format('[STATUS] [OK] [%s] Harvester run job enqueued', site));
+          
+          siteHarvestFinish();
         });
       };
     });
