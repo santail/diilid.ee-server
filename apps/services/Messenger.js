@@ -80,71 +80,81 @@ Messenger.prototype.sendSms = function (phone, offers) {
 
 Messenger.prototype.compileEmailBody = function (notification) {
 
-  var body = "<h1>SalesTracker.eu has found something</h1> what could be potentially interesting to you";
+  var content = "<h1>SalesTracker.eu has found something</h1> what could be potentially interesting to you";
 
-  body += util.format("<h2>You have been searching for '%s'</h2>", notification.contains);
-  
+  content += util.format("<h2>You have been searching for '%s'</h2>", notification.contains);
+
   _.each(notification.offers, function (offer) {
-    body += util.format('<p><a href="%s" title="%s" />%s</a> %s %s %s</p><span>%s</span>', offer.url, offer.title, offer.title, offer.vendor, offer.price. offer.original_price, offer.description);
+    var details = util.format('<span>%s</span> <span style="text: bold;">%s</span>', offer.vendor, offer.price);
+
+    if (offer.original_price) {
+     details += util.format('<span style="text-decoration: line-through;">%s</span>', offer.original_price);
+    }
+
+    if (offer.description) {
+      details += util.format('<br /><span>%s</span>',  offer.description);
+    }
+
+    content += util.format('<p><a href="%s" title="%s" />%s</a> %s</p>', offer.url, offer.title, offer.title, details);
   });
 
-  return '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' + 
-  '<tr>' + 
-  '<td align="center">' + 
-  '<center style="max-width: 600px; width: 100%;">' + 
-  '<!--[if gte mso 9]>' + 
-  '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0">' + 
-  '<tr>' + 
-  '<td>' + 
-  '<![endif]-->' + 
-  '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' + 
-    '<tr>' + 
-      '<td>' + 
-        '<!--[if gte mso 9]>' + 
-        '<table border="0" cellpadding="0" cellspacing="0">' + 
-          '<tr>' + 
-            '<td align="center">' + 
-              '<table border="0" cellpadding="0" cellspacing="0" width="600" align="center">' + 
-                '<tr>' + 
-                  '<td>' + 
-                  '<![endif]-->' + 
-                    '<!-- Блок номер 1 -->' + 
-                    '<span style="display:inline-block; width:300px;">' + body + '</span>' + 
-                    '<!-- Блок номер 1 -->' + 
-                  '<!--[if gte mso 9]>' + 
-                  '</td>' + 
-                '</tr>' + 
-              '</table>' + 
-            '</td>' + 
+  return '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' +
+  '<tr>' +
+  '<td align="center">' +
+  '<center style="max-width: 600px; width: 100%;">' +
+  '<!--[if gte mso 9]>' +
+  '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0">' +
+  '<tr>' +
+  '<td>' +
+  '<![endif]-->' +
+  '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' +
+    '<tr>' +
+      '<td>' +
+        '<!--[if gte mso 9]>' +
+        '<table border="0" cellpadding="0" cellspacing="0">' +
+          '<tr>' +
+            '<td align="center">' +
+              '<table border="0" cellpadding="0" cellspacing="0" width="600" align="center">' +
+                '<tr>' +
+                  '<td>' +
+                  '<![endif]-->' +
+                    '<!-- Блок номер 1 -->' +
+                    '<span style="display:inline-block; width:600px;">' + content + '</span>' +
+                    '<!-- Блок номер 1 -->' +
+                  '<!--[if gte mso 9]>' +
+                  '</td>' +
+                '</tr>' +
+              '</table>' +
+            '</td>' +
             /*
-            '<td align="center">' + 
-              '<table border="0" cellpadding="0" cellspacing="0" align="center">' + 
-                '<tr>' + 
-                  '<td>' + 
-                  '<![endif]-->' + 
-                    '<!-- Блок номер 2 -->' + 
-                    '<span style="display:inline-block; width:300px;">' + 'Контент блока' + '</span>' + 
-                    '<!-- Блок номер 2 -->' + 
-                  '<!--[if gte mso 9]>' + 
-                  '</td>' + 
-                '</tr>' + 
-              '</table>' + 
-            '</td>' + 
+            '<td align="center">' +
+              '<table border="0" cellpadding="0" cellspacing="0" align="center">' +
+                '<tr>' +
+                  '<td>' +
+                  '<![endif]-->' +
+                    '<!-- Блок номер 2 -->' +
+                    '<span style="display:inline-block; width:300px;">' + 'Контент блока' + '</span>' +
+                    '<!-- Блок номер 2 -->' +
+                  '<!--[if gte mso 9]>' +
+                  '</td>' +
+                '</tr>' +
+              '</table>' +
+            '</td>' +
             */
-          '</tr>' + 
-        '</table>' + 
-        '<![endif]-->' + 
-      '</td>' + 
-    '</tr>' + 
-  '</table>' + 
-  '<!--[if gte mso 9]>' + 
-  '</td>' + 
-  '</tr>' + 
-  '</table>' + 
-  '<![endif]-->' + 
-  '</center>' + 
-  '</td>' + 
-  '</tr>' + 
+          '</tr>' +
+        '</table>' +
+        '<![endif]-->' +
+      '</td>' +
+    '</tr>' +
+  '</table>' +
+  '<!--[if gte mso 9]>' +
+  '</td>' +
+  '</tr>' +
+  '</table>' +
+  '<![endif]-->' +
+  '</center>' +
+  '</td>' +
+  '</tr>' +
   '</table>';
 };
 
