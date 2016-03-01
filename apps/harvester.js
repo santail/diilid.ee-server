@@ -72,6 +72,8 @@ Harvester.prototype.run = function (options, callback) {
 
   LOG.info('[STATUS] [OK] [', site, '] Harvesting started');
 
+  console.log(options);
+  
   async.waterfall([
       function stepCleanup(done) {
         if (options.cleanup) {
