@@ -55,54 +55,54 @@ PrismamarketParser.prototype.gatherOffers = function (language, processOffer, ca
     site = that.config.site,
     paging = that.config.paging;
 
-    var pageNumber = 0,
-      pageRepeats = false;
+  var pageNumber = 0,
+    pageRepeats = false;
 
-    async.whilst(
-      function () {
-        return !pageRepeats;
-      },
-      function (finishPageProcessing) {
-        LOG.info('[STATUS] [OK] [', site, '] [', language, '] Processing page ' + pageNumber);
+  async.whilst(
+    function () {
+      return !pageRepeats;
+    },
+    function (finishPageProcessing) {
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing page %s', site, language, pageNumber));
 
-        var pageUrl = paging.nextPageUrl(language, pageNumber);
+      var pageUrl = paging.nextPageUrl(language, pageNumber);
 
-        that.processPage(pageUrl, language, processOffer, function (err, result) {
-          if (err) {
-            LOG.error({
-              'message': 'Error processing page from prismamarket.ee ' + pageUrl,
-              'error': err.message
-            });
-
-            return finishPageProcessing(err);
-          }
-
-          var totalPages = result.totalPages;
-
-          if ((pageNumber + 1) === totalPages) {
-            pageRepeats = true;
-
-            LOG.info('[STATUS] [OK] [', site, '] [', language, '] Total pages ' + totalPages);
-          }
-
-          pageNumber++;
-
-          return finishPageProcessing(err);
-        });
-      },
-      function (err) {
+      that.processPage(pageUrl, language, processOffer, function (err, result) {
         if (err) {
           LOG.error({
-            'message': 'Error processing site ' + site,
+            'message': 'Error processing page from prismamarket.ee ' + pageUrl,
             'error': err.message
           });
 
-          return callback(err);
+          return finishPageProcessing(err);
         }
 
-        return callback();
+        var totalPages = result.totalPages;
+
+        if ((pageNumber + 1) === totalPages) {
+          pageRepeats = true;
+
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] Total pages %s', site, language, totalPages));
+        }
+
+        pageNumber++;
+
+        return finishPageProcessing(err);
+      });
+    },
+    function (err) {
+      if (err) {
+        LOG.error({
+          'message': 'Error processing site ' + site,
+          'error': err.message
+        });
+
+        return callback(err);
       }
-    );
+
+      return callback();
+    }
+  );
 };
 
 PrismamarketParser.prototype.processPage = function (url, language, processOffer, callback) {
@@ -111,62 +111,62 @@ PrismamarketParser.prototype.processPage = function (url, language, processOffer
   var that = this,
     site = that.config.site;
 
-  LOG.info('Processing page for', site, 'language', language, ':', url);
+  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing page %s', site, language, url));
 
   async.waterfall([
     function (done) {
-      request.get(url, {
-          headers: {
-            'Connection': 'keep-alive',
-            'Pragma': 'no-cache',
-            'Cache-Control': 'no-cache',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Upgrade-Insecure-Requests': '1',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
-            'Accept-Encoding': 'gzip, deflate, sdch',
-            'Accept-Language': 'en-US,en;q=0.8,ru;q=0.6,et;q=0.4',
-            'Cookie': 'is_new_user=1; _session_id=b426f59445bc396cfbbb78f8f0668beb'
-          }
-        },
-        function (err, response, data) {
+        request.get(url, {
+            headers: {
+              'Connection': 'keep-alive',
+              'Pragma': 'no-cache',
+              'Cache-Control': 'no-cache',
+              'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+              'Upgrade-Insecure-Requests': '1',
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
+              'Accept-Encoding': 'gzip, deflate, sdch',
+              'Accept-Language': 'en-US,en;q=0.8,ru;q=0.6,et;q=0.4',
+              'Cookie': 'is_new_user=1; _session_id=b426f59445bc396cfbbb78f8f0668beb'
+            }
+          },
+          function (err, response, data) {
+            if (err) {
+              LOG.error({
+                'message': 'Error retrieving page for ' + site + ' language ' + language + ': ' + url,
+                'error': err.message
+              });
+            }
+
+            return done(err, data);
+          });
+    },
+    function (data, done) {
+        that.parseResponseBody(data, function (err, body) {
           if (err) {
             LOG.error({
-              'message': 'Error retrieving page for ' + site + ' language ' + language + ': ' + url,
+              'message': 'Error parsing response body to DOM',
               'error': err.message
             });
           }
 
-          return done(err, data);
+          data = null;
+
+          done(err, body);
         });
     },
-    function (data, done) {
-      that.parseResponseBody(data, function (err, body) {
-        if (err) {
-          LOG.error({
-            'message': 'Error parsing response body to DOM',
-            'error': err.message
-          });
-        }
-
-        data = null;
-
-        done(err, body);
-      });
-    },
     function (body, done) {
-      var offers = that.getOffers(body, language),
-        offersNumber = _.size(offers.offers);
+        var offers = that.getOffers(body, language),
+          offersNumber = _.size(offers.offers);
 
-      LOG.info('Total offers found on page', offersNumber);
+        LOG.info('Total offers found on page', offersNumber);
 
-      body = null;
+        body = null;
 
-      done(null, offers);
+        done(null, offers);
     },
     function (offers, done) {
-      that.processOffers(language, offers.offers, processOffer, function (err) {
-        done(err, offers);
-      });
+        that.processOffers(language, offers.offers, processOffer, function (err) {
+          done(err, offers);
+        });
     }],
     function (err, result) {
       LOG.profile('Harvester.processPage');
@@ -199,43 +199,149 @@ PrismamarketParser.prototype.getOffers = function (data, language) {
     pageNumber: data.message.categories[0].page,
     offers: _.map(data.message.categories[0].entries, function (link) {
       return _.extend(link, {
-       'id': that.languages[language] + '_' + link.ean,
-       'site': that.config.site,
-       'language': that.languages[language]
+        'id': that.languages[language] + '_' + link.ean,
+        'site': that.config.site,
+        'language': that.languages[language]
       });
     })
   };
 };
 
 PrismamarketParser.prototype.fetchOffer = function (event, callback) {
-  var id = event.id,
+  var that = this,
+    id = event.id,
     site = event.site,
     language = event.language;
 
   LOG.info('Retrieving offer for', site, 'language', language, ':', id);
 
-  var runningTime = new Date();
+  if (event.refresh || event.test) {
+    async.waterfall([
+    function (done) {
+          request.get(event.url, {
+              headers: {
+                'Connection': 'keep-alive',
+                'Pragma': 'no-cache',
+                'Cache-Control': 'no-cache',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Upgrade-Insecure-Requests': '1',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
+                'Accept-Encoding': 'gzip, deflate, sdch',
+                'Accept-Language': 'en-US,en;q=0.8,ru;q=0.6,et;q=0.4',
+                'Cookie': 'is_new_user=1; _session_id=b426f59445bc396cfbbb78f8f0668beb'
+              }
+            },
+            function (err, response, data) {
+              if (err) {
+                LOG.error({
+                  'message': 'Error retrieving page for ' + site + ' language ' + language + ': ' + event.url,
+                  'error': err.message
+                });
+              }
 
-  if (event.reprocessing || event.test) {
+              return done(err, data);
+            });
+    },
+    function (data, done) {
+          that.parseResponseBody(data, function (err, body) {
+            if (err) {
+              LOG.error({
+                'message': 'Error parsing response body to DOM',
+                'error': err.message
+              });
+            }
 
+            data = null;
+
+            done(err, body);
+          });
+    },
+    function parseOffer(dom, done) {
+          LOG.profile("parser.ParseOffer");
+
+          that.parse(dom.message.entry, language, function parseOfferResult(err, offer) {
+            if (err) {
+              LOG.error({
+                'message': 'Error parsing data for ' + site + ' language ' + language + ': ' + event.url,
+                'error': err.message
+              });
+            }
+
+            LOG.profile("parser.ParseOffer");
+
+            dom = null;
+
+            return done(err, offer);
+          });
+    },
+    function extendOffer(offer, done) {
+        var runningTime = new Date();
+
+        offer = _.extend(offer, {
+          'id': id,
+          'url': event.url,
+          'site': site,
+          'language': language,
+          'active': true,
+          'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
+        });
+
+        done(null, offer);
+    }],
+      function handleProcessOfferError(err, offer) {
+        if (err) {
+          LOG.error({
+            'message': 'Error fetching offer for ' + site + ' language ' + language + ': ' + event.url,
+            'error': err.message
+          });
+        }
+
+        LOG.profile('Harvester.processOffer');
+
+        LOG.profile("Harvester.saveOffer");
+
+        LOG.debug('Saving offer', offer);
+
+        return callback(err, offer);
+      });
   }
   else {
+    that.parse(event, language, function parseOfferResult(err, offer) {
+      if (err) {
+        LOG.error({
+          'message': 'Error parsing data for ' + site + ' language ' + language + ': ' + event.url,
+          'error': err.message
+        });
+      }
 
+      LOG.profile("parser.ParseOffer");
+
+      event = null;
+      
+      var runningTime = new Date();
+
+      offer = _.extend(offer, {
+        'id': id,
+        'url': event.url,
+        'site': site,
+        'language': language,
+        'active': true,
+        'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
+      });
+
+      return callback(null, offer);
+    });
   }
+};
 
+PrismamarketParser.prototype.parse = function (event, language, callback) {
   var offer = {
-    'id': id,
-    'site': site,
-    'language': language,
-    'active': true,
-    'url': util.format('https://www.prismamarket.ee/api/?path=entry&ean=%s', event.ean),
     'title': event.name,
-    'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear(),
     'campaign_start': event.campaign_start,
     'campaign_end': event.campaign_end,
     'price': event.price,
     'original_price': event.original_price,
-    'pictures': [ util.format("https://s3-eu-west-1.amazonaws.com/balticsimages/images/320x480/%s.png", event.image_guid)],
+    'pictures': [util.format("https://s3-eu-west-1.amazonaws.com/balticsimages/images/320x480/%s.png", event.image_guid)],
     'subname': event.subname,
     'quantity': event.quantity,
     'unit_name': event.unit_name,
@@ -245,5 +351,7 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
 
   return callback(null, offer);
 };
+
+
 
 module.exports = PrismamarketParser;

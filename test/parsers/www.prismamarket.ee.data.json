@@ -1,0 +1,74 @@
+{
+  "offers": {
+    "est": {
+      "https://www.prismamarket.ee/api/?path=entry&ean=4742108006121&language=et": {
+        "campaign_end": "2016-03-02",
+        "campaign_start": "2016-02-04",
+        "description": "",
+        "original_price": 1.15,
+        "pictures": [
+          "https://s3-eu-west-1.amazonaws.com/balticsimages/images/320x480/581e4e072f9d1e1d59776cb9105abf78.png"
+        ],
+        "price": 0.69,
+        "quantity": 1,
+        "shop": "Prisma",
+        "subname": "",
+        "title": "Tutti-Frutti 1 L Segumahlajook",
+        "unit_name": "l"
+      }
+    },
+    "rus": {
+      "https://www.prismamarket.ee/api/?path=entry&ean=4742108006121&language=ru": {
+        "campaign_end": "2016-03-02",
+        "campaign_start": "2016-02-04",
+        "description": "",
+        "original_price": 1.15,
+        "pictures": [
+          "https://s3-eu-west-1.amazonaws.com/balticsimages/images/320x480/581e4e072f9d1e1d59776cb9105abf78.png"
+        ],
+        "price": 0.69,
+        "quantity": 1,
+        "shop": "Prisma",
+        "subname": "",
+        "title": "Tutti-Frutti 1 L Segumahlajook",
+        "unit_name": "л"
+      }
+    },
+    "eng": {
+      "https://www.prismamarket.ee/api/?path=entry&ean=4742108006121&language=en": {
+        "campaign_end": "2016-03-02",
+        "campaign_start": "2016-02-04",
+        "description": "",
+        "original_price": 1.15,
+        "pictures": [
+          "https://s3-eu-west-1.amazonaws.com/balticsimages/images/320x480/581e4e072f9d1e1d59776cb9105abf78.png"
+        ],
+        "price": 0.69,
+        "quantity": 1,
+        "shop": "Prisma",
+        "site": "",
+        "subname": "",
+        "title": "Tutti-Frutti 1 L Segumahlajook",
+        "unit_name": "l"
+      }
+    },
+    "fin": {
+      "https://www.prismamarket.ee/api/?path=entry&ean=4742108006121&language=fi": {
+        "campaign_end": "2016-03-02",
+        "campaign_start": "2016-02-04",
+        "description": "",
+        "original_price": 1.15,
+        "pictures": [
+          "https://s3-eu-west-1.amazonaws.com/balticsimages/images/320x480/581e4e072f9d1e1d59776cb9105abf78.png"
+        ],
+        "price": 0.69,
+        "quantity": 1,
+        "shop": "Prisma",
+        "site": "",
+        "subname": "",
+        "title": "Tutti-Frutti 1 L Segumahlajook",
+        "unit_name": "l"
+      }
+    }
+  }
+}

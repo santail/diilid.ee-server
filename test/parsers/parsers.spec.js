@@ -11,10 +11,15 @@ _.each(conf.activeSites, function (active, site) {
 
     Parser.prototype.processOffers = function (language, offers, processOffer, done) {
       expect(offers).to.not.be.empty;
-      
+
       done();
     };
-    
+
+    Parser.prototype.processPage = function (url, language, processOffer, callback) {
+      callback(null, {"totalPages": 1 });
+    };
+
+
     var parser = new Parser();
 
     describe(parser.config.site, function () {
@@ -38,7 +43,8 @@ _.each(conf.activeSites, function (active, site) {
                 'id': 1,
                 'site': parser.config.site,
                 'language': parser.languages[language],
-                'url': url
+                'url': url,
+                'test': true
               };
 
               parser.fetchOffer(event, function (err, res) {
