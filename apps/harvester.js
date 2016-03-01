@@ -72,11 +72,9 @@ Harvester.prototype.run = function (options, callback) {
 
   LOG.info('[STATUS] [OK] [', site, '] Harvesting started');
 
-  var parser = parserFactory.getParser(site);
-
   async.waterfall([
       function stepCleanup(done) {
-        if (parser.config.cleanup) {
+        if (options.cleanup) {
           LOG.info('[STATUS] [OK] [', site, '] Cleanup started');
 
           that.db.offers.remove({
@@ -103,7 +101,7 @@ Harvester.prototype.run = function (options, callback) {
       function stepDeactivate(done) {
         LOG.profile("Harvester.deactivate");
 
-        if (parser.config.reactivate) {
+        if (options.reactivate) {
           LOG.info('[STATUS] [OK] [', site, '] Deactivation started');
 
           that.db.offers.update({
