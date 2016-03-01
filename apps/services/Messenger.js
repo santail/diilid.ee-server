@@ -85,7 +85,13 @@ Messenger.prototype.compileEmailBody = function (notification) {
   content += util.format("<h2>You have been searching for '%s'</h2>", notification.contains);
 
   _.each(notification.offers, function (offer) {
-    var details = util.format('<span>%s</span> <span style="text: bold;">%s</span>', offer.vendor, offer.price);
+    var details = '';
+
+    if (offer.vendor) {
+      details += util.format('<span>%s</span>', offer.vendor);
+    }
+    
+    details += util.format(' <span style="text: bold;">%s</span>', offer.price);
 
     if (offer.original_price) {
      details += util.format('<span style="text-decoration: line-through;">%s</span>', offer.original_price);
