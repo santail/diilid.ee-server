@@ -41,12 +41,12 @@ agenda.define('execute harvester', function (job, done) {
               'message': 'Error enqueueing harvester run job',
               'error': err.message
             });
-            
+
             return siteHarvestFinish(err);
           }
 
           LOG.info(util.format('[STATUS] [OK] [%s] Harvester run job enqueued', site));
-          
+
           siteHarvestFinish();
         });
       };
@@ -58,7 +58,7 @@ agenda.define('execute harvester', function (job, done) {
           'message': '[STATUS] [Failed] Error processing sites',
           'error': err.message
         });
-        
+
         return done(err);
       }
 
@@ -96,7 +96,13 @@ agenda.define('execute procurer', function (job, done) {
   });
 });
 
-agenda.every(config.harvester.execution.rule, 'execute harvester');
-agenda.every(config.procurer.execution.rule, 'execute procurer');
 
-agenda.start();
+agenda.on('ready', function() {
+  agenda.every(config.harvester.execution.rule, 'execute harvester');
+
+  var procurerJob = agenda.create('execute procurer');
+  procurerJob.repeatAt(config.procurer.execution.rule).save();
+
+  agenda.start();
+});
+
