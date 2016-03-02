@@ -90,18 +90,18 @@ Messenger.prototype.compileEmailBody = function (notification) {
     if (offer.vendor) {
       details += util.format('<span>%s</span>', offer.vendor);
     }
-    
-    details += util.format(' <span style="text: bold;">%s</span>', offer.price);
+
+    details += util.format('&nbsp;<span style="text: bold;">%s</span>', offer.price);
 
     if (offer.original_price) {
-     details += util.format('<span style="text-decoration: line-through;">%s</span>', offer.original_price);
+     details += util.format('&nbsp;<span style="text-decoration: line-through;">%s</span>', offer.original_price);
     }
 
     if (offer.description) {
       details += util.format('<br /><span>%s</span>',  offer.description);
     }
 
-    content += util.format('<p><a href="%s" title="%s" />%s</a> %s</p>', offer.url, offer.title, offer.title, details);
+    content += util.format('<p><a href="%s" title="%s" />%s</a>&nbsp;%s</p>', offer.url, offer.title, offer.title, details);
   });
 
   return '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' +
