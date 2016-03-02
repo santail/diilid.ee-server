@@ -45,7 +45,7 @@ Processor.prototype.run = function (options, callback) {
       that.offerRefresh(offer, callback);
     }
     else if (offer) {
-      that.offerReactivate(offer._id, callback);
+      that.offerReactivate(offer, callback);
     }
     else {
       that.offerFetch(options, callback);
@@ -53,12 +53,12 @@ Processor.prototype.run = function (options, callback) {
   });
 };
 
-Processor.prototype.offerReactivate = function (id, callback) {
-  LOG.info(util.format('[STATUS] [OK] [%s] Reactivate offer', id));
+Processor.prototype.offerReactivate = function (offer, callback) {
+  LOG.info(util.format('[STATUS] [OK] [%s] Reactivate offer %s', offer.site, offer.id));
 
   this.db.offers.findAndModify({
     query: {
-      _id: id
+      _id: offer.id
     },
     update: {
       $set: {
@@ -70,24 +70,25 @@ Processor.prototype.offerReactivate = function (id, callback) {
   }, function offerReactivateResult(err, doc, lastErrorObject) {
     if (err) {
       LOG.error({
-        'message': util.format('Error reactivating offer #Id %s', id),
+        'message': util.format('Error reactivating offer #Id %s', offer.id),
         'error': err.message
       });
     }
 
-    LOG.info('[STATUS] [OK] [%s] Reactivated');
+    LOG.info(util.format('[STATUS] [OK] [%s] Reactivated offer %s', offer.site, offer.id));
 
     return callback(err);
   });
 };
 
 Processor.prototype.offerFetch = function (options, callback) {
-  LOG.info(util.format('[STATUS] [OK] [%s] Fetching offer with id %s', site, options.id));
-
   LOG.profile('Harvester.processOffer');
 
   var that = this,
     site = options.site;
+
+  LOG.info(util.format('[STATUS] [OK] [%s] Fetching offer with id %s', options.site, options.id));
+
   var parser = parserFactory.getParser(site);
 
   parser.fetchOffer(options, function (err, offer) {
@@ -112,7 +113,7 @@ Processor.prototype.offerFetch = function (options, callback) {
         return callback(err);
       }
 
-      LOG.info('[STATUS] [OK] [', site, '] Offer saved with id ', parser.getOfferId(saved));
+      LOG.info(util.format('[STATUS] [OK] [%s] Offer saved with id %s', site, parser.getOfferId(saved)));
 
       LOG.profile("Harvester.saveOffer");
 
@@ -122,12 +123,13 @@ Processor.prototype.offerFetch = function (options, callback) {
 };
 
 Processor.prototype.offerRefresh = function (offer, callback) {
-  LOG.info(util.format('[STATUS] [OK] [%s] Refreshing offer with id %s', site, offer.id));
-
   LOG.profile('Harvester.processOffer');
 
   var that = this,
     site = offer.site;
+
+  LOG.info(util.format('[STATUS] [OK] [%s] Refreshing offer with id %s', site, offer.id));
+
   var parser = parserFactory.getParser(site);
 
   var options = _.extend(offer, {});
@@ -163,7 +165,7 @@ Processor.prototype.offerRefresh = function (offer, callback) {
         });
       }
 
-      LOG.info(util.format('[STATUS] [OK] [%s] Reactivated', options._id));
+      LOG.info(util.format('[STATUS] [OK] [%s] Refreshed offer %s', options.site, options._id));
 
       return callback(err);
     });
