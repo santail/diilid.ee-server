@@ -279,7 +279,6 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
 
         offer = _.extend(offer, {
           'id': id,
-          'url': event.url,
           'site': site,
           'language': language,
           'active': true,
@@ -320,7 +319,6 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
 
       offer = _.extend(offer, {
         'id': id,
-        'url': event.url,
         'site': site,
         'language': language,
         'active': true,
@@ -337,6 +335,7 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
 PrismamarketParser.prototype.parse = function (event, language, callback) {
   var offer = {
     'title': event.name,
+    'url': util.format('https://www.prismamarket.ee/api/?path=entry&ean=%s', event.ean),
     'campaign_start': event.campaign_start,
     'campaign_end': event.campaign_end,
     'price': event.price,
