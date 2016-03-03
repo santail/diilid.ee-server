@@ -75,7 +75,7 @@ Processor.prototype.offerReactivate = function (offer, callback) {
       });
     }
 
-    LOG.info(util.format('[STATUS] [OK] [%s] Reactivated offer %s', offer.site, offer.id));
+    LOG.debug(util.format('[STATUS] [OK] [%s] Reactivated offer %s', offer.site, offer.id));
 
     return callback(err);
   });
