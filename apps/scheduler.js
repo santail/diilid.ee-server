@@ -97,12 +97,10 @@ agenda.define('execute procurer', function (job, done) {
 });
 
 
-agenda.on('ready', function() {
   agenda.every(config.harvester.execution.rule, 'execute harvester');
 
   var procurerJob = agenda.create('execute procurer');
   procurerJob.repeatAt(config.procurer.execution.rule).save();
 
   agenda.start();
-});
 
