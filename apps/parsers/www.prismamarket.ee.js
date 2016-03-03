@@ -213,7 +213,7 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
     site = event.site,
     language = event.language;
 
-  LOG.info('Retrieving offer for', site, 'language', language, ':', id);
+  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Retrieving offer %s', site, language, id));
 
   if (event.refresh || event.test) {
     async.waterfall([
@@ -326,7 +326,7 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
         'active': true,
         'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
       });
-      
+
       event = null;
 
       return callback(null, offer);
