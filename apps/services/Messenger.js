@@ -101,7 +101,8 @@ Messenger.prototype.compileEmailBody = function (notification) {
       details += util.format('<br /><span>%s</span>',  offer.description);
     }
 
-    content += util.format('<p><a href="%s" title="%s" />%s</a>&nbsp;%s</p>', offer.url, offer.title, offer.title, details);
+    var url = offer.original_url ? offer.original_url : offer.url;
+    content += util.format('<p><a href="%s" title="%s" />%s</a>&nbsp;%s</p>', url, offer.title, offer.title, details);
   });
 
   return '<table border="0" cellpadding="0" cellspacing="0" style="margin:0; padding:0" width="100%">' +

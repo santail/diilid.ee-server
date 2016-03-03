@@ -332,19 +332,20 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
   }
 };
 
-PrismamarketParser.prototype.parse = function (event, language, callback) {
+PrismamarketParser.prototype.parse = function (data, language, callback) {
   var offer = {
-    'title': event.name,
-    'url': util.format('https://www.prismamarket.ee/api/?path=entry&ean=%s', event.ean),
-    'campaign_start': event.campaign_start,
-    'campaign_end': event.campaign_end,
-    'price': event.price,
-    'original_price': event.original_price,
-    'pictures': [util.format("https://s3-eu-west-1.amazonaws.com/balticsimages/images/320x480/%s.png", event.image_guid)],
-    'subname': event.subname,
-    'quantity': event.quantity,
-    'unit_name': event.unit_name,
-    'description': event.description,
+    'title': data.name,
+    'original_url': util.format('https://www.prismamarket.ee/?language=%s#!/entry/%s', this.languages[language], data.ean),
+    'url': util.format('https://www.prismamarket.ee/api/?path=entry&ean=%s', data.ean),
+    'campaign_start': data.campaign_start,
+    'campaign_end': data.campaign_end,
+    'price': data.price,
+    'original_price': data.original_price,
+    'pictures': [util.format("https://s3-eu-west-1.amazonaws.com/balticsimages/images/320x480/%s.png", data.image_guid)],
+    'subname': data.subname,
+    'quantity': data.quantity,
+    'unit_name': data.unit_name,
+    'description': data.description,
     'vendor': 'Prisma'
   };
 
