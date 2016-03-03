@@ -316,8 +316,6 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
 
       LOG.profile("parser.ParseOffer");
 
-      event = null;
-      
       var runningTime = new Date();
 
       offer = _.extend(offer, {
@@ -328,6 +326,8 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
         'active': true,
         'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
       });
+      
+      event = null;
 
       return callback(null, offer);
     });
