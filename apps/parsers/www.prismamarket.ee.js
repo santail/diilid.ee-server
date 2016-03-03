@@ -345,7 +345,7 @@ PrismamarketParser.prototype.parse = function (event, language, callback) {
     'quantity': event.quantity,
     'unit_name': event.unit_name,
     'description': event.description,
-    'shop': 'Prisma'
+    'vendor': 'Prisma'
   };
 
   return callback(null, offer);
