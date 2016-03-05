@@ -335,7 +335,7 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
 PrismamarketParser.prototype.parse = function (data, language, callback) {
   var offer = {
     'title': data.name,
-    'original_url': util.format('https://www.prismamarket.ee/?language=%s#!/entry/%s', this.languages[language], data.ean),
+    'original_url': util.format('https://www.prismamarket.ee/?language=%s#!/entry/%s', language, data.ean),
     'url': util.format('https://www.prismamarket.ee/api/?path=entry&ean=%s', data.ean),
     'campaign_start': data.campaign_start,
     'campaign_end': data.campaign_end,
