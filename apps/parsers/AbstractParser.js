@@ -276,7 +276,16 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
             };
           });
 
-          async.series(functions, done);
+          async.series(functions, function (err, results) {
+            if (err) {
+              LOG.error({
+                'message': 'Error processing pages',
+                'error': err.message
+              });
+            }
+  
+            done(err);
+          });
         }
         else {
           var offers = that.getOffers(dom, language),
