@@ -54,7 +54,7 @@ Processor.prototype.run = function (options, callback) {
 };
 
 Processor.prototype.offerReactivate = function (offer, callback) {
-  LOG.info(util.format('[STATUS] [OK] [%s] Reactivate offer %s', offer.site, offer.id));
+  LOG.debug(util.format('[STATUS] [OK] [%s] Reactivate offer %s', offer.site, offer.id));
 
   this.db.offers.findAndModify({
     query: {
@@ -75,7 +75,7 @@ Processor.prototype.offerReactivate = function (offer, callback) {
       });
     }
 
-    LOG.debug(util.format('[STATUS] [OK] [%s] Reactivated offer %s', offer.site, offer.id));
+    LOG.info(util.format('[STATUS] [OK] [%s] Reactivated offer %s', offer.site, offer.id));
 
     return callback(err);
   });

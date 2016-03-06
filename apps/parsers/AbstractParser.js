@@ -268,11 +268,17 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
 
           var functions = _.map(pages, function (pageUrl, index) {
             return function (finishPageProcessing) {
-              LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing page %s of %s', site, language, index + 1, pagesNumber));
-
               dom = null;
 
-              return that.processPage(pageUrl, language, processOffer, finishPageProcessing);
+              var options = {
+                url: pageUrl,
+                language: language, 
+                handler: processOffer,
+                pageNumber: index + 1, 
+                totalPages: pagesNumber
+              };
+
+              return that.processPage(options, finishPageProcessing);
             };
           });
 
@@ -318,34 +324,42 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
   );
 };
 
-AbstractParser.prototype.processPage = function (url, language, processOffer, callback) {
+AbstractParser.prototype.processPage = function (options, callback) {
   LOG.profile('Harvester.processPage');
 
   var that = this,
-    site = that.config.site;
-
-  LOG.debug(util.format('Processing page for %s language %s: %s', site, language, url));
+    site = that.config.site,
+    url = options.url, 
+    language = options.language, 
+    handler = options.handler;
+  
+  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing page %s of %s', site, language, options.pageNumber, options.totalPages));
 
   async.waterfall([
     function (done) {
-        request.get(url, {
-            headers: {
-              'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
-              'accept-language': 'en-US,en;q=0.8',
-              'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'
-            },
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+      
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Fetching page %s', site, language, url));
+      
+      request.get(url, {
+          headers: {
+            'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+            'accept-language': 'en-US,en;q=0.8',
+            'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'
           },
-          function (err, response, data) {
-            if (err) {
-              LOG.error({
-                'message': util.format('Error retrieving page for %s language %s: %s', site, language, url),
-                'error': err.message
-              });
-            }
+          'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+        },
+        function (err, response, data) {
+          if (err || response.statusCode !== 200 || !data) {
+            LOG.error({
+              'message': util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Error retrieving page.', site, language, url, response.statusCode),
+              'error': err.message
+            });
+          }
+          
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] [%s] Response status %s', site, language, url, response.statusCode));
 
-            return done(err, data);
-          });
+          return done(err, data);
+        });
     },
     function (data, done) {
         that.parseResponseBody(data, function (err, body) {
@@ -372,7 +386,7 @@ AbstractParser.prototype.processPage = function (url, language, processOffer, ca
         done(null, offers);
     },
     function (offers, done) {
-        that.processOffers(language, offers, processOffer, done);
+        that.processOffers(language, offers, handler, done);
     }],
     function (err, result) {
       if (err) {

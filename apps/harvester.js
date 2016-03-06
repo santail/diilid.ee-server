@@ -72,12 +72,10 @@ Harvester.prototype.run = function (options, callback) {
 
   LOG.info('[STATUS] [OK] [', site, '] Harvesting started');
 
-  console.log(options);
-  
   async.waterfall([
       function stepCleanup(done) {
         if (options.cleanup) {
-          LOG.info('[STATUS] [OK] [', site, '] Cleanup started');
+          LOG.info(util.format('[STATUS] [OK] [%s] Cleanup started', site));
 
           that.db.offers.remove({
             'site': site
@@ -87,24 +85,22 @@ Harvester.prototype.run = function (options, callback) {
                 'message': 'Error deleting offers for site ' + site,
                 'error': err.message
               });
-
-              return done(err);
             }
 
-            LOG.info('[STATUS] [OK] [', site, '] Cleanup finished');
+            LOG.info(util.format('[STATUS] [OK] [%s] Cleanup finished', site));
 
-            return done(null);
+            return done(err);
           });
         }
         else {
-          done(null);
+          done();
         }
       },
       function stepDeactivate(done) {
         LOG.profile("Harvester.deactivate");
 
         if (options.reactivate) {
-          LOG.info('[STATUS] [OK] [', site, '] Deactivation started');
+          LOG.info(util.format('[STATUS] [OK] [%s] Reactivation started', site));
 
           that.db.offers.update({
             'site': site
@@ -121,13 +117,11 @@ Harvester.prototype.run = function (options, callback) {
                 'message': 'Error deactivating for site ' + site,
                 'error': err.message
               });
-
-              return done(err);
             }
 
-            LOG.info('[STATUS] [OK] [', site, '] Deactivation finished');
+            LOG.info(util.format('[STATUS] [OK] [%s] Reactivation finished', site));
 
-            return done(null);
+            return done(err);
           });
         }
         else {
@@ -156,14 +150,14 @@ Harvester.prototype.run = function (options, callback) {
     function (err, result) {
       if (err) {
         LOG.error({
-          'message': 'Error processing site',
+          'message': 'Harvesting failed',
           'error': err.message
         });
       }
-
-      LOG.info('[STATUS] [OK] [', site, '] Harvesting finished');
-
-      return that.onHarvestingFinished(err, callback);
+    
+      LOG.info('[STATUS] [OK] Harvesting finished');
+    
+      return callback(err);
     });
 };
 
@@ -172,7 +166,7 @@ Harvester.prototype.processSite = function (site, callback) {
     parser = parserFactory.getParser(site),
     languages = _.keys(parser.config.index);
 
-  LOG.info('[STATUS] [OK] [', site, '] Processing started.', 'Languages', languages);
+  LOG.info(util.format('[STATUS] [OK] [%s] Processing started', site));
 
   var functions = _.map(languages, function (language) {
     return function (done) {
@@ -198,7 +192,7 @@ Harvester.prototype.processSite = function (site, callback) {
       return callback(err);
     }
 
-    LOG.info('[STATUS] [OK] [', site, '] Processing finished.');
+    LOG.info(util.format('[STATUS] [OK] [%s] Processing finished', site));
 
     return callback();
   });
@@ -211,32 +205,17 @@ Harvester.prototype.processOffer = function (offer, callback) {
   that.queue.enqueue('offer_fetch_event', offer, function (err, job) {
     if (err) {
       LOG.error({
-        'message': 'Error enqueueing offer ' + (offer.id ? offer.id : '') + ' for site ' + (offer.site ? offer.site : ''),
+        'message': util.format('[STATUS] [Failure] [%s] [%s] [%s] Error enqueueing offer for processing', offer.site, offer.language, offer.id),
         'error': err.message
       });
 
       return callback(err);
     }
 
-     LOG.info('[STATUS] [OK] [', offer.site, '] [', offer.language, '] [', offer.id , '] Offer enqueued for processing');
+     LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Offer enqueued for processing', offer.site, offer.language, offer.id));
 
     return callback(err, offer);
   });
-};
-
-Harvester.prototype.onHarvestingFinished = function (err, callback) {
-  if (err) {
-    LOG.error({
-      'message': 'Harvesting failed',
-      'error': err.message
-    });
-
-    return callback(err, 'NOK');
-  }
-
-  LOG.info('[STATUS] [OK] Harvesting finished');
-
-  return callback(err, 'OK');
 };
 
 module.exports = Harvester;
