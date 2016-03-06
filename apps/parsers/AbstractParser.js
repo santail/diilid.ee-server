@@ -212,7 +212,7 @@ AbstractParser.prototype.parse = function parse(dom, language, callback) {
   callback(null, offer);
 };
 
-AbstractParser.prototype.gatherOffers = function (language, processOffer, callback) {
+AbstractParser.prototype.gatherOffers = function (language, offerHandler, callback) {
   LOG.profile('Harvester.gatherOffers');
 
   var that = this,
@@ -225,6 +225,8 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
       function stepRetrieveIndexPage(done) {
         LOG.profile('IndexRequest');
 
+        LOG.info(util.format('[STATUS] [OK] [%s] [%s] Fetching site index page %s', site, language, url));
+
         request({
           method: 'GET',
           uri: url,
@@ -236,19 +238,23 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
           },
           'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
         }, function (err, response, data) {
-          if (err) {
+          if (err || response.statusCode !== 200 || !data) {
             LOG.error({
-              'message': 'Error retrieving index page: ' + url,
+              'message': util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Error fetching site index page.', site, language, url, response.statusCode),
               'error': err.message
             });
           }
 
           LOG.profile('IndexRequest');
+          
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Site index page received %s', site, language, response.statusCode, url));
 
-          return done(err, utils.unleakString(data));
+          return done(err, data);
         });
       },
       function stepParseResponseBody(data, done) {
+        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing index page body', site, language, url));
+        
         that.parseResponseBody(data, function (err, dom) {
           if (err) {
             LOG.error({
@@ -256,15 +262,21 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
               'error': err.message
             });
           }
+          
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing index page body finished', site, language, url));
 
           done(err, dom);
         });
       },
       function stepCheckPaging(dom, done) {
+        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Checking index page contains paging', site, language, url));
+        
         if (that.config.paging && that.config.paging.finit) {
           var pagingParams = that.getPagingParameters(language, dom);
           var pages = pagingParams.pages,
             pagesNumber = _.size(pages);
+
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Paging found %r', site, language, url, pagingParams));
 
           var functions = _.map(pages, function (pageUrl, index) {
             return function (finishPageProcessing) {
@@ -273,7 +285,7 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
               var options = {
                 url: pageUrl,
                 language: language, 
-                handler: processOffer,
+                handler: offerHandler,
                 pageNumber: index + 1, 
                 totalPages: pagesNumber
               };
@@ -281,34 +293,42 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
               return that.processPage(options, finishPageProcessing);
             };
           });
+          
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing %s pages started', site, language, pagesNumber));
 
-          async.series(functions, function (err, results) {
-            if (err) {
-              LOG.error({
-                'message': 'Error processing pages',
-                'error': err.message
-              });
+          async.series(
+            functions, 
+            function (err, results) {
+              if (err) {
+                LOG.error({
+                  'message': 'Error processing pages',
+                  'error': err.message
+                });
+              }
+              
+              LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing %s pages finished', site, language, pagesNumber));
+    
+              done(err);
             }
-  
-            done(err);
-          });
+          );
         }
         else {
-          var offers = that.getOffers(dom, language),
-            linksNumber = _.size(offers);
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] No paging found', site, language, url));
+          
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing offers started %s', site, language, url));
+
+          var offers = that.getOffers(dom, language);
 
           dom = null;
 
-          LOG.debug('Total links found on page', linksNumber);
-
-          that.processOffers(language, offers, processOffer, done);
+          that.processOffers(language, offers, offerHandler, done);
         }
       }
     ],
     function onSiteIndexPageProcessed(err, result) {
       if (err) {
         LOG.error({
-          'message': util.format('Error processing index page for %s language %s', site, language),
+          'message': util.format('[STATUS] [Failure] [%s] [%s] Error gathering offers %s', site, language, url),
           'error': err.message
         });
 
@@ -317,7 +337,7 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
 
       LOG.profile('Harvester.gatherOffers');
 
-      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Gathering offers from %s finished', site, language, url));
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Gathering offers finished %s', site, language, url));
 
       return callback();
     }
@@ -331,7 +351,7 @@ AbstractParser.prototype.processPage = function (options, callback) {
     site = that.config.site,
     url = options.url, 
     language = options.language, 
-    handler = options.handler;
+    offerHandler = options.handler;
   
   LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing page %s of %s', site, language, options.pageNumber, options.totalPages));
 
@@ -356,7 +376,7 @@ AbstractParser.prototype.processPage = function (options, callback) {
             });
           }
           
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] [%s] Response status %s', site, language, url, response.statusCode));
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Page received %s', site, language, response.statusCode, url));
 
           return done(err, data);
         });
@@ -386,7 +406,7 @@ AbstractParser.prototype.processPage = function (options, callback) {
         done(null, offers);
     },
     function (offers, done) {
-        that.processOffers(language, offers, handler, done);
+        that.processOffers(language, offers, offerHandler, done);
     }],
     function (err, result) {
       if (err) {
@@ -402,33 +422,37 @@ AbstractParser.prototype.processPage = function (options, callback) {
     });
 };
 
-AbstractParser.prototype.processOffers = function (language, offers, processOffer, callback) {
-  (function (that, language, offers, processOffer, callback) {
+AbstractParser.prototype.processOffers = function (language, offers, offerHandler, callback) {
+  var that = this,
+    site = that.config.site;
+    
+  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing offers started %s', site, language, _.size(offers)));
 
-    var site = that.config.site;
+  var functions = _.map(offers, function (offer) {
+    return function (done) {
+      offer = _.extend(offer, {
+        id: that.getOfferId(offer)
+      });
 
-    var functions = _.map(offers, function (offer) {
-      return function (done) {
-        offer = _.extend(offer, {
-          id: that.getOfferId(offer)
-        });
+      offerHandler(offer, done);
+    };
+  });
 
-        processOffer(offer, done);
-      };
-    });
-
-    async.series(functions, function (err, links) {
+  async.series(
+    functions, 
+    function (err, links) {
       if (err) {
         LOG.error({
           'message': 'Error processing offers for site ' + site,
           'error': err.message
         });
       }
+  
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing offers finished %s', site, language, _.size(offers)));
 
       callback(err, links);
-    });
-
-  })(this, language, offers, processOffer, callback);
+    }
+  );
 };
 
 AbstractParser.prototype.fetchOffer = function (options, callback) {
@@ -438,7 +462,7 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
     language = options.language,
     url = options.url;
 
-  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Retrieving offer %s', site, language, url));
+  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing offer %s', site, language, url));
 
   async.waterfall([
     function requestOffer(done) {
@@ -454,14 +478,16 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
           },
           'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
         }, function requestOfferResult(err, response, data) {
-          if (err) {
+          if (err || response.statusCode !== 200 || !data) {
             LOG.error({
-              'message': 'Error retrieving offer for ' + site + ' language ' + language + ': ' + url,
+              'message': util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Error retrieving offer.', site, language, url, response.statusCode),
               'error': err.message
             });
           }
 
           LOG.profile('Retrieve offer');
+          
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Offer received %s', site, language, response.statusCode, url));
 
           done(err, data);
         });
@@ -490,7 +516,7 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
         that.parse(dom, language, function parseOfferResult(err, offer) {
           if (err) {
             LOG.error({
-              'message': 'Error parsing data for ' + site + ' language ' + language + ': ' + url,
+              'message': util.format('[STATUS] [Failure] [%s] [%s] [%s] Error parsing offer.', site, language, url),
               'error': err.message
             });
           }
@@ -519,16 +545,18 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
     function handleProcessOfferError(err, offer) {
       if (err) {
         LOG.error({
-          'message': 'Error fetching offer for ' + site + ' language ' + language + ': ' + url,
+          'message': util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Error processing offer.', site, language, url), 
           'error': err.message
         });
+        
+        return callback(err);
       }
 
       LOG.profile('Harvester.processOffer');
 
       LOG.profile("Harvester.saveOffer");
 
-      LOG.debug('Saving offer', offer);
+      LOG.info(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing offer finished.', site, language, url));
 
       return callback(err, offer);
     });

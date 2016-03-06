@@ -53,6 +53,8 @@ worker.register({
   'harvester_run_event': function harvesterRunEventHandler(event, done) {
     var harvester = new Harvester();
 
+    LOG.info(util.format('[STATUS] [OK] [%s] Harvesting event received %r', event.site, event));
+
     var options = _.extend(event, {});
 
     harvester.run(options, done);
@@ -70,8 +72,8 @@ Harvester.prototype.run = function (options, callback) {
   var that = this,
     site = options.site;
 
-  LOG.info('[STATUS] [OK] [', site, '] Harvesting started');
-
+  LOG.info(util.format('[STATUS] [OK] [%s] Harvesting started', site));
+    
   async.waterfall([
       function stepCleanup(done) {
         if (options.cleanup) {
@@ -93,7 +95,7 @@ Harvester.prototype.run = function (options, callback) {
           });
         }
         else {
-          done();
+          done(null);
         }
       },
       function stepDeactivate(done) {
@@ -133,6 +135,8 @@ Harvester.prototype.run = function (options, callback) {
 
         LOG.profile("Harvester.processSite");
 
+        LOG.info(util.format('[STATUS] [OK] [%s] Processing started', site));
+
         that.processSite(site, function (err) {
           if (err) {
             LOG.error({
@@ -142,6 +146,8 @@ Harvester.prototype.run = function (options, callback) {
           }
 
           LOG.profile("Harvester.processSite");
+          
+          LOG.info(util.format('[STATUS] [OK] [%s] Processing finished', site));
 
           return done(err);
         });
@@ -166,36 +172,37 @@ Harvester.prototype.processSite = function (site, callback) {
     parser = parserFactory.getParser(site),
     languages = _.keys(parser.config.index);
 
-  LOG.info(util.format('[STATUS] [OK] [%s] Processing started', site));
-
   var functions = _.map(languages, function (language) {
     return function (done) {
       parser.gatherOffers(language, that.processOffer.bind(that), done);
     };
   });
 
-  async.waterfall(functions, function (err, results) {
-    parser = null;
-
-    if (err) {
-      LOG.error({
-        'message': 'Error processing site ' + site,
-        'error': err.message
-      });
-
-      pmx.notify({
-        success : false,
-        'message': 'Error processing site ' + site,
-        'error': err.message
-      });
-
-      return callback(err);
+  async.waterfall(
+    functions, 
+    function (err, results) {
+      parser = null;
+  
+      if (err) {
+        LOG.error({
+          'message': 'Error processing site ' + site,
+          'error': err.message
+        });
+  
+        pmx.notify({
+          success : false,
+          'message': 'Error processing site ' + site,
+          'error': err.message
+        });
+  
+        return callback(err);
+      }
+  
+      LOG.info(util.format('[STATUS] [OK] [%s] Processing finished', site));
+  
+      return callback();
     }
-
-    LOG.info(util.format('[STATUS] [OK] [%s] Processing finished', site));
-
-    return callback();
-  });
+  );
 };
 
 
