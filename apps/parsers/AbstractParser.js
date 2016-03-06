@@ -276,7 +276,16 @@ AbstractParser.prototype.gatherOffers = function (language, processOffer, callba
             };
           });
 
-          async.series(functions, done);
+          async.series(functions, function (err, results) {
+            if (err) {
+              LOG.error({
+                'message': 'Error processing pages',
+                'error': err.message
+              });
+            }
+  
+            done(err);
+          });
         }
         else {
           var offers = that.getOffers(dom, language),
@@ -366,6 +375,13 @@ AbstractParser.prototype.processPage = function (url, language, processOffer, ca
         that.processOffers(language, offers, processOffer, done);
     }],
     function (err, result) {
+      if (err) {
+        LOG.error({
+          'message': util.format('Error processing page for %s language %s: %s', site, language, url),
+          'error': err.message
+        });
+      }
+      
       LOG.profile('Harvester.processPage');
 
       callback(err, result);
