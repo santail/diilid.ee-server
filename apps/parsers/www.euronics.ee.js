@@ -52,7 +52,10 @@ function EuronicsParser() {
     },
     'templates': {
       'title': function ($) {
-        return utils.unleakString($('div.oi-section-main-content.clear div.oi-main-article-header > h1').text());
+        var modelId = $('div.oi-section-main-content.clear > div.oi-main-article-header > p.productID > span[itemprop="productID"]').text().trim();
+        var title = $('div.oi-section-main-content.clear div.oi-main-article-header > h1').text().trim();
+        
+        return util.format('%s %s', title, modelId);
       },
       'pictures': function ($, language) {
         var pictureUrls = [];
