@@ -1,0 +1,76 @@
+{
+  "offers": {
+    "est": {
+      "https://www.e-maxima.ee/Pages/Search/SpecialOffers.aspx?Karastusjook&UrlId=198687": {
+        "description": "<h3>Kirjeldus</h3> <p>Coca-Cola</p> <h4>Netto</h4> <p>2 L</p> <h4>Brand</h4> <p>Coca-Cola</p> <h4>Tootja</h4> <p>Factory in Lithuania - Alytus plant: Miškininkų st</p>",
+        "original_price": "1,39 €",
+        "compaign_end": "14.03.2016",
+        "pictures": [
+          "https://www.e-maxima.ee/SiteImages/Inventory/0/a/0/0a0c528f-15a6-4e37-b27e-c75a485aabd3.png?v=20160209.1158"
+        ],
+        "price": "0,99 €",
+        "title": "Karastusjook COCA-COLA 2L",
+        "vendor": "Maxima"
+      },
+      "https://www.e-maxima.ee/Offers/ByCategory/sook-ja-jook/drazee_piimasokolaadiga_m_m_s_90g.aspx?203976&subcat=595c20d3-9f34-43cb-b657-6514b0a205cd": {
+        "description": "",
+        "original_price": "1,39 €",
+        "compaign_end": "14.03.2016",
+        "pictures": [
+          "https://www.e-maxima.ee/SiteImages/Inventory/4/e/0/4e06873f-4c4a-46c9-b461-7e8b6f9f54d5.png?v=20160209.1158"
+        ],
+        "price": "0,99 €",
+        "title": "Dražee piimašokolaadiga M&M'S 90g",
+        "vendor": "Maxima"
+      }
+    },
+    "rus": {
+      "https://www.e-maxima.ee/Pages/Search/SpecialOffers.aspx?Karastusjook&UrlId=198687": {
+        "description": "<h3>Описание</h3> <p>Coca-Cola</p> <h4>Netto</h4> <p>2 L</p> <h4>Brand</h4> <p>Coca-Cola</p> <h4>Tootja</h4> <p>Factory in Lithuania - Alytus plant: Miškininkų st</p>",
+        "original_price": "1,39 €",
+        "compaign_end": "14.03.2016",
+        "pictures": [
+          "https://www.e-maxima.ee/SiteImages/Inventory/0/a/0/0a0c528f-15a6-4e37-b27e-c75a485aabd3.png?v=20160209.1158"
+        ],
+        "price": "0,99 €",
+        "title": "Karastusjook COCA-COLA 2L",
+        "vendor": "Maxima"
+      },
+      "https://www.e-maxima.ee/Offers/ByCategory/sook-ja-jook/drazee_piimasokolaadiga_m_m_s_90g.aspx?203976&subcat=595c20d3-9f34-43cb-b657-6514b0a205cd": {
+        "description": "",
+        "original_price": "1,39 €",
+        "compaign_end": "14.03.2016",
+        "pictures": [
+          "https://www.e-maxima.ee/SiteImages/Inventory/4/e/0/4e06873f-4c4a-46c9-b461-7e8b6f9f54d5.png?v=20160209.1158"
+        ],
+        "price": "0,99 €",
+        "title": "Dražee piimašokolaadiga M&M'S 90g",
+        "vendor": "Maxima"
+      }
+    },
+    "eng": {
+      "https://www.e-maxima.ee/Pages/Search/SpecialOffers.aspx?Karastusjook&UrlId=198687": {
+        "description": "<h3>Description</h3> <p>Coca-Cola</p> <h4>Netto</h4> <p>2 L</p> <h4>Brand</h4> <p>Coca-Cola</p> <h4>Tootja</h4> <p>Factory in Lithuania - Alytus plant: Miškininkų st</p>",
+        "original_price": "1.39 €",
+        "compaign_end": "14.03.2016",
+        "pictures": [
+          "https://www.e-maxima.ee/SiteImages/Inventory/0/a/0/0a0c528f-15a6-4e37-b27e-c75a485aabd3.png?v=20160209.1158"
+        ],
+        "price": "0.99 €",
+        "title": "Karastusjook COCA-COLA 2L",
+        "vendor": "Maxima"
+      },
+      "https://www.e-maxima.ee/Offers/ByCategory/sook-ja-jook/drazee_piimasokolaadiga_m_m_s_90g.aspx?203976&subcat=595c20d3-9f34-43cb-b657-6514b0a205cd": {
+        "description": "",
+        "original_price": "1.39 €",
+        "compaign_end": "14.03.2016",
+        "pictures": [
+          "https://www.e-maxima.ee/SiteImages/Inventory/4/e/0/4e06873f-4c4a-46c9-b461-7e8b6f9f54d5.png?v=20160209.1158"
+        ],
+        "price": "0.99 €",
+        "title": "Dražee piimašokolaadiga M&M'S 90g",
+        "vendor": "Maxima"
+      }
+    }
+  }
+}
