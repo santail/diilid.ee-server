@@ -38,6 +38,8 @@ AbstractParser.prototype.getPaging = function () {
 AbstractParser.prototype.parseResponseBody = function (data, callback) {
   LOG.debug('Create DOM from body', data);
 
+  data = data.replace(/&amp;/g, '&');
+  
   async.waterfall([
     function (done) {
         LOG.profile("tidy");
@@ -406,10 +408,7 @@ AbstractParser.prototype.processPage = function (options, callback) {
         done(null, offers);
     },
     function (offers, done) {
-
-      LOG.info(offers);
-      
-        that.processOffers(language, offers, offerHandler, done);
+      that.processOffers(language, offers, offerHandler, done);
     }],
     function (err, result) {
       if (err) {

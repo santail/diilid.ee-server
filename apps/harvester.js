@@ -77,32 +77,33 @@ Harvester.prototype.run = function (options, callback) {
   async.waterfall([
       function stepCleanup(done) {
         if (options.cleanup) {
+          LOG.profile("Harvester.cleanup");
+          
           LOG.info(util.format('[STATUS] [OK] [%s] Cleanup started', site));
 
           that.db.offers.remove({
             'site': site
           }, function (err) {
+            LOG.profile("Harvester.cleanup");
+            
             if (err) {
-              LOG.error({
-                'message': 'Error deleting offers for site ' + site,
-                'error': err.message
-              });
+              LOG.error(util.format('[STATUS] [Failure] [%s] Cleanup failed', site, err));
+              return done(err);
             }
 
             LOG.info(util.format('[STATUS] [OK] [%s] Cleanup finished', site));
-
-            return done(err);
+            return done();
           });
         }
         else {
-          done(null);
+          return done();
         }
       },
       function stepDeactivate(done) {
-        LOG.profile("Harvester.deactivate");
-
         if (options.reactivate) {
-          LOG.info(util.format('[STATUS] [OK] [%s] Reactivation started', site));
+          LOG.profile("Harvester.deactivate");
+
+          LOG.info(util.format('[STATUS] [OK] [%s] Deactivation started', site));
 
           that.db.offers.update({
             'site': site
@@ -114,60 +115,41 @@ Harvester.prototype.run = function (options, callback) {
             'multi': true,
             'new': false
           }, function (err) {
+            LOG.profile("Harvester.deactivate");
+            
             if (err) {
-              LOG.error({
-                'message': 'Error deactivating for site ' + site,
-                'error': err.message
-              });
+              LOG.error(util.format('[STATUS] [Failure] [%s] Deactivation failed', site, err));
+              return done(err);
             }
 
-            LOG.info(util.format('[STATUS] [OK] [%s] Reactivation finished', site));
-
-            return done(err);
+            LOG.info(util.format('[STATUS] [OK] [%s] Deactivation finished', site));
+            return done();
           });
         }
         else {
-          return done(null);
+          return done();
         }
       },
       function stepProcessSite(done) {
-        LOG.profile("Harvester.deactivate");
-
-        LOG.profile("Harvester.processSite");
-
-        LOG.info(util.format('[STATUS] [OK] [%s] Processing started', site));
-
-        that.processSite(site, function (err) {
-          if (err) {
-            LOG.error({
-              'message': 'Error processing site ' + site,
-              'error': err.message
-            });
-          }
-
-          LOG.profile("Harvester.processSite");
-          
-          LOG.info(util.format('[STATUS] [OK] [%s] Processing finished', site));
-
-          return done(err);
-        });
+        that.processSite(site, done);
       }
     ],
     function (err, result) {
       if (err) {
-        LOG.error({
-          'message': 'Harvesting failed',
-          'error': err.message
-        });
+        LOG.error(util.format('[STATUS] [Failure] [%s] Harvesting failed', site, err));
+        return callback(err);
       }
     
-      LOG.info('[STATUS] [OK] Harvesting finished');
-    
-      return callback(err);
+      LOG.info(util.format('[STATUS] [OK] [%s] Harvesting finished', site));
+      return callback();
     });
 };
 
 Harvester.prototype.processSite = function (site, callback) {
+  LOG.profile("Harvester.processSite");
+
+  LOG.info(util.format('[STATUS] [OK] [%s] Processing started', site));
+
   var that = this,
     parser = parserFactory.getParser(site),
     languages = _.keys(parser.config.index);
@@ -183,46 +165,38 @@ Harvester.prototype.processSite = function (site, callback) {
     function (err, results) {
       parser = null;
   
+      LOG.profile("Harvester.processSite");
+        
       if (err) {
-        LOG.error({
-          'message': 'Error processing site ' + site,
-          'error': err.message
-        });
-  
+        LOG.error(util.format('[STATUS] [Failure] [%s] Processing failed', site, err));
         pmx.notify({
           success : false,
-          'message': 'Error processing site ' + site,
-          'error': err.message
+          'message': util.format('[STATUS] [Failure] [%s] Processing failed', site, err),
+          'error': err
         });
-  
+      
         return callback(err);
       }
-  
+
       LOG.info(util.format('[STATUS] [OK] [%s] Processing finished', site));
-  
       return callback();
     }
   );
 };
 
-
 Harvester.prototype.processOffer = function (offer, callback) {
-  var that = this;
-
-  that.queue.enqueue('offer_fetch_event', offer, function (err, job) {
+  this.queue.enqueue('offer_fetch_event', offer, function (err, job) {
     if (err) {
-      LOG.error({
-        'message': util.format('[STATUS] [Failure] [%s] [%s] [%s] Error enqueueing offer for processing', offer.site, offer.language, offer.id),
-        'error': err.message
-      });
-
+      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Enqueueing offer for processing failed', offer.site, offer.language, offer.id, err));
       return callback(err);
     }
-
-     LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Offer enqueued for processing', offer.site, offer.language, offer.id));
-
-    return callback(err, offer);
+    
+    LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Enqueueing offer for processing finished', offer.site, offer.language, offer.id));
+    return callback(null, offer);
   });
 };
+
+var harvester = new Harvester();
+harvester.run({site: 'www.e-maxima.ee'});
 
 module.exports = Harvester;
