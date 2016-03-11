@@ -196,7 +196,4 @@ Harvester.prototype.processOffer = function (offer, callback) {
   });
 };
 
-var harvester = new Harvester();
-harvester.run({site: 'www.e-maxima.ee'});
-
 module.exports = Harvester;
