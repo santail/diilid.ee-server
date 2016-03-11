@@ -70,7 +70,7 @@ function eMaximaParser() {
     },
     'templates': {
       'title': function ($) {
-        return $('#main-content > h1').text().trim();
+        return utils.unleakString($('#main-content > h1').text().trim());
       },
       'pictures': function ($, language) {
         return $('#ctl00_MainContent_productDetails_images > a, #ctl00_MainContent_prodDetails_images > a').map(function () {
@@ -180,6 +180,9 @@ eMaximaParser.prototype.gatherOffers = function (language, offerHandler, callbac
     function onSiteIndexPageProcessed(err, result) {
       LOG.profile('Harvester.gatherOffers');
 
+      site = null;
+      url = null;
+      
       if (err) {
         LOG.error(util.format('[STATUS] [OK] [%s] [%s] [%s] Gathering offers failed %s', site, language, url, err));
         return callback(err);
@@ -399,6 +402,21 @@ eMaximaParser.prototype.processCategoryPage = function (options, callback) {
       return callback();
     }
   );
+};
+
+eMaximaParser.prototype.getOffers = function (dom, language) {
+  var that = this;
+
+  var links = that.config.list.call(that, dom, language);
+
+  return _.map(links, function (link) {
+    return {
+      'id': that.languages[language] + '_' + that.compileOfferUrl(language, link),
+      'site': that.config.site,
+      'language': that.languages[language],
+      'url': that.compileOfferUrl(language, link)
+    };
+  });
 };
 
 eMaximaParser.prototype.compileRequestOptions = function (options) {
