@@ -11,5 +11,5 @@ module.exports.createSingleUseCallback = function (callback) {
 };
 
 module.exports.unleakString = function(s) {
-  return (' ' + s).substr(1);
+  return (' ' + s.replace('&amp;', '&')).substr(1);
 };
