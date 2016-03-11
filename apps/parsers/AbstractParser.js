@@ -8,7 +8,14 @@ var _ = require("underscore")._,
   util = require("util");
 
 function AbstractParser() {
-  this.config = {};
+  this.config = {
+    'headers': {
+      'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+      'accept-language': 'en-US,en;q=0.8',
+      'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'
+    }
+  };
+  
   this.isInPakkumised = false;
 
   this.languages = {
@@ -24,12 +31,48 @@ function AbstractParser() {
     'en': 'eng',
     'fi': 'est'
   };
+  
+  this.languageIso = {
+    'en': 'en-US',
+    'et': 'et-ET',
+    'fi': 'fi-FI',
+    'ru': 'ru-RU'
+  };
 
   this.paging = {
     hasNextPage: function hasNextPage() {},
     nextPage: function nextPage() {}
   };
 }
+
+AbstractParser.prototype.request = function (options) {
+  LOG.profile('Request');
+
+  var that = this;
+  
+  options = _.extend({
+    method: 'GET',
+    gzip: true,
+    headers: that.config.headers,
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+  }, options);
+  
+  options = that.compileRequestOptions(options);
+
+  request(options, function (err, response, data) {
+    LOG.profile('Request');
+
+    if (err || response.statusCode !== 200 || !data) {
+      return options.onError(err, response);
+    }
+
+    return options.onSuccess(response, data);
+  });
+};
+
+AbstractParser.prototype.compileRequestOptions = function (language) {
+  return this.config.headers;
+};
 
 AbstractParser.prototype.getPaging = function () {
   return this.paging;
@@ -38,8 +81,6 @@ AbstractParser.prototype.getPaging = function () {
 AbstractParser.prototype.parseResponseBody = function (data, callback) {
   LOG.debug('Create DOM from body', data);
 
-  data = data.replace(/&amp;/g, '&');
-  
   async.waterfall([
     function (done) {
         LOG.profile("tidy");
@@ -229,29 +270,20 @@ AbstractParser.prototype.gatherOffers = function (language, offerHandler, callba
 
         LOG.info(util.format('[STATUS] [OK] [%s] [%s] Fetching site index page %s', site, language, url));
 
-        request({
-          method: 'GET',
+        that.request({
           uri: url,
-          gzip: true,
-          headers: {
-            'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
-            'accept-language': 'en-US,en;q=0.8',
-            'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'
+          onError: function (err, response) {
+            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Fetching site index page failed %s', site, language, url, response.statusCode, err));
+
+            response = null;
+            return done(err);
           },
-          'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-        }, function (err, response, data) {
-          if (err || response.statusCode !== 200 || !data) {
-            LOG.error({
-              'message': util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Error fetching site index page.', site, language, url, response.statusCode),
-              'error': err
-            });
+          onSuccess: function (response, data) {
+            LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] [%s] Fetching site index page finished', site, language, url, response.statusCode));
+
+            response = null;
+            return done(null, data);
           }
-
-          LOG.profile('IndexRequest');
-
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Site index page received %s', site, language, response.statusCode, url));
-
-          return done(err, data);
         });
       },
       function stepParseResponseBody(data, done) {
@@ -362,26 +394,21 @@ AbstractParser.prototype.processPage = function (options, callback) {
 
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] Fetching page %s', site, language, url));
 
-      request.get(url, {
-          headers: {
-            'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
-            'accept-language': 'en-US,en;q=0.8',
-            'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'
-          },
-          'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+      that.request({
+        uri: url,
+        onError: function (err, response) {
+          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Fetching site page failed %s', site, language, url, response.statusCode, err));
+
+          response = null;
+          return done(err);
         },
-        function (err, response, data) {
-          if (err || response.statusCode !== 200 || !data) {
-            LOG.error({
-              'message': util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Error retrieving page.', site, language, url, response.statusCode),
-              'error': err
-            });
-          }
+        onSuccess: function (response, data) {
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] [%s] Fetching site page finished', site, language, url, response.statusCode));
 
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Page received %s', site, language, response.statusCode, url));
-
-          return done(err, data);
-        });
+          response = null;
+          return done(null, data);
+        }
+      });
     },
     function (data, done) {
         that.parseResponseBody(data, function (err, body) {
@@ -464,34 +491,27 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
     language = options.language,
     url = options.url;
 
-  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing offer %s', site, language, url));
+  LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching offer started', site, language, url));
 
   async.waterfall([
     function requestOffer(done) {
         LOG.profile('Retrieve offer');
 
-        request({
-          method: "GET",
+        that.request({
           uri: url,
-          headers: {
-            'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
-            'accept-language': 'en-US,en;q=0.8',
-            'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'
+          language: language,
+          onError: function (err, response) {
+            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Fetching offer failed %s', site, language, url, response.statusCode, err));
+  
+            response = null;
+            return done(err);
           },
-          'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-        }, function requestOfferResult(err, response, data) {
-          if (err || response.statusCode !== 200 || !data) {
-            LOG.error({
-              'message': util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Error retrieving offer.', site, language, url, response.statusCode),
-              'error': err
-            });
+          onSuccess: function (response, data) {
+            LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] [%s] Fetching offer finished', site, language, url, response.statusCode));
+  
+            response = null;
+            return done(null, data);
           }
-
-          LOG.profile('Retrieve offer');
-
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Offer received %s', site, language, response.statusCode, url));
-
-          done(err, data);
         });
     },
     function parseResponseBody(data, done) {
