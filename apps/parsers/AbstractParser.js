@@ -70,8 +70,8 @@ AbstractParser.prototype.request = function (options) {
   });
 };
 
-AbstractParser.prototype.compileRequestOptions = function (language) {
-  return this.config.headers;
+AbstractParser.prototype.compileRequestOptions = function (options) {
+  return options;
 };
 
 AbstractParser.prototype.getPaging = function () {
