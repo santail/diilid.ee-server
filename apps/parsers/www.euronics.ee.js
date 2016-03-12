@@ -2,14 +2,15 @@
 
 var util = require('util'),
   AbstractParser = require("./AbstractParser"),
-  utils = require("../services/Utils");
+  utils = require("../services/Utils"),
+  _ = require("underscore")._;
 
 function EuronicsParser() {
   AbstractParser.call(this);
 
   var that = this;
 
-  this.config = {
+  var config = {
     'site': 'www.euronics.ee',
     'cleanup': false,
     'reactivate': true,
@@ -88,6 +89,8 @@ function EuronicsParser() {
       'vendor': 'Euronics'
     }
   };
+  
+  this.config = _.extend(this.config, config);
 }
 
 util.inherits(EuronicsParser, AbstractParser);
