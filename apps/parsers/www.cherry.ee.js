@@ -42,7 +42,6 @@ function CherryParser() {
       'price': function ($) {
         return utils.unleakString($('div#deal-info > div.price-big').text()).replace(/\n/g, ' ').replace(/\t/g, ' ').replace(/\s\s+/g, ' ').trim();
       }
-
     }
   };
 }

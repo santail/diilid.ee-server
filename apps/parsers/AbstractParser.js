@@ -491,11 +491,11 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
     language = options.language,
     url = options.url;
 
-  LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching offer started', site, language, url));
-
   async.waterfall([
     function requestOffer(done) {
         LOG.profile('Retrieve offer');
+
+        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching offer started', site, language, url));
 
         that.request({
           uri: url,
