@@ -3,8 +3,7 @@
 var util = require('util'),
   urlParser = require("url"),
   AbstractParser = require("./AbstractParser"),
-  utils = require("../services/Utils"),
-  _ = require("underscore")._;
+  utils = require("../services/Utils");
 
 function OnoffParser() {
   AbstractParser.call(this);
@@ -13,8 +12,6 @@ function OnoffParser() {
 
   this.config = {
     'site': 'www.onoff.ee',
-    'cleanup': false,
-    'reactivate': true,
     'index': {
       'rus': 'http://www.onoff.ee/font-colorb00000predlozenija-mesjatsafont/',
       'est': 'http://www.onoff.ee/font-colorb00000kuupakkumisedfont/',

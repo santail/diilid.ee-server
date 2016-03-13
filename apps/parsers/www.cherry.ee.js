@@ -10,8 +10,6 @@ function CherryParser() {
 
   this.config = {
     'site': 'www.cherry.ee',
-    'cleanup': false,
-    'reactivate': true,
     'index': {
       'rus': 'https://cherry.ee/ru/',
       'est': 'https://cherry.ee/et/'

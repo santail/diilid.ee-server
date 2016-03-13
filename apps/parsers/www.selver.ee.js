@@ -12,8 +12,6 @@ function SelverParser() {
 
   this.config = {
     'site': 'www.selver.ee',
-    'cleanup': false,
-    'reactivate': true,
     'index': {
       'est': 'http://www.selver.ee/soodushinnaga-tooted?limit=96'
     },

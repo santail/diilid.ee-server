@@ -27,8 +27,6 @@ function eMaximaParser() {
       'Connection': 'keep-alive',
       'Cache-Control': 'no-cache'
     },
-    'cleanup': false,
-    'reactivate': true,
     'index': {
       'rus': 'https://www.e-maxima.ee/Pages/Offers/',
       'est': 'https://www.e-maxima.ee/Pages/Offers/',

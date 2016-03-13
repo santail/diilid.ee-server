@@ -12,6 +12,7 @@ function PakkumisedParser() {
   AbstractParser.call(this);
 
   this.config = {
+    'site': 'www.pakkumised.ee',
     'index': {
       'est': 'http://pakkumised.ee/acts/offers/js_load.php'
     },
@@ -21,9 +22,6 @@ function PakkumisedParser() {
         return that.compilePageUrl(language, '?page={pageNumber}'.replace('{pageNumber}', pageNumber));
       }
     },
-    'site': 'www.pakkumised.ee',
-    'cleanup': false,
-    'reactivate': false,
     'templates': {
       'title': function ($) {
         return $('div#deal-info h2 > a').text();

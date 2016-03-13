@@ -12,8 +12,6 @@ function EuronicsParser() {
 
   var config = {
     'site': 'www.euronics.ee',
-    'cleanup': false,
-    'reactivate': true,
     'index': {
       'rus': 'http://www.euronics.ee/products/c/143',
       'est': 'http://www.euronics.ee/tooted/c/143',

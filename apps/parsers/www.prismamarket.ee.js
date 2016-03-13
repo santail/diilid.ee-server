@@ -4,7 +4,6 @@ var util = require('util'),
   AbstractParser = require("./AbstractParser"),
   _ = require("underscore")._,
   LOG = require("../services/Logger"),
-  request = require('request'),
   async = require("async");
 
 function PrismamarketParser() {
@@ -21,13 +20,22 @@ function PrismamarketParser() {
 
   this.config = {
     'site': 'www.prismamarket.ee',
-    'cleanup': false,
-    'reactivate': true,
     'index': {
       'rus': 'https://www.prismamarket.ee/api/?path=entry%2Fads&entry_type=PT&language=ru&limit=50&category_ids=16928&sort_order=relevancy&sort_dir=desc',
       'est': 'https://www.prismamarket.ee/api/?path=entry%2Fads&entry_type=PT&language=et&limit=50&category_ids=16928&sort_order=relevancy&sort_dir=desc',
       'eng': 'https://www.prismamarket.ee/api/?path=entry%2Fads&entry_type=PT&language=en&limit=50&category_ids=16928&sort_order=relevancy&sort_dir=desc',
       'fin': 'https://www.prismamarket.ee/api/?path=entry%2Fads&entry_type=PT&language=fi&limit=50&category_ids=16928&sort_order=relevancy&sort_dir=desc'
+    },
+    'headers': {
+      'Connection': 'keep-alive',
+      'Pragma': 'no-cache',
+      'Cache-Control': 'no-cache',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+      'Upgrade-Insecure-Requests': '1',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
+      'Accept-Encoding': 'gzip, deflate, sdch',
+      'Accept-Language': 'en-US,en;q=0.8,ru;q=0.6,et;q=0.4',
+      'Cookie': 'is_new_user=1; _session_id=b426f59445bc396cfbbb78f8f0668beb'
     },
     'paging': {
       finit: true,
@@ -115,29 +123,24 @@ PrismamarketParser.prototype.processPage = function (url, language, processOffer
 
   async.waterfall([
     function (done) {
-        request.get(url, {
-            headers: {
-              'Connection': 'keep-alive',
-              'Pragma': 'no-cache',
-              'Cache-Control': 'no-cache',
-              'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-              'Upgrade-Insecure-Requests': '1',
-              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
-              'Accept-Encoding': 'gzip, deflate, sdch',
-              'Accept-Language': 'en-US,en;q=0.8,ru;q=0.6,et;q=0.4',
-              'Cookie': 'is_new_user=1; _session_id=b426f59445bc396cfbbb78f8f0668beb'
-            }
-          },
-          function (err, response, data) {
-            if (err) {
-              LOG.error({
-                'message': 'Error retrieving page for ' + site + ' language ' + language + ': ' + url,
-                'error': err.message
-              });
-            }
+      
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Fetching page %s', site, language, url));
 
-            return done(err, data);
-          });
+      that.request({
+        uri: url,
+        onError: function (err, response) {
+          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Fetching site page failed %s', site, language, url, response.statusCode, err));
+
+          response = null;
+          return done(err);
+        },
+        onSuccess: function (response, data) {
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] [%s] Fetching site page finished', site, language, url, response.statusCode));
+
+          response = null;
+          return done(null, data);
+        }
+      });
     },
     function (data, done) {
         that.parseResponseBody(data, function (err, body) {
@@ -218,29 +221,27 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
   if (event.refresh || event.test) {
     async.waterfall([
     function (done) {
-          request.get(event.url, {
-              headers: {
-                'Connection': 'keep-alive',
-                'Pragma': 'no-cache',
-                'Cache-Control': 'no-cache',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                'Upgrade-Insecure-Requests': '1',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
-                'Accept-Encoding': 'gzip, deflate, sdch',
-                'Accept-Language': 'en-US,en;q=0.8,ru;q=0.6,et;q=0.4',
-                'Cookie': 'is_new_user=1; _session_id=b426f59445bc396cfbbb78f8f0668beb'
-              }
-            },
-            function (err, response, data) {
-              if (err) {
-                LOG.error({
-                  'message': 'Error retrieving page for ' + site + ' language ' + language + ': ' + event.url,
-                  'error': err.message
-                });
-              }
-
-              return done(err, data);
-            });
+      
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching offer started', site, language, url));
+      
+      var url = event.url;
+      
+        that.request({
+          uri: url,
+          language: language,
+          onError: function (err, response) {
+            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Fetching offer failed %s', site, language, url, response.statusCode, err));
+  
+            response = null;
+            return done(err);
+          },
+          onSuccess: function (response, data) {
+            LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] [%s] Fetching offer finished', site, language, url, response.statusCode));
+  
+            response = null;
+            return done(null, data);
+          }
+        });
     },
     function (data, done) {
           that.parseResponseBody(data, function (err, body) {
