@@ -63,25 +63,25 @@ PrismamarketParser.prototype.gatherOffers = function (language, processOffer, ca
     site = that.config.site,
     paging = that.config.paging;
 
+  var url = paging.nextPageUrl(language, pageNumber);
+
   var pageNumber = 0,
     pageRepeats = false;
+
+  LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Gathering offers started', site, language, url));
 
   async.whilst(
     function () {
       return !pageRepeats;
     },
     function (finishPageProcessing) {
-      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing page %s', site, language, pageNumber));
+      url = paging.nextPageUrl(language, pageNumber);
+      
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page started', site, language, url));
 
-      var pageUrl = paging.nextPageUrl(language, pageNumber);
-
-      that.processPage(pageUrl, language, processOffer, function (err, result) {
+      that.processPage(url, language, processOffer, function (err, result) {
         if (err) {
-          LOG.error({
-            'message': 'Error processing page from prismamarket.ee ' + pageUrl,
-            'error': err.message
-          });
-
+          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing page failed %s', site, language, url, err));
           return finishPageProcessing(err);
         }
 
@@ -90,7 +90,7 @@ PrismamarketParser.prototype.gatherOffers = function (language, processOffer, ca
         if ((pageNumber + 1) === totalPages) {
           pageRepeats = true;
 
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] Total pages %s', site, language, totalPages));
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Gathering offers finished. Total pages %s', site, language, url, totalPages));
         }
 
         pageNumber++;
@@ -100,14 +100,11 @@ PrismamarketParser.prototype.gatherOffers = function (language, processOffer, ca
     },
     function (err) {
       if (err) {
-        LOG.error({
-          'message': 'Error processing site ' + site,
-          'error': err.message
-        });
-
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Gathering offers failed %s', site, language, url, err));
         return callback(err);
       }
-
+      
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Gathering offers finished', site, language, url));
       return callback();
     }
   );
@@ -119,41 +116,30 @@ PrismamarketParser.prototype.processPage = function (url, language, processOffer
   var that = this,
     site = that.config.site;
 
-  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing page %s', site, language, url));
+  LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page started', site, language, url));
 
   async.waterfall([
     function (done) {
       
-      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Fetching page %s', site, language, url));
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching page started', site, language, url));
 
       that.request({
         uri: url,
-        onError: function (err, response) {
-          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Fetching site page failed %s', site, language, url, response.statusCode, err));
-
-          response = null;
-          return done(err);
-        },
-        onSuccess: function (response, data) {
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] [%s] Fetching site page finished', site, language, url, response.statusCode));
-
-          response = null;
-          return done(null, data);
-        }
+        onError: done,
+        onSuccess: done
       });
     },
     function (data, done) {
         that.parseResponseBody(data, function (err, body) {
-          if (err) {
-            LOG.error({
-              'message': 'Error parsing response body to DOM',
-              'error': err.message
-            });
-          }
-
           data = null;
 
-          done(err, body);
+          if (err) {
+            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing response body failed %s', site, language, url, err));
+            return callback(err);
+          }
+          
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing response body finished', site, language, url, err));
+          return done(null, body);
         });
     },
     function (body, done) {
@@ -173,8 +159,14 @@ PrismamarketParser.prototype.processPage = function (url, language, processOffer
     }],
     function (err, result) {
       LOG.profile('Harvester.processPage');
+      
+      if (err) {
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing page failed %s', site, language, url, err));
+        return callback(err);
+      }
 
-      callback(err, result);
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page finished', site, language, url));
+      return callback(null, result);
     });
 };
 
@@ -185,11 +177,7 @@ PrismamarketParser.prototype.parseResponseBody = function (data, callback) {
     return callback(null, JSON.parse(data));
   }
   catch (ex) {
-    LOG.error({
-      'message': 'Error parsing JSON',
-      'error': ex.message
-    });
-
+    LOG.error(util.format('[STATUS] [Failure] Parse response body failed %s', ex));
     callback(new Error(ex.message));
   }
 };
@@ -228,52 +216,40 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
       
         that.request({
           uri: url,
-          language: language,
-          onError: function (err, response) {
-            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Fetching offer failed %s', site, language, url, response.statusCode, err));
-  
-            response = null;
-            return done(err);
-          },
-          onSuccess: function (response, data) {
-            LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] [%s] Fetching offer finished', site, language, url, response.statusCode));
-  
-            response = null;
-            return done(null, data);
-          }
+          onError: done,
+          onSuccess: done
         });
     },
     function (data, done) {
-          that.parseResponseBody(data, function (err, body) {
-            if (err) {
-              LOG.error({
-                'message': 'Error parsing response body to DOM',
-                'error': err.message
-              });
-            }
-
-            data = null;
-
-            done(err, body);
+      that.parseResponseBody(data, function (err, body) {
+        if (err) {
+          LOG.error({
+            'message': 'Error parsing response body to DOM',
+            'error': err.message
           });
+        }
+
+        data = null;
+
+        done(err, body);
+      });
     },
     function parseOffer(dom, done) {
-          LOG.profile("parser.ParseOffer");
+      LOG.profile("parser.ParseOffer");
 
-          that.parse(dom.message.entry, language, function parseOfferResult(err, offer) {
-            if (err) {
-              LOG.error({
-                'message': 'Error parsing data for ' + site + ' language ' + language + ': ' + event.url,
-                'error': err.message
-              });
-            }
+      that.parse(dom.message.entry, language, function parseOfferResult(err, offer) {
+        LOG.profile("parser.ParseOffer");
 
-            LOG.profile("parser.ParseOffer");
+        dom = null;
 
-            dom = null;
+        if (err) {
+          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing offer failed %s', site, language, event.url, err));
+          return done(err);
+        }
 
-            return done(err, offer);
-          });
+        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing offer finished', site, language, event.url));
+        return done(null, offer);
+      });
     },
     function extendOffer(offer, done) {
         var runningTime = new Date();
@@ -290,30 +266,21 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
     }],
       function handleProcessOfferError(err, offer) {
         if (err) {
-          LOG.error({
-            'message': 'Error fetching offer for ' + site + ' language ' + language + ': ' + event.url,
-            'error': err.message
-          });
+          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Fetching offer failed %s', site, language, event.url, err));
+          return callback(err);
         }
 
-        LOG.profile('Harvester.processOffer');
-
-        LOG.profile("Harvester.saveOffer");
-
-        LOG.debug('Saving offer', offer);
-
+        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching offer finished', site, language, event.url));
         return callback(err, offer);
       });
   }
   else {
     that.parse(event, language, function parseOfferResult(err, offer) {
       if (err) {
-        LOG.error({
-          'message': 'Error parsing data for ' + site + ' language ' + language + ': ' + event.url,
-          'error': err.message
-        });
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing offer failed %s', site, language, event.url, err));
+        return callback(err);
       }
-
+      
       LOG.profile("parser.ParseOffer");
 
       var runningTime = new Date();
@@ -352,7 +319,5 @@ PrismamarketParser.prototype.parse = function (data, language, callback) {
 
   return callback(null, offer);
 };
-
-
 
 module.exports = PrismamarketParser;

@@ -113,18 +113,8 @@ eMaximaParser.prototype.gatherOffers = function (language, offerHandler, callbac
 
         that.request({
           uri: url,
-          onError: function (err, response) {
-            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Fetching site index page failed %s', site, language, url, response.statusCode, err));
-
-            response = null;
-            return done(err);
-          },
-          onSuccess: function (response, data) {
-            LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] [%s] Fetching site index page finished', site, language, url, response.statusCode));
-
-            response = null;
-            return done(null, data);
-          }
+          onError: done,
+          onSuccess: done
         });
       },
       function stepParseResponseBody(data, done) {
@@ -211,18 +201,8 @@ eMaximaParser.prototype.processProductGroupPage = function (options, callback) {
 
         that.request({
           uri: url,
-          onError: function (err, response) {
-            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Fetching product group page failed %s', site, language, url, response && response.statusCod, err));
-
-            response = null;
-            return done(err);
-          },
-          onSuccess: function (response, data) {
-            LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching product group page finished', site, language, url));
-
-            response = null;
-            return done(null, data);
-          }
+          onError: done,
+          onSuccess: done
         });
       },
       function stepParseResponseBody(data, done) {
@@ -303,18 +283,8 @@ eMaximaParser.prototype.processCategoryPage = function (options, callback) {
 
         that.request({
           uri: url,
-          onError: function (err, response) {
-            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Fetching product category page failed %s', site, language, url, response && response.statusCod, err));
-
-            response = null;
-            return done(err);
-          },
-          onSuccess: function (response, data) {
-            LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching product category page finished', site, language, url));
-
-            response = null;
-            return done(null, data);
-          }
+          onError: done,
+          onSuccess: done
         });
       },
       function stepParseResponseBody(data, done) {
