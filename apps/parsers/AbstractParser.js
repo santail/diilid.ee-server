@@ -15,7 +15,7 @@ function AbstractParser() {
       'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'
     }
   };
-  
+
   this.isInPakkumised = false;
 
   this.languages = {
@@ -31,7 +31,7 @@ function AbstractParser() {
     'en': 'eng',
     'fi': 'est'
   };
-  
+
   this.languageIso = {
     'en': 'en-US',
     'et': 'et-ET',
@@ -49,33 +49,51 @@ AbstractParser.prototype.request = function (options) {
   LOG.profile('Request');
 
   var that = this;
-  
+
+  var retries = 3;
+
   options = _.extend({
     method: 'GET',
     gzip: true,
     headers: that.config.headers,
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
   }, options);
-  
+
   options = that.compileRequestOptions(options);
 
-  request(options, function (err, response, data) {
+  var handler = function (err, response, data) {
     LOG.profile('Request');
 
     response = response || '';
-    
+
     if (err || response.statusCode !== 200 || !data) {
-      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching page failed %s', options.url, response.statusCode, err));
+      if (retries) {
+        var timeout = Math.ceil(Math.random(1) * 10000);
 
-      response = null;
-      data = null;
-            
-      return options.onError(err);
+        retries--;
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching page failed %s. Retry in %s msec. Retries left %s', options.uri, response.statusCode, err, timeout, retries));
+
+        setTimeout(function () {
+          response = null;
+          data = null;
+
+          request(options, handler);
+        }, timeout);
+      }
+      else {
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching page failed %s', options.uri, response.statusCode, err));
+
+        retries = null;
+        return options.onError(err);
+      }
     }
+    else {
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Fetching page finished', options.uri, response.statusCode));
+      return options.onSuccess(null, data);
+    }
+  };
 
-    LOG.info(util.format('[STATUS] [OK] [%s] [%s] Fetching page finished', options.url, response.statusCode));
-    return options.onSuccess(null, data);
-  });
+  request(options, handler);
 };
 
 AbstractParser.prototype.compileRequestOptions = function (options) {
@@ -108,7 +126,7 @@ AbstractParser.prototype.parseResponseBody = function (data, callback) {
           wrap: 0
         }, function (err, body) {
           LOG.profile("tidy");
-          
+
           if (err) {
             LOG.error(util.format('[STATUS] [Failure] Cleanup response body failed %s', err));
             return done(err);
@@ -276,6 +294,7 @@ AbstractParser.prototype.gatherOffers = function (language, offerHandler, callba
 
         that.request({
           uri: url,
+          language: language,
           onError: done,
           onSuccess: done
         });
@@ -312,7 +331,7 @@ AbstractParser.prototype.gatherOffers = function (language, offerHandler, callba
                 language: language,
                 handler: offerHandler
               };
-              
+
               LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page %s of %s', site, language, url, index + 1, totalPages));
 
               return that.processPage(options, finishPageProcessing);
@@ -354,7 +373,7 @@ AbstractParser.prototype.gatherOffers = function (language, offerHandler, callba
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Gathering offers failed %s', site, language, url, err));
         return callback(err);
       }
-      
+
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Gathering offers finished', site, language, url));
       return callback();
     }
@@ -376,30 +395,21 @@ AbstractParser.prototype.processPage = function (options, callback) {
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching page', site, language, url));
 
       that.request({
-        uri: url,
-        onError: function (err, response) {
-          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Fetching page failed %s', site, language, url, response.statusCode, err));
-
-          response = null;
-          return done(err);
-        },
-        onSuccess: function (response, data) {
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] [%s] Fetching page finished', site, language, url, response.statusCode));
-
-          response = null;
-          return done(null, data);
-        }
-      });
+          uri: url,
+          language: language,
+          onError: done,
+          onSuccess: done
+        });
     },
     function (data, done) {
         that.parseResponseBody(data, function (err, body) {
           data = null;
-          
+
           if (err) {
             LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing response body failed %s', site, language, url, err));
             return done(err);
           }
-          
+
           LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing response body finished', site, language, url));
           return done(null, body);
         });
@@ -424,7 +434,7 @@ AbstractParser.prototype.processPage = function (options, callback) {
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing page failed %s', site, language, url, err));
         return callback(err);
       }
-      
+
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page finished', site, language, url));
       return callback(null, result);
     });
@@ -476,18 +486,8 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
         that.request({
           uri: url,
           language: language,
-          onError: function (err, response) {
-            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] [%s] Fetching offer failed %s', site, language, url, response.statusCode, err));
-  
-            response = null;
-            return done(err);
-          },
-          onSuccess: function (response, data) {
-            LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] [%s] Fetching offer finished', site, language, url, response.statusCode));
-  
-            response = null;
-            return done(null, data);
-          }
+          onError: done,
+          onSuccess: done
         });
     },
     function parseResponseBody(data, done) {
@@ -495,14 +495,14 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
 
         that.parseResponseBody(data, function parseResponseBodyResult(err, dom) {
           LOG.profile('Parse offer DOM');
-          
+
           data = null;
-          
+
           if (err) {
             LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing response body failed %s', site, language, url, err));
             return done(err);
           }
-          
+
           LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing response body finished', site, language, url));
           return done(null, dom);
         });
