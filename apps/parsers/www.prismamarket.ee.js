@@ -138,7 +138,7 @@ PrismamarketParser.prototype.processPage = function (url, language, processOffer
             return callback(err);
           }
           
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing response body finished', site, language, url, err));
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing response body finished', site, language, url));
           return done(null, body);
         });
     },
@@ -207,31 +207,31 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
   LOG.info(util.format('[STATUS] [OK] [%s] [%s] Retrieving offer %s', site, language, id));
 
   if (event.refresh || event.test) {
+    var url = event.url;
+      
     async.waterfall([
     function (done) {
       
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching offer started', site, language, url));
       
-      var url = event.url;
-      
         that.request({
           uri: url,
+          language: language,
           onError: done,
           onSuccess: done
         });
     },
     function (data, done) {
       that.parseResponseBody(data, function (err, body) {
-        if (err) {
-          LOG.error({
-            'message': 'Error parsing response body to DOM',
-            'error': err.message
-          });
-        }
-
         data = null;
+        
+        if (err) {
+            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing response body failed %s', site, language, url, err));
+            return done(err);
+          }
 
-        done(err, body);
+        LOG.error(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing response body finished', site, language, url));
+        done(null, body);
       });
     },
     function parseOffer(dom, done) {

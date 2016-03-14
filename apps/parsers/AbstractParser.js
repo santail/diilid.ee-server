@@ -520,7 +520,7 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
             return done(err);
           }
 
-          LOG.inf(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing offer finished', site, language, url));
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing offer finished', site, language, url));
           return done(null, offer);
         });
     },
