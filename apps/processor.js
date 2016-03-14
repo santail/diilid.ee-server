@@ -16,7 +16,6 @@ worker.register({
   }
 });
 
-
 worker.on('complete', function (data) { 
   SessionFactory.getDbConnection().jobs.remove({_id: data._id}, function (err, lastErrorObject) {
     if (err) {
@@ -79,7 +78,7 @@ Processor.prototype.offerReactivate = function (offer, callback) {
       return callback(err);
     }
 
-    LOG.info(util.format('[STATUS] [Failure] [%s] [%s] Reactivating offer finished', offer.site, offer.id));
+    LOG.info(util.format('[STATUS] [OK] [%s] [%s] Reactivating offer finished', offer.site, offer.id));
     return callback(null);
   });
 };
