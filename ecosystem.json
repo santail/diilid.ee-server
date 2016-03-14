@@ -3,6 +3,7 @@
     {
       "name": "Scheduler",
       "cwd": "/home/salestracker_eu/diilid.ee-server",
+      "node_args": "--max-stack-size=102400000 ",
       "script": "apps/scheduler.js",
       "log_date_format": "YYYY-MM-DD HH:mm Z",
       "max_restarts": 10,
@@ -21,7 +22,27 @@
       }
     },
     {
-      "name": "Harvester",
+      "name": "Harvester 1",
+      "cwd": "/home/salestracker_eu/diilid.ee-server",
+      "script": "apps/harvester.js",
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "max_restarts": 10,
+      "max_memory_restart": "256M",
+      "watch": false,
+      "exec_interpreter": "node",
+      "exec_mode": "fork",
+      "instances": 0,
+      "autorestart": false,
+      "env": {
+        "NODE_ENV": "production",
+        "IP": "localhost"
+      },
+      "env_production": {
+        "NODE_ENV": "production"
+      }
+    },
+    {
+      "name": "Harvester 2",
       "cwd": "/home/salestracker_eu/diilid.ee-server",
       "script": "apps/harvester.js",
       "log_date_format": "YYYY-MM-DD HH:mm Z",

@@ -370,12 +370,12 @@ AbstractParser.prototype.gatherOffers = function (language, offerHandler, callba
       LOG.profile('Harvester.gatherOffers');
 
       if (err) {
-        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Gathering offers failed %s', site, language, url, err));
-        return callback(err);
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Gathering offers failed', site, language, url, err));
+        return callback(null);
       }
 
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Gathering offers finished', site, language, url));
-      return callback();
+      return callback(null);
     }
   );
 };
@@ -432,7 +432,7 @@ AbstractParser.prototype.processPage = function (options, callback) {
 
       if (err) {
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing page failed %s', site, language, url, err));
-        return callback(err);
+        return callback(null);
       }
 
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page finished', site, language, url));
@@ -461,11 +461,11 @@ AbstractParser.prototype.processOffers = function (language, offers, offerHandle
     function (err, links) {
       if (err) {
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Processing offers failed %s', site, language, err));
-        return callback(err);
+        return callback(null);
       }
 
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] Processing offers finished %s', site, language, _.size(offers)));
-      return callback(err, links);
+      return callback(null, links);
     }
   );
 };
@@ -545,7 +545,7 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
 
       if (err) {
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing offer failed %s', site, language, url, err));
-        return callback(err);
+        return callback(null);
       }
 
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing offer finished.', site, language, url));

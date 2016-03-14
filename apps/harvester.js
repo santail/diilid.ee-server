@@ -175,11 +175,11 @@ Harvester.prototype.processSite = function (site, callback) {
           'error': err
         });
       
-        return callback(err);
+        return callback(null);
       }
 
       LOG.info(util.format('[STATUS] [OK] [%s] Processing finished', site));
-      return callback();
+      return callback(null);
     }
   );
 };
@@ -188,7 +188,7 @@ Harvester.prototype.processOffer = function (offer, callback) {
   this.queue.enqueue('offer_fetch_event', offer, function (err, job) {
     if (err) {
       LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Enqueueing offer for processing failed', offer.site, offer.language, offer.id, err));
-      return callback(err);
+      return callback(null);
     }
     
     LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Enqueueing offer for processing finished', offer.site, offer.language, offer.id));
