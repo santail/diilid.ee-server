@@ -129,19 +129,6 @@ PrismamarketParser.prototype.processPage = function (url, language, processOffer
         onSuccess: done
       });
     },
-    function (data, done) {
-        that.parseResponseBody(data, function (err, body) {
-          data = null;
-
-          if (err) {
-            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing response body failed %s', site, language, url, err));
-            return callback(err);
-          }
-          
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing response body finished', site, language, url));
-          return done(null, body);
-        });
-    },
     function (body, done) {
         var offers = that.getOffers(body, language),
           offersNumber = _.size(offers.offers);
@@ -220,19 +207,6 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
           onError: done,
           onSuccess: done
         });
-    },
-    function (data, done) {
-      that.parseResponseBody(data, function (err, body) {
-        data = null;
-        
-        if (err) {
-            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing response body failed %s', site, language, url, err));
-            return done(err);
-          }
-
-        LOG.error(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing response body finished', site, language, url));
-        done(null, body);
-      });
     },
     function parseOffer(dom, done) {
       LOG.profile("parser.ParseOffer");

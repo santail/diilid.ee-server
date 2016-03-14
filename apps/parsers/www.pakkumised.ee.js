@@ -67,12 +67,8 @@ PakkumisedParser.prototype.parseResponseBody = function (data, callback) {
     return callback(null, JSON.parse(data));
   }
   catch (ex) {
-    LOG.error({
-      'message': 'Error parsing JSON',
-      'error': ex.message
-    });
-
-    callback(new Error(ex.message));
+    LOG.error(util.format('[STATUS] [Failure] Parse response body failed %s', ex));
+    return callback(new Error(ex.message));
   }
 };
 

@@ -81,6 +81,8 @@ AbstractParser.prototype.request = function (options) {
         }, timeout);
       }
       else {
+        LOG.profile('Request');
+        
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching page failed %s', options.uri, response.statusCode, err));
 
         retries = null;
@@ -88,8 +90,24 @@ AbstractParser.prototype.request = function (options) {
       }
     }
     else {
+      LOG.profile('Request');
+      
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] Fetching page finished', options.uri, response.statusCode));
-      return options.onSuccess(null, data);
+      LOG.info(util.format('[STATUS] [OK] [%s] Parsing page body', options.uri));
+
+      response = null;
+
+      that.parseResponseBody(data, function (err, dom) {
+        data = null;
+        
+        if (err) {
+          LOG.error(util.format('[STATUS] [Failure] [%s] Parsing page body failed %s', options.uri, err));
+          return options.onError(err);
+        }
+
+        LOG.info(util.format('[STATUS] [OK] [%s] Parsing page body finished', options.uri));
+        return options.onSuccess(null, dom);
+      });
     }
   };
 
@@ -107,66 +125,52 @@ AbstractParser.prototype.getPaging = function () {
 AbstractParser.prototype.parseResponseBody = function (data, callback) {
   LOG.debug('Create DOM from body', data);
 
-  async.waterfall([
-    function (done) {
-        LOG.profile("tidy");
+  LOG.profile("tidy");
 
-        // TODO Warning: tidy uses 32 bit binary instead of 64, https://github.com/vavere/htmltidy/issues/11
-        // TODO Needs manual update on production for libs
+  // TODO Warning: tidy uses 32 bit binary instead of 64, https://github.com/vavere/htmltidy/issues/11
+  // TODO Needs manual update on production for libs
 
-        var tidy = require('htmltidy').tidy;
+  var tidy = require('htmltidy').tidy;
 
-        tidy(data, {
-          doctype: 'html5',
-          indent: false,
-          bare: true,
-          breakBeforeBr: false,
-          hideComments: false,
-          fixUri: false,
-          wrap: 0
-        }, function (err, body) {
-          LOG.profile("tidy");
+  tidy(data, {
+    doctype: 'html5',
+    indent: false,
+    bare: true,
+    breakBeforeBr: false,
+    hideComments: false,
+    fixUri: false,
+    wrap: 0
+  }, function (err, body) {
+    data = null;
+    tidy = null;
+    
+    LOG.profile("tidy");
 
-          if (err) {
-            LOG.error(util.format('[STATUS] [Failure] Cleanup response body failed %s', err));
-            return done(err);
-          }
+    if (err) {
+      LOG.error(util.format('[STATUS] [Failure] Cleanup response body failed', err));
+      return callback(err);
+    }
 
-          data = null;
-          tidy = null;
+    LOG.profile("cheerio");
 
-          return done(null, body);
-        });
-    },
-    function (body, done) {
-        LOG.profile("cheerio");
+    var cheerio = require("cheerio");
 
-        var cheerio = require("cheerio");
-
-        var dom = cheerio.load(body, {
-          normalizeWhitespace: true,
-          lowerCaseTags: true,
-          lowerCaseAttributeNames: true,
-          recognizeCDATA: true,
-          recognizeSelfClosing: true,
-          decodeEntities: false
-        });
-
-        body = null;
-        cheerio = null;
-
-        LOG.profile("cheerio");
-
-        return done(null, dom);
-    }],
-    function (err, dom) {
-      if (err) {
-        LOG.error(util.format('[STATUS] [Failure] Parsing response body failed %s', err));
-        return callback(err);
-      }
-
-      return callback(null, dom);
+    var dom = cheerio.load(body, {
+      normalizeWhitespace: true,
+      lowerCaseTags: true,
+      lowerCaseAttributeNames: true,
+      recognizeCDATA: true,
+      recognizeSelfClosing: true,
+      decodeEntities: false
     });
+
+    body = null;
+    cheerio = null;
+
+    LOG.profile("cheerio");
+
+    return callback(null, dom);
+  });
 };
 
 AbstractParser.prototype.getPagingParameters = function (language, dom) {
@@ -299,19 +303,6 @@ AbstractParser.prototype.gatherOffers = function (language, offerHandler, callba
           onSuccess: done
         });
       },
-      function stepParseResponseBody(data, done) {
-        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing index page body', site, language, url));
-
-        that.parseResponseBody(data, function (err, dom) {
-          if (err) {
-            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing index page body failed %s', site, language, url, err));
-            return done(err);
-          }
-
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing index page body finished', site, language, url));
-          return done(null, dom);
-        });
-      },
       function stepCheckPaging(dom, done) {
         LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Checking index page contains paging', site, language, url));
 
@@ -401,19 +392,6 @@ AbstractParser.prototype.processPage = function (options, callback) {
           onSuccess: done
         });
     },
-    function (data, done) {
-        that.parseResponseBody(data, function (err, body) {
-          data = null;
-
-          if (err) {
-            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing response body failed %s', site, language, url, err));
-            return done(err);
-          }
-
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing response body finished', site, language, url));
-          return done(null, body);
-        });
-    },
     function (body, done) {
         var offers = that.getOffers(body, language),
           offersNumber = _.size(offers);
@@ -488,23 +466,6 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
           language: language,
           onError: done,
           onSuccess: done
-        });
-    },
-    function parseResponseBody(data, done) {
-        LOG.profile('Parse offer DOM');
-
-        that.parseResponseBody(data, function parseResponseBodyResult(err, dom) {
-          LOG.profile('Parse offer DOM');
-
-          data = null;
-
-          if (err) {
-            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing response body failed %s', site, language, url, err));
-            return done(err);
-          }
-
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing response body finished', site, language, url));
-          return done(null, dom);
         });
     },
     function parseOffer(dom, done) {

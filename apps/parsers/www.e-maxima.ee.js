@@ -117,19 +117,6 @@ eMaximaParser.prototype.gatherOffers = function (language, offerHandler, callbac
           onSuccess: done
         });
       },
-      function stepParseResponseBody(data, done) {
-        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing index page body', site, language, url));
-
-        that.parseResponseBody(data, function (err, dom) {
-          if (err) {
-            LOG.error(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing index page body failed %s', site, language, url, err));
-            return done(err);
-          }
-
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing index page body finished', site, language, url));
-          return done(null, dom);
-        });
-      },
       function stepProcessGroups($, done) {
         LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing product groups', site, language, url));
 
@@ -205,19 +192,6 @@ eMaximaParser.prototype.processProductGroupPage = function (options, callback) {
           onSuccess: done
         });
       },
-      function stepParseResponseBody(data, done) {
-        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing product group page body', site, language, url));
-
-        that.parseResponseBody(data, function (err, dom) {
-          if (err) {
-            LOG.error(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing product group page body failed %s', site, language, url, err));
-            return done(err);
-          }
-
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing product group page body finished', site, language, url));
-          return done(err, dom);
-        });
-      },
       function stepProcessGroups($, done) {
         LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing product categories', site, language, url));
 
@@ -285,19 +259,6 @@ eMaximaParser.prototype.processCategoryPage = function (options, callback) {
           uri: url,
           onError: done,
           onSuccess: done
-        });
-      },
-      function stepParseResponseBody(data, done) {
-        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing product category page body', site, language, url));
-
-        that.parseResponseBody(data, function (err, dom) {
-          if (err) {
-            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing product category page body failed %s', site, language, url, err));
-          }
-
-          LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing product category page body finished', site, language, url));
-
-          done(err, dom);
         });
       },
       function stepCheckPaging(dom, done) {
