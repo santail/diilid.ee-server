@@ -16,6 +16,21 @@ worker.register({
   }
 });
 
+worker.on('dequeued', function (data) { 
+  
+});
+
+worker.on('failed', function (data) {
+});
+
+worker.on('complete', function (data) { 
+  console.log(data);
+});
+
+worker.on('error', function (err) { 
+  
+});
+
 worker.start();
 
 var Processor = function () {
