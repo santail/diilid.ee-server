@@ -1,10 +1,10 @@
 var LOG = require("./services/Logger"),
   parserFactory = require("./services/ParserFactory"),
-  Sessionfactory = require("./services/SessionFactory"),
+  SessionFactory = require("./services/SessionFactory"),
   _ = require('underscore')._,
   util = require("util");
 
-var worker = Sessionfactory.getWorkerConnection(['offers_queue']);
+var worker = SessionFactory.getWorkerConnection(['offers_queue']);
 
 worker.register({
   'offer_fetch_event': function offerFetchEventHandler(event, done) {
@@ -16,25 +16,20 @@ worker.register({
   }
 });
 
-worker.on('dequeued', function (data) { 
-  
-});
-
-worker.on('failed', function (data) {
-});
 
 worker.on('complete', function (data) { 
-  console.log(data);
-});
-
-worker.on('error', function (err) { 
-  
+  SessionFactory.getDbConnection().jobs.remove({_id: data._id}, function (err, lastErrorObject) {
+    if (err) {
+      LOG.debug(util.format('[STATUS] [Failure] Removeing event failed %s', err));
+      return;
+    }
+  });
 });
 
 worker.start();
 
 var Processor = function () {
-  this.db = Sessionfactory.getDbConnection();
+  this.db = SessionFactory.getDbConnection();
 };
 
 Processor.prototype.run = function (options, callback) {
@@ -48,11 +43,7 @@ Processor.prototype.run = function (options, callback) {
     id: id
   }, function findOfferResult(err, offer) {
     if (err) {
-      LOG.error({
-        'message': 'Error checking offer by #id ' + id,
-        'error': err.message
-      });
-
+      LOG.error(util.format('[STATUS] [Failure] Checking offer failed %s', err));
       return callback(err);
     }
 
@@ -69,7 +60,7 @@ Processor.prototype.run = function (options, callback) {
 };
 
 Processor.prototype.offerReactivate = function (offer, callback) {
-  LOG.debug(util.format('[STATUS] [OK] [%s] Reactivate offer %s', offer.site, offer.id));
+  LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Reactivating offer', offer.site, offer.id));
 
   this.db.offers.findAndModify({
     query: {
@@ -84,15 +75,12 @@ Processor.prototype.offerReactivate = function (offer, callback) {
     'new': false
   }, function offerReactivateResult(err, doc, lastErrorObject) {
     if (err) {
-      LOG.error({
-        'message': util.format('Error reactivating offer #Id %s', offer.id),
-        'error': err.message
-      });
+      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Reactivating offer failed %s', offer.site, offer.id, err));
+      return callback(err);
     }
 
-    LOG.info(util.format('[STATUS] [OK] [%s] Reactivated offer %s', offer.site, offer.id));
-
-    return callback(err);
+    LOG.info(util.format('[STATUS] [Failure] [%s] [%s] Reactivating offer finished', offer.site, offer.id));
+    return callback(null);
   });
 };
 
@@ -102,37 +90,28 @@ Processor.prototype.offerFetch = function (options, callback) {
   var that = this,
     site = options.site;
 
-  LOG.info(util.format('[STATUS] [OK] [%s] Fetching offer with id %s', options.site, options.id));
+  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Fetching offer', options.site, options.id));
 
   var parser = parserFactory.getParser(site);
 
   parser.fetchOffer(options, function (err, offer) {
     if (err) {
-      LOG.error({
-        'message': 'Error fetching offer',
-        'error': err.message
-      });
-
+      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching offer failed %s', offer.site, offer.id, err));
       return callback(err);
     }
 
-    LOG.info(util.format('[STATUS] [OK] [%s] Saving offer with id %s', site, parser.getOfferId(offer)));
+    LOG.info(util.format('[STATUS] [OK] [%s] [%s] Saving offer', site, parser.getOfferId(offer)));
 
     that.db.offers.save(offer, function saveOfferResult(err, saved) {
+      LOG.profile("Harvester.saveOffer");
+      
       if (err || !saved) {
-        LOG.error({
-          'message': 'Error saving offer',
-          'error': err
-        });
-
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Saving offer failed %s', offer.site, offer.id, err));
         return callback(err);
       }
 
-      LOG.info(util.format('[STATUS] [OK] [%s] Offer saved with id %s', site, parser.getOfferId(saved)));
-
-      LOG.profile("Harvester.saveOffer");
-
-      return callback(err, saved);
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Saving offer finished', site, parser.getOfferId(saved)));
+      return callback(null, saved);
     });
   });
 };
@@ -143,7 +122,7 @@ Processor.prototype.offerRefresh = function (offer, callback) {
   var that = this,
     site = offer.site;
 
-  LOG.info(util.format('[STATUS] [OK] [%s] Refreshing offer with id %s', site, offer.id));
+  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Refreshing offer', site, offer.id));
 
   var parser = parserFactory.getParser(site);
 
@@ -151,15 +130,11 @@ Processor.prototype.offerRefresh = function (offer, callback) {
 
   parser.fetchOffer(options, function (err, offer) {
     if (err) {
-      LOG.error({
-        'message': 'Error fetching offer',
-        'error': err.message
-      });
-
+      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Refreshing offer failed %s', offer.site, offer.id, err));
       return callback(err);
     }
 
-    LOG.info(util.format('[STATUS] [OK] [%s] Saving offer with id %s', site, parser.getOfferId(offer)));
+    LOG.info(util.format('[STATUS] [OK] [%s] [%s] Updating offer', site, offer.id));
 
     that.db.offers.findAndModify({
       query: {
@@ -174,14 +149,11 @@ Processor.prototype.offerRefresh = function (offer, callback) {
       'new': false
     }, function offerReactivateResult(err, doc, lastErrorObject) {
       if (err) {
-        LOG.error({
-          'message': util.format('Error reactivating offer #Id %s', options._id),
-          'error': err.message
-        });
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Updating offer failed %s', offer.site, offer.id, err));
+        return callback(err);
       }
 
-      LOG.info(util.format('[STATUS] [OK] [%s] Refreshed offer %s', options.site, options._id));
-
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Updating offer finished', options.site, options._id));
       return callback(err);
     });
   });
