@@ -1,9 +1,31 @@
 {
   apps: [
     {
+      "name": "AdministrationPortal",
+      "cwd": "/home/salestracker_eu/diilid.ee-admin",
+      "node_args": "--optimize_for_size --max_old_space_size=128 --gc_interval=50 --stack-size=102400000 ",
+      "args": "-f",
+      "script": "server.js",
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "max_restarts": 10,
+      "max_memory_restart": "256M",
+      "watch": false,
+      "exec_interpreter": "node",
+      "exec_mode": "fork",
+      "instances": 0,
+      "autorestart": false,
+      "env": {
+        "NODE_ENV": "production",
+        "IP": "localhost"
+      },
+      "env_production": {
+        "NODE_ENV": "production"
+      }
+    },
+    {
       "name": "Scheduler",
       "cwd": "/home/salestracker_eu/diilid.ee-server",
-      "node_args": "--max-stack-size=102400000 ",
+      "node_args": "--stack-size=102400000 ",
       "script": "apps/scheduler.js",
       "log_date_format": "YYYY-MM-DD HH:mm Z",
       "max_restarts": 10,
@@ -24,7 +46,7 @@
     {
       "name": "Harvester 1",
       "cwd": "/home/salestracker_eu/diilid.ee-server",
-      "node_args": "--optimize_for_size --max_old_space_size=460 --gc_interval=100 --max-stack-size=102400000 ",
+      "node_args": "--optimize_for_size --max_old_space_size=128 --gc_interval=50 --stack-size=102400000 ",
       "args": "-f",
       "script": "apps/harvester.js",
       "log_date_format": "YYYY-MM-DD HH:mm Z",
@@ -46,7 +68,7 @@
     {
       "name": "Harvester 2",
       "cwd": "/home/salestracker_eu/diilid.ee-server",
-      "node_args": "--optimize_for_size --max_old_space_size=460 --gc_interval=100 --max-stack-size=102400000 ",
+      "node_args": "--optimize_for_size --max_old_space_size=128 --gc_interval=50 --stack-size=102400000 ",
       "script": "apps/harvester.js",
         "args": "-f",
       "log_date_format": "YYYY-MM-DD HH:mm Z",
@@ -68,7 +90,7 @@
     {
       "name": "Processor 1",
       "cwd": "/home/salestracker_eu/diilid.ee-server",
-      "node_args": "--optimize_for_size --max_old_space_size=460 --gc_interval=100 --max-stack-size=102400000 ",
+      "node_args": "--optimize_for_size --max_old_space_size=128 --gc_interval=50 --stack-size=102400000 ",
       "script": "apps/processor.js",
       "args": "-f",
       "log_date_format": "YYYY-MM-DD HH:mm Z",
@@ -76,7 +98,7 @@
       "max_memory_restart": "256M",
       "watch": false,
       "exec_interpreter": "node",
-      "exec_mode": "cluster",
+      "exec_mode": "fork",
       "instances": 0,
       "autorestart": false,
       "env": {
@@ -90,7 +112,7 @@
     {
       "name": "Processor 2",
       "cwd": "/home/salestracker_eu/diilid.ee-server",
-      "node_args": "--optimize_for_size --max_old_space_size=460 --gc_interval=100 --max-stack-size=102400000 ",
+      "node_args": "--optimize_for_size --max_old_space_size=128 --gc_interval=50 --stack-size=102400000 ",
       "script": "apps/processor.js",
       "args": "-f",
       "log_date_format": "YYYY-MM-DD HH:mm Z",
@@ -98,7 +120,7 @@
       "max_memory_restart": "256M",
       "watch": false,
       "exec_interpreter": "node",
-      "exec_mode": "cluster",
+      "exec_mode": "fork",
       "instances": 0,
       "autorestart": false,
       "env": {
@@ -118,7 +140,7 @@
       "max_memory_restart": "256M",
       "watch": false,
       "exec_interpreter": "node",
-      "exec_mode": "cluster",
+      "exec_mode": "fork",
       "instances": 0,
       "autorestart": false,
       "env": {
@@ -138,7 +160,7 @@
       "max_memory_restart": "256M",
       "watch": false,
       "exec_interpreter": "node",
-      "exec_mode": "cluster",
+      "exec_mode": "fork",
       "instances": 0,
       "autorestart": false,
       "env": {
