@@ -19,7 +19,7 @@ worker.register({
 worker.on('complete', function (data) { 
   SessionFactory.getDbConnection().jobs.remove({_id: data._id}, function (err, lastErrorObject) {
     if (err) {
-      LOG.debug(util.format('[STATUS] [Failure] Removeing event failed %s', err));
+      LOG.debug(util.format('[STATUS] [Failure] Removing event failed %s', err));
       return;
     }
   });
@@ -63,7 +63,7 @@ Processor.prototype.offerReactivate = function (offer, callback) {
 
   this.db.offers.findAndModify({
     query: {
-      _id: offer.id
+      id: offer.id
     },
     update: {
       $set: {
@@ -73,7 +73,7 @@ Processor.prototype.offerReactivate = function (offer, callback) {
     },
     'new': false
   }, function offerReactivateResult(err, doc, lastErrorObject) {
-    if (err) {
+    if (err || !doc) {
       LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Reactivating offer failed %s', offer.site, offer.id, err));
       return callback(err);
     }
@@ -147,13 +147,13 @@ Processor.prototype.offerRefresh = function (offer, callback) {
       },
       'new': false
     }, function offerReactivateResult(err, doc, lastErrorObject) {
-      if (err) {
+      if (err || !doc) {
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Updating offer failed %s', offer.site, offer.id, err));
         return callback(err);
       }
 
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] Updating offer finished', options.site, options._id));
-      return callback(err);
+      return callback(null);
     });
   });
 };
