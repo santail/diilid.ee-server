@@ -27,6 +27,8 @@ var Procurer = function () {
 Procurer.prototype.run = function (options, callback) {
   var that = this;
 
+  LOG.info(util.format('[STATUS] [OK] Gathering wishes'));
+
   that.db.wishes.aggregate([
       {
         $group: {
@@ -37,20 +39,14 @@ Procurer.prototype.run = function (options, callback) {
         }
     }
    ],
-    function (err, res) {
-
+    function (err, wishes) {
       if (err) {
-        LOG.error({
-          'message': 'Error getting wishes',
-          'error': err.message
-        });
-
+        LOG.error(util.format('[STATUS] [Failure] Gathering wishes failed', err));
         return callback(err);
       }
 
-      LOG.info(util.format('[STATUS] [OK] Found %d requests. Processing.', _.size(res)));
-
-      return that.aggregateResult(res, callback);
+      LOG.info(util.format('[STATUS] [OK] Gathering wishes finished. Found %s', _.size(wishes)));
+      return that.aggregateResult(wishes, callback);
     });
 };
 
@@ -62,11 +58,11 @@ Procurer.prototype.aggregateResult = function aggregateResult(res, callback) {
     var email = result._id,
       wishes = result.wishes;
 
-    LOG.info(util.format('[STATUS] [OK] Found %d wishes for %s. Processing.', _.size(wishes), email));
+    LOG.info(util.format('[STATUS] [OK] [%s] Processing wishes. Found %d', email, _.size(wishes)));
 
     var functions = _.map(wishes, function (wish) {
       return function (done) {
-        LOG.info(util.format('[STATUS] [OK] Searching for offers containing "%s"', wish.contains));
+        LOG.info(util.format('[STATUS] [OK] Fetching offers for "%s"', wish.contains));
 
         that.db.offers.find({
             $text: {
@@ -76,19 +72,15 @@ Procurer.prototype.aggregateResult = function aggregateResult(res, callback) {
           },
           function (err, offers) {
             if (err) {
-              LOG.error({
-                'message': 'Error getting offers',
-                'error': err.message
-              });
-              return done(err);
-            }
-
-            if (_.size(offers) === 0) {
-              LOG.info(util.format('[STATUS] [OK] No offers containing "%s" found', wish.contains));
+              LOG.error(util.format('[STATUS] [Failure] Fetching offers for "%s" failed', wish.contains, err));
               return done();
             }
 
-            LOG.info(util.format('[STATUS] [OK] %d offers containing "%s" found', _.size(offers), wish.contains));
+            LOG.info(util.format('[STATUS] [OK] Fetching offers for "%s" finished. Found %s', wish.contains, _.size(offers)));
+            
+            if (_.size(offers) === 0) {
+              return done();
+            }
 
             var notification = {
               email: email,
@@ -102,16 +94,11 @@ Procurer.prototype.aggregateResult = function aggregateResult(res, callback) {
 
             that.queue.enqueue('notification_send_event', notification, function (err, job) {
               if (err) {
-                LOG.error({
-                  'message': 'Error enqueueing notification',
-                  'error': err.message
-                });
-
+                LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Enqueuing notification failed', notification.email, notification.contains, err));
                 return callback(err);
               }
 
-              LOG.info('[STATUS] [OK] Notification enqueued for processing');
-
+              LOG.info(util.format('[STATUS] [OK] [%s] [%s] Enqueuing notification finished', notification.email, notification.contains));
               return callback();
             });
 
@@ -122,14 +109,11 @@ Procurer.prototype.aggregateResult = function aggregateResult(res, callback) {
 
     async.series(functions, function (err, notifications) {
       if (err) {
-        LOG.error({
-          'message': 'Error enqueueing offers for site ',
-          'error': err.message
-        });
-
+        LOG.error(util.format('[STATUS] [Failure] [%s] Processing wishes failed', email, err));
         return callback(err);
       }
 
+      LOG.error(util.format('[STATUS] [Failure] [%s] Processing wishes finished', email));
       return callback();
     });
   });
