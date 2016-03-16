@@ -1,0 +1,30 @@
+{
+  "offers": {
+    "est": {
+      "http://www.expert.ee/p/pesumasin-bosch-wab28266sn/11353": {
+        "title": "Pesumasin BOSCH WAB28266SN",
+        "description": "<h2 class=\"tabheading01\">Kirjeldus</h2> <h1><img alt=\"Saadaval ainult e-poes\" src=\"http://www.expert.ee/failid/epoes.png\" style=\"width: 150px; height: 150px;\"></h1> Tarne kuni 1 nädal !",
+        "details": "<h2 class=\"tabheading01\">Tehnilised andmed</h2> <dl> <dt>Energiaklass</dt> <dd>A+++</dd> <dt>Pesukogus (kg)</dt> <dd>6 kg/-</dd> <dt>Tsentrifuug (p/min)</dt> <dd>1400 p/min</dd> <dt>Tsentrifuugiklass</dt> <dd>B</dd> <dt>Pesutulemus</dt> <dd>A</dd> <dt>Müratase pesemisel/kuivatamisel (dB)</dt> <dd>59/77</dd> <dt>Kaaluautomaatika</dt> <dd>Jah</dd> <dt>Lisafunktsioonid</dt> <dd>VarioPerfect - optimeeritud aja ja energiaga programmid</dd> <dt>Trumli maht (l)</dt> <dd>42 L</dd> <dt>Viitstart</dt> <dd>Kuni 24 h</dd> <dt>Jääkaja näit</dt> <dd>Jah</dd> <dt>Vahuandur</dt> <dd>Jah</dd> <dt>Ülevooluandur</dt> <dd>Jah</dd> <dt>Värv</dt> <dd>Valge</dd> <dt>Mõõtmed KxLxS (cm)</dt> <dd>84,8 x 59,8 x 55 cm</dd> <dt>Aastane energiakulu (kWh)</dt> <dd>153 kWh /aastas</dd> <dt>Bränd</dt> <dd>BOSCH</dd> </dl>",
+        "price": "329,90 €",
+        "original_price": "399,90 €",
+        "discount": "70,00 €",
+        "pictures": [
+          "/files/product/000/011/353/large/809d2efc9d34.jpg"
+        ],
+        "vendor": ""
+      },
+      "http://www.expert.ee/p/kohvikapslid-nestle-nescafe-dolce-gusto-grande-aroma/11252": {
+        "description": "<h2 class=\"tabheading01\">Kirjeldus</h2> Kogus: 1pk = 16 kapslit = 128g",
+        "details": "<h2 class=\"tabheading01\">Tehnilised andmed</h2> <dl> <dt>Bränd</dt> <dd>NESTLE</dd> </dl>",
+        "discount": "",
+        "original_price": "",
+        "pictures": [
+          "/files/product/000/011/252/large/345213f0243e.jpg"
+        ],
+        "price": "5,50 €",
+        "title": "Kohvikapslid NESTLE Nescafe Dolce Gusto Grande Aroma",
+        "vendor": ""
+      }
+    }
+  }
+}
