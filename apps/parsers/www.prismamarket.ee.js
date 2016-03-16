@@ -42,7 +42,7 @@ function PrismamarketParser() {
       nextPageUrl: function nextPageUrl(language, pageNumber) {
         return that.compilePageUrl(language, '&page={pageNumber}'.replace('{pageNumber}', pageNumber));
       }
-    },
+    }
   };
 }
 

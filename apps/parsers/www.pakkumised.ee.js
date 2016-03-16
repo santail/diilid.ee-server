@@ -52,10 +52,10 @@ PakkumisedParser.prototype.getOffers = function (data, language) {
 
   return _.map(data, function (offer) {
     return {
-     'id': that.compileOfferUrl(language, offer.url),
-     'site': that.config.site,
-     'language': that.languages[language],
-     'url': that.compileOfferUrl(language, offer.url)
+      'id': that.compileOfferUrl(language, offer.url),
+      'site': that.config.site,
+      'language': that.languages[language],
+      'url': that.compileOfferUrl(language, offer.url)
     };
   });
 };
@@ -129,54 +129,55 @@ PakkumisedParser.prototype.gatherOffers = function (language, processOffer, call
     site = that.config.site,
     paging = that.config.paging;
 
-    var pageNumber = 0,
-      pageRepeats = false,
-      lastUrl = null;
+  var pageNumber = 0,
+    pageRepeats = false,
+    lastUrl = null;
 
-    async.whilst(
-      function () {
-        return !pageRepeats;
-      },
-      function (finishPageProcessing) {
-        pageNumber++;
+  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Gathering offers started', site, language));
 
-        LOG.info('[STATUS] [OK] [', site, '] [', language, '] Processing page ' + pageNumber);
+  async.whilst(
+    function () {
+      return !pageRepeats;
+    },
+    function (finishPageProcessing) {
+      pageNumber++;
 
-        var pageUrl = paging.nextPageUrl(language, pageNumber);
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page started', site, language, url, pageNumber));
 
-        that.processPage(pageUrl, language, processOffer, function (err, links) {
-          if (err) {
-            LOG.error({
-              'message': 'Error processing page from pakkumised.ee ' + pageUrl,
-              'error': err.message
-            });
-          }
+      var url = paging.nextPageUrl(language, pageNumber);
 
-          if (!_.isEmpty(links) && lastUrl !== _.last(links)) {
-            lastUrl = _.last(links);
-          }
-          else {
-            pageRepeats = true;
-
-            LOG.info('[STATUS] [OK] [', site, '] [', language, '] Total pages ' + pageNumber);
-          }
-
-          return finishPageProcessing(err);
-        });
-      },
-      function (err) {
+      that.processPage(url, language, processOffer, function (err, links) {
         if (err) {
-          LOG.error({
-            'message': 'Error processing site ' + site,
-            'error': err.message
-          });
-
-          return callback(err);
+          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing page failed %s', site, language, url, err));
+          return finishPageProcessing(err);
         }
 
-        return callback();
+        if (!_.isEmpty(links) && lastUrl !== _.last(links)) {
+          lastUrl = _.last(links);
+        }
+        else {
+          pageRepeats = true;
+
+          LOG.info(util.format('[STATUS] [OK] [%s] [%s] Gathering offers finished', site, language, pageNumber));
+        }
+
+        return finishPageProcessing();
+      });
+    },
+    function (err) {
+      pageNumber = null;
+      pageRepeats = null;
+      lastUrl = null;
+
+      if (err) {
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Gathering offers failed %s', site, language, err));
+        return callback(err);
       }
-    );
+
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Gathering offers finished', site, language));
+      return callback();
+    }
+  );
 };
 
 module.exports = PakkumisedParser;
