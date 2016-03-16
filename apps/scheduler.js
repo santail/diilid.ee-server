@@ -8,12 +8,7 @@ var config = require('./config/env'),
 
 var queue = Sessionfactory.getQueueConnection('offers_queue');
 
-var agenda = new Agenda({
-  db: {
-    address: config.db.uri
-  },
-  defaultLockLifetime: 10000
-});
+var agenda = new Agenda({db: {address: config.db.uri}});
 
 agenda.define('execute harvester', function (job, done) {
   try {
@@ -96,11 +91,11 @@ agenda.define('execute procurer', function (job, done) {
   });
 });
 
-
+agenda.on('ready', function() {
   agenda.every(config.harvester.execution.rule, 'execute harvester');
 
   var procurerJob = agenda.create('execute procurer');
   procurerJob.repeatAt(config.procurer.execution.rule).save();
 
   agenda.start();
-
+});
