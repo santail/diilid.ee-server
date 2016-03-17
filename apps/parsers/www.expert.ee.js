@@ -36,7 +36,7 @@ function ExpertParser() {
       },
       'pictures': function ($, language) {
         return $('#slider02 ul.navigation01 a').map(function () {
-          return $(this).attr('href');
+          return that.compileImageUrl(language, $(this).attr('href'));
         }).get();
       },
       'description': function ($) {
@@ -126,7 +126,7 @@ ExpertParser.prototype.gatherOffers = function (language, processOffer, callback
   );
 };
 
-ExpertParser.prototype.compilePageUrl = function compileOfferUrl(language, link) {
+ExpertParser.prototype.compilePageUrl = function compilePageUrl(language, link) {
   var that = this;
 
   return urlParser.resolve(that.config.index[language], link);
@@ -134,6 +134,14 @@ ExpertParser.prototype.compilePageUrl = function compileOfferUrl(language, link)
 
 ExpertParser.prototype.compileOfferUrl = function compileOfferUrl(language, link) {
   var that = this;
+
+  return urlParser.resolve(that.config.index[language], link);
+};
+
+ExpertParser.prototype.compileImageUrl = function compileImageUrl(language, link) {
+  var that = this;
+
+  language = that.languages_reverse[language];
 
   return urlParser.resolve(that.config.index[language], link);
 };

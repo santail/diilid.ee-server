@@ -9,7 +9,7 @@
         "original_price": "399,90 €",
         "discount": "70,00 €",
         "pictures": [
-          "/files/product/000/011/353/large/809d2efc9d34.jpg"
+          "http://www.expert.ee/files/product/000/011/353/large/809d2efc9d34.jpg"
         ],
         "vendor": ""
       },
@@ -19,7 +19,7 @@
         "discount": "",
         "original_price": "",
         "pictures": [
-          "/files/product/000/011/252/large/345213f0243e.jpg"
+         "http://www.expert.ee/files/product/000/011/252/large/345213f0243e.jpg"
         ],
         "price": "5,50 €",
         "title": "Kohvikapslid NESTLE Nescafe Dolce Gusto Grande Aroma",
@@ -31,12 +31,28 @@
         "discount": "",
         "original_price": "",
         "pictures": [
-          "/files/product/000/011/877/large/a40563a21366.jpg",
-          "/files/product/000/011/877/large/3f0941410479.jpg",
-          "/files/product/000/011/877/large/fb3dfd3f49b1.jpg"
+          "http://www.expert.ee/files/product/000/011/877/large/a40563a21366.jpg",
+          "http://www.expert.ee/files/product/000/011/877/large/3f0941410479.jpg",
+          "http://www.expert.ee/files/product/000/011/877/large/fb3dfd3f49b1.jpg"
         ],
         "price": "1 799,90 €",
         "title": "Retrokülmik BOSCH KCN40AW30",
+        "vendor": ""
+      },
+      "http://www.expert.ee/p/droon-parrot-bebop-drone-skycontroller-kollane/11542": {
+        "description": "<h2 class=\"tabheading01\">Kirjeldus</h2> <h1><img alt=\"Saadaval ainult e-poes\" src=\"http://www.expert.ee/failid/epoes.png\" style=\"width: 150px; height: 150px;\"></h1> <br> Bebop on Parroti kolmas droonigeneratsioon. Komplekti kuuluvad multikopter, 2 akut, 4 varutiivikut, propellerikaitsmed ja laadija. Kõigest 380 grammi kaaluvasse drooni on mahutatud märkimisväärselt palju \"tarkust\" - ultrahelisensor täpseks kõrguse mõõtmiseks, allasuunatud kaamera kiiruse jälgimiseks, GPS, baromeeter ning asendi- ja kiirendussensorid. Drooni ninas asub 180-kraadise vaatenurgaga 14 Mpx FullHD kaamera koos elektroonilise stabilisaatoriga.<br> <br> Bebopil pole peale tiivikute ühtegi liikuvat osa, mis tähendab, et tegemist on erakordselt vastupidava kopteriga - kergemate kukkumiste puhul ei purune tavaliselt midagi ning varuosad on mõistliku hinnaga. Kõige kallim komponent on kaamera - aga 150 eurot on tunduvalt vähem kui konkurentide 500-eurosed gimbalitega kaamerakomplektid, mis õnnetuse puhul tihti esimesena purunevad. Lennuaeg on kuni 11 minutit, ent aku laadimiseks kulub alla tunni. Parrot Bebop on üliminiatuurne, lõbus ja vastupidav droon, mille mõõtudest ei tasu lasta end eksitada - FullHD videopildi stabiilsus pole kehvem kui gimbalitega kaameratel.<br> <br> Skycontroller juhtpult võimendab Wi-Fi raadiust, mis lubab drooniga lennata kaugemale. Skycontrolleri külge on võimalik kinnitada nutitelefon või tahvelarvuti ja näha drooni kaamera pilti läbi voogedastuse (vajalik on rakenduse FreeFlight 3 olemasolu). Lisaks on drooni mugavam juhtida tänu kahele füüsilisele juhtkangile.<br> <br> <iframe width=\"640\" height=\"360\" src=\"https://www.youtube.com/embed/WUpmPUcnuBY?rel=0&controls=0&showinfo=0\" frameborder=\"0\" allowfullscreen></iframe>",
+        "details": "<h2 class=\"tabheading01\">Tehnilised andmed</h2> <dl> <dt>Bränd</dt> <dd>PARROT</dd> </dl>",
+        "discount": "100,00 €",
+        "original_price": "999,90 €",
+        "pictures": [
+          "http://www.expert.ee/files/product/000/011/542/large/4b719abac85c.jpg",
+          "http://www.expert.ee/files/product/000/011/542/large/ab8fb70cd60f.jpg",
+          "http://www.expert.ee/files/product/000/011/542/large/4ed7129c94dc.jpg",
+          "http://www.expert.ee/files/product/000/011/542/large/cda985750412.jpg",
+          "http://www.expert.ee/files/product/000/011/542/large/0ec0f9870c03.jpg"
+        ],
+        "price": "899,90 €",
+        "title": "Droon PARROT Bebop Drone + Skycontroller Kollane",
         "vendor": ""
       }
     }
