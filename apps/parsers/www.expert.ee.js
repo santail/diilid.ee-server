@@ -13,20 +13,21 @@ function ExpertParser() {
 
   var that = this;
 
-  var config = {
+  this.config = {
     'site': 'www.expert.ee',
     'index': {
-      'est': 'http://www.expert.ee/shop/special-list/view?type=lopumuuk'
+      'est': 'http://www.expert.ee/shop/special-list/product-list'
     },
+
     'paging': {
       finit: true,
       nextPageUrl: function nextPageUrl(language, offset) {
         return that.compilePageUrl(language, '?type=lopumuuk&priceRange%5Bmin%5D=49&priceRange%5Bmax%5D=69999&limit=12&offset={offset}&sort=date_desc'.replace('{offset}', offset));
       }
     },
-    'list': function ($) {
-      return $('body > li > div > a.js-link-product.img').map(function () {
-        return $(this).attr('href');
+    'list': function ($, language) {
+      return $('p.heading01 > a.js-link-product.img').map(function () {
+        return that.compileOfferUrl(language, $(this).attr('href'));
       }).get();
     },
     'templates': {
@@ -60,8 +61,6 @@ function ExpertParser() {
       }
     }
   };
-
-  this.config = _.extend(this.config, config);
 }
 
 util.inherits(ExpertParser, AbstractParser);
@@ -86,7 +85,13 @@ ExpertParser.prototype.gatherOffers = function (language, processOffer, callback
 
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page started', site, language, url));
 
-      that.processPage(url, language, processOffer, function (err, links) {
+      var options = {
+        url: url,
+        language: language,
+        handler: processOffer
+      };
+
+      that.processPage(options, function (err, links) {
         if (err) {
           LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing page failed %s', site, language, url, err));
           return finishPageProcessing(err);
@@ -122,6 +127,12 @@ ExpertParser.prototype.gatherOffers = function (language, processOffer, callback
 };
 
 ExpertParser.prototype.compilePageUrl = function compileOfferUrl(language, link) {
+  var that = this;
+
+  return urlParser.resolve(that.config.index[language], link);
+};
+
+ExpertParser.prototype.compileOfferUrl = function compileOfferUrl(language, link) {
   var that = this;
 
   return urlParser.resolve(that.config.index[language], link);
