@@ -79,7 +79,13 @@ PrismamarketParser.prototype.gatherOffers = function (language, processOffer, ca
       
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page started', site, language, url));
 
-      that.processPage(url, language, processOffer, function (err, result) {
+      var options = {
+        url: url,
+        language: language,
+        handler: processOffer
+      };
+      
+      that.processPage(options, function (err, result) {
         if (err) {
           LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing page failed %s', site, language, url, err));
           return finishPageProcessing(err);
@@ -110,11 +116,14 @@ PrismamarketParser.prototype.gatherOffers = function (language, processOffer, ca
   );
 };
 
-PrismamarketParser.prototype.processPage = function (url, language, processOffer, callback) {
+PrismamarketParser.prototype.processPage = function (options, callback) {
   LOG.profile('Harvester.processPage');
 
   var that = this,
-    site = that.config.site;
+    site = that.config.site,
+    url = options.url,
+    language = options.language,
+    offerHandler = options.handler;
 
   LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page started', site, language, url));
 
@@ -140,7 +149,7 @@ PrismamarketParser.prototype.processPage = function (url, language, processOffer
         done(null, offers);
     },
     function (offers, done) {
-        that.processOffers(language, offers.offers, processOffer, function (err) {
+        that.processOffers(language, offers.offers, offerHandler, function (err) {
           done(err, offers);
         });
     }],

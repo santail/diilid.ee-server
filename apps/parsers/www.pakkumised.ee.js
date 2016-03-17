@@ -146,7 +146,13 @@ PakkumisedParser.prototype.gatherOffers = function (language, processOffer, call
 
       var url = paging.nextPageUrl(language, pageNumber);
 
-      that.processPage(url, language, processOffer, function (err, links) {
+      var options = {
+        url: url,
+        language: language,
+        handler: processOffer
+      };
+      
+      that.processPage(options, function (err, links) {
         if (err) {
           LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing page failed %s', site, language, url, err));
           return finishPageProcessing(err);
