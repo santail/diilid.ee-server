@@ -71,7 +71,7 @@ AbstractParser.prototype.request = function (options) {
         var timeout = Math.ceil(Math.random(1) * 10000);
 
         retries--;
-        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching page failed %s. Retry in %s msec. Retries left %s', options.uri, response.statusCode, err, timeout, retries));
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching page failed %r. Retry in %s msec. Retries left %s', options.uri, response.statusCode, err, timeout, retries));
 
         setTimeout(function () {
           response = null;
@@ -83,7 +83,7 @@ AbstractParser.prototype.request = function (options) {
       else {
         LOG.profile('Request');
         
-        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching page failed %s', options.uri, response.statusCode, err));
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching page failed', options.uri, response.statusCode, err));
 
         retries = null;
         return options.onError(err);
@@ -335,7 +335,7 @@ AbstractParser.prototype.gatherOffers = function (language, offerHandler, callba
             functions,
             function (err, results) {
               if (err) {
-                LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Processing pages failed %s', site, language, err));
+                LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Processing pages failed', site, language, err));
                 return done(err);
               }
 

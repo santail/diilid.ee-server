@@ -19,7 +19,7 @@ worker.register({
 worker.on('complete', function (data) { 
   SessionFactory.getDbConnection().jobs.remove({_id: data._id}, function (err, lastErrorObject) {
     if (err) {
-      LOG.debug(util.format('[STATUS] [Failure] Removing event failed %s', err));
+      LOG.debug(util.format('[STATUS] [Failure] Removing event failed', err));
       return;
     }
   });
@@ -42,7 +42,7 @@ Processor.prototype.run = function (options, callback) {
     id: id
   }, function findOfferResult(err, offer) {
     if (err) {
-      LOG.error(util.format('[STATUS] [Failure] Checking offer failed %s', err));
+      LOG.error(util.format('[STATUS] [Failure] Checking offer failed', err));
       return callback(err);
     }
 
@@ -74,8 +74,8 @@ Processor.prototype.offerReactivate = function (offer, callback) {
     'new': false
   }, function offerReactivateResult(err, doc, lastErrorObject) {
     if (err || !doc) {
-      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Reactivating offer failed %s', offer.site, offer.id, err));
-      return callback(err);
+      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Reactivating offer failed', offer.site, offer.id, err));
+      return callback(null);
     }
 
     LOG.info(util.format('[STATUS] [OK] [%s] [%s] Reactivating offer finished', offer.site, offer.id));
@@ -95,8 +95,8 @@ Processor.prototype.offerFetch = function (options, callback) {
 
   parser.fetchOffer(options, function (err, offer) {
     if (err) {
-      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching offer failed %s', offer.site, offer.id, err));
-      return callback(err);
+      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching offer failed', offer.site, offer.id, err));
+      return callback(null);
     }
 
     LOG.info(util.format('[STATUS] [OK] [%s] [%s] Saving offer', site, parser.getOfferId(offer)));
@@ -105,8 +105,8 @@ Processor.prototype.offerFetch = function (options, callback) {
       LOG.profile("Harvester.saveOffer");
       
       if (err || !saved) {
-        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Saving offer failed %s', offer.site, offer.id, err));
-        return callback(err);
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Saving offer failed', offer.site, offer.id, err));
+        return callback(null);
       }
 
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] Saving offer finished', site, parser.getOfferId(saved)));
@@ -129,8 +129,8 @@ Processor.prototype.offerRefresh = function (offer, callback) {
 
   parser.fetchOffer(options, function (err, offer) {
     if (err) {
-      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Refreshing offer failed %s', offer.site, offer.id, err));
-      return callback(err);
+      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Refreshing offer failed', offer.site, offer.id, err));
+      return callback(null);
     }
 
     LOG.info(util.format('[STATUS] [OK] [%s] [%s] Updating offer', site, offer.id));
@@ -148,8 +148,8 @@ Processor.prototype.offerRefresh = function (offer, callback) {
       'new': false
     }, function offerReactivateResult(err, doc, lastErrorObject) {
       if (err || !doc) {
-        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Updating offer failed %s', offer.site, offer.id, err));
-        return callback(err);
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Updating offer failed', offer.site, offer.id, err));
+        return callback(null);
       }
 
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] Updating offer finished', options.site, options._id));
