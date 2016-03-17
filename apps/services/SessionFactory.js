@@ -6,10 +6,12 @@ var config = require('../config/env'),
   monq = require('monq');
 
 function Sessionfactory() {
-    LOG.debug('Connecting to database', config.db.uri);
+  LOG.debug('Connecting to database', config.db.uri);
 
-    this.db = mongojs(config.db.uri, config.db.collections);
-    this.client = monq(config.db.uri, { safe: true });
+  this.db = mongojs(config.db.uri, config.db.collections);
+  this.client = monq(config.db.uri, {
+    safe: true
+  });
 }
 
 Sessionfactory.prototype.getDbConnection = function () {
