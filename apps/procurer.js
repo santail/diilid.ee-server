@@ -93,13 +93,19 @@ Procurer.prototype.processWish = function (options, callback) {
 
   LOG.info(util.format('[STATUS] [OK] Fetching offers for "%s"', options.contains));
 
-  that.db.offers.find({
-      $text: {
-        $search: options.contains,
-        $language: options.language
-      },
-      active: true
+  var criteria = {
+    $text: {
+      $search: options.contains,
+      $language: options.language
     },
+    active: true
+  };
+  
+  if (options.language && options.language !== 'none') {
+    criteria.language = options.language;
+  }
+    
+  that.db.offers.find(criteria,
     function (err, offers) {
       if (err) {
         LOG.error(util.format('[STATUS] [Failure] Fetching offers for "%s" failed', options.contains, err));
