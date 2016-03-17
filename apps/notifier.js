@@ -2,11 +2,11 @@
 
 var Messenger = require("./services/Messenger"),
   LOG = require("./services/Logger"),
-  Sessionfactory = require("./services/SessionFactory"),
-  _ = require("underscore")._;
+  SessionFactory = require("./services/SessionFactory"),
+  _ = require("underscore")._,
+  util = require("util");
 
-
-var worker = Sessionfactory.getWorkerConnection(['offers_queue']);
+var worker = SessionFactory.getWorkerConnection(['offers_queue']);
 
 worker.register({
   'notification_send_event': function notificationSendEventHandler(event, done) {
@@ -16,6 +16,15 @@ worker.register({
 
     notifier.run(options, done);
   }
+});
+
+worker.on('complete', function (data) { 
+  SessionFactory.getDbConnection().jobs.remove({_id: data._id}, function (err, lastErrorObject) {
+    if (err) {
+      LOG.debug(util.format('[STATUS] [Failure] Removing event failed', err));
+      return;
+    }
+  });
 });
 
 worker.start();
