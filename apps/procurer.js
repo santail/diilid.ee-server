@@ -17,6 +17,16 @@ worker.register({
   }
 });
 
+worker.register({
+  'wish_procure_event': function procurerRunEventHandler(event, done) {
+    var procurer = new Procurer();
+
+    var options = _.extend(event, {});
+
+    procurer.processWish(options, done);
+  }
+});
+
 worker.start();
 
 var Procurer = function () {
@@ -62,49 +72,7 @@ Procurer.prototype.aggregateResult = function aggregateResult(res, callback) {
 
     var functions = _.map(wishes, function (wish) {
       return function (done) {
-        LOG.info(util.format('[STATUS] [OK] Fetching offers for "%s"', wish.contains));
-
-        that.db.offers.find({
-            $text: {
-              $search: wish.contains,
-              $language: wish.language
-            },
-            active: true
-          },
-          function (err, offers) {
-            if (err) {
-              LOG.error(util.format('[STATUS] [Failure] Fetching offers for "%s" failed', wish.contains, err));
-              return done();
-            }
-
-            LOG.info(util.format('[STATUS] [OK] Fetching offers for "%s" finished. Found %s', wish.contains, _.size(offers)));
-
-            if (_.size(offers) === 0) {
-              return done();
-            }
-
-            var notification = {
-              email: email,
-              contains: wish.contains,
-              offers: offers
-            };
-
-            if (wish.phone) {
-              notification.phone = wish.phone;
-            }
-
-            that.queue.enqueue('notification_send_event', notification, function (err, job) {
-              if (err) {
-                LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Enqueuing notification failed', notification.email, notification.contains, err));
-                return callback(err);
-              }
-
-              LOG.info(util.format('[STATUS] [OK] [%s] [%s] Enqueuing notification finished', notification.email, notification.contains));
-              return callback();
-            });
-
-            done(null, notification);
-          });
+        that.processWish(wish, done);
       };
     });
 
@@ -118,6 +86,52 @@ Procurer.prototype.aggregateResult = function aggregateResult(res, callback) {
       return callback();
     });
   });
+};
+
+Procurer.prototype.processWish = function (options, callback) {
+  var that = this;
+
+  LOG.info(util.format('[STATUS] [OK] Fetching offers for "%s"', options.contains));
+
+  that.db.offers.find({
+      $text: {
+        $search: options.contains,
+        $language: options.language
+      },
+      active: true
+    },
+    function (err, offers) {
+      if (err) {
+        LOG.error(util.format('[STATUS] [Failure] Fetching offers for "%s" failed', options.contains, err));
+        return callback();
+      }
+
+      LOG.info(util.format('[STATUS] [OK] Fetching offers for "%s" finished. Found %s', options.contains, _.size(offers)));
+
+      if (_.size(offers) === 0) {
+        return callback();
+      }
+
+      var notification = {
+        email: options.email,
+        contains: options.contains,
+        offers: offers
+      };
+
+      if (options.phone) {
+        notification.phone = options.phone;
+      }
+
+      that.queue.enqueue('notification_send_event', notification, function (err, job) {
+        if (err) {
+          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Enqueuing notification failed', notification.email, notification.contains, err));
+          return callback(err);
+        }
+
+        LOG.info(util.format('[STATUS] [OK] [%s] [%s] Enqueuing notification finished', notification.email, notification.contains));
+        return callback();
+      });
+    });
 };
 
 
