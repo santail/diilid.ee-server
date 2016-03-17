@@ -113,7 +113,7 @@ Procurer.prototype.aggregateResult = function aggregateResult(res, callback) {
         return callback(err);
       }
 
-      LOG.error(util.format('[STATUS] [Failure] [%s] Processing wishes finished', email));
+      LOG.info(util.format('[STATUS] [OK] [%s] Processing wishes finished', email));
       return callback();
     });
   });
