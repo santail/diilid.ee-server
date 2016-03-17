@@ -1,5 +1,5 @@
 var
-  async = require('async'),
+async = require('async'),
   _ = require('underscore')._,
   LOG = require("./services/Logger"),
   util = require("util"),
@@ -68,7 +68,8 @@ Procurer.prototype.aggregateResult = function aggregateResult(res, callback) {
             $text: {
               $search: wish.contains,
               $language: wish.language
-            }
+            },
+            active: true
           },
           function (err, offers) {
             if (err) {
@@ -77,7 +78,7 @@ Procurer.prototype.aggregateResult = function aggregateResult(res, callback) {
             }
 
             LOG.info(util.format('[STATUS] [OK] Fetching offers for "%s" finished. Found %s', wish.contains, _.size(offers)));
-            
+
             if (_.size(offers) === 0) {
               return done();
             }
