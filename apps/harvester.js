@@ -5,7 +5,7 @@ var async = require('async'),
   heapdump = require('heapdump'),
   util = require("util"),
   parserFactory = require("./services/ParserFactory"),
-  Sessionfactory = require("./services/SessionFactory");
+  SessionFactory = require("./services/SessionFactory");
 
 var hd;
 memwatch.on('leak', function (info) {
@@ -47,7 +47,7 @@ var pmx = require('pmx').init({
   ports         : true  // Shows which ports your app is listening on (default: false)
 });
 
-var worker = Sessionfactory.getWorkerConnection(['offers_queue']);
+var worker = SessionFactory.getWorkerConnection(['offers_queue']);
 
 worker.register({
   'harvester_run_event': function harvesterRunEventHandler(event, done) {
@@ -61,11 +61,20 @@ worker.register({
   }
 });
 
+worker.on('complete', function (data) { 
+  SessionFactory.getDbConnection().jobs.remove({_id: data._id}, function (err, lastErrorObject) {
+    if (err) {
+      LOG.debug(util.format('[STATUS] [Failure] Removing event failed', err));
+      return;
+    }
+  });
+});
+
 worker.start();
 
 var Harvester = function () {
-  this.db = Sessionfactory.getDbConnection('');
-  this.queue = Sessionfactory.getQueueConnection('offers_queue');
+  this.db = SessionFactory.getDbConnection('');
+  this.queue = SessionFactory.getQueueConnection('offers_queue');
 };
 
 Harvester.prototype.run = function (options, callback) {
