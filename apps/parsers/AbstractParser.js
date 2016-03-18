@@ -269,16 +269,22 @@ AbstractParser.prototype.parse = function parse(dom, language, callback) {
       return result;
     }
 
-    var result = _parseTemplates(dom, templates, language);
-
-    dom = null;
-
-    LOG.profile("AbstractParser.parseOffer");
-
-    return result;
+    try {
+      var result = _parseTemplates(dom, templates, language);
+  
+      dom = null;
+  
+      LOG.profile("AbstractParser.parseOffer");
+  
+      return result;
+    }
+    catch (err) {
+      return callback(new Error("Error parsing templates", err), offer);
+    }
+    
   })(this, dom, language);
 
-  callback(null, offer);
+  return callback(null, offer);
 };
 
 AbstractParser.prototype.gatherOffers = function (language, offerHandler, callback) {
