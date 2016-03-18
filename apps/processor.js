@@ -38,6 +38,7 @@ Processor.prototype.run = function (options, callback) {
 
   LOG.profile('Harvester.processOffers');
 
+
   that.db.offers.findOne({
     id: id
   }, function findOfferResult(err, offer) {
@@ -63,7 +64,7 @@ Processor.prototype.offerReactivate = function (offer, callback) {
 
   this.db.offers.findAndModify({
     query: {
-      id: offer.id
+      _id: offer._id
     },
     update: {
       $set: {
