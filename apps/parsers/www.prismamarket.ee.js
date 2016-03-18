@@ -232,12 +232,7 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
           LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing offer failed %s', site, language, event.url, err));
           return done(err);
         }
-
-        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing offer finished', site, language, event.url));
-        return done(null, offer);
-      });
-    },
-    function extendOffer(offer, done) {
+        
         var runningTime = new Date();
 
         offer = _.extend(offer, {
@@ -248,17 +243,19 @@ PrismamarketParser.prototype.fetchOffer = function (event, callback) {
           'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
         });
 
-        done(null, offer);
-    }],
-      function handleProcessOfferError(err, offer) {
-        if (err) {
-          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Fetching offer failed %s', site, language, event.url, err));
-          return callback(err);
-        }
-
-        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching offer finished', site, language, event.url));
-        return callback(err, offer);
+        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing offer finished', site, language, event.url));
+        return done(null, offer);
       });
+    }],
+    function handleProcessOfferError(err, offer) {
+      if (err) {
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Fetching offer failed %s', site, language, event.url, err));
+        return callback(err);
+      }
+
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching offer finished', site, language, event.url));
+      return callback(null, offer);
+    });
   }
   else {
     that.parse(event, language, function parseOfferResult(err, offer) {
