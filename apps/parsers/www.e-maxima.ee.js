@@ -142,7 +142,7 @@ eMaximaParser.prototype.gatherOffers = function (language, offerHandler, callbac
           functions,
           function (err, results) {
             if (err) {
-              LOG.error(util.format('[STATUS] [OK] [%s] [%s] Processing product groups failed %s', site, language, err));
+              LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Processing product groups failed %s', site, language, err));
               return done(err);
             }
 
@@ -234,7 +234,7 @@ eMaximaParser.prototype.processProductGroupPage = function (options, callback) {
 
       LOG.profile('Harvester.gatherOffers');
 
-      LOG.info(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing product group page finished', site, language, url));
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing product group page finished', site, language, url));
       return callback();
     }
   );
@@ -306,28 +306,29 @@ eMaximaParser.prototype.processCategoryPage = function (options, callback) {
 
           LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing offers started %s', site, language, url));
 
-          var offers = that.getOffers(dom, language);
-
-          dom = null;
-
-          that.processOffers(language, offers, offerHandler, done);
+          try {
+            var offers = that.getOffers(dom, language);
+            dom = null;
+            that.processOffers(language, offers, offerHandler, done);
+          }
+          catch (err) {
+            dom = null;
+            
+            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing offers failed', site, language, url, err));
+            return done(err);
+          }
         }
       }
     ],
     function onSiteIndexPageProcessed(err, result) {
-      if (err) {
-        LOG.error({
-          'message': util.format('[STATUS] [Failure] [%s] [%s] Error processing product groups pages %s', site, language, url),
-          'error': err.message
-        });
+      LOG.profile('Harvester.gatherOffers');
 
+      if (err) {
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Processing offer category pages failed', site, language, err));
         return callback(err);
       }
 
-      LOG.profile('Harvester.gatherOffers');
-
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] Product groups pages processing finished %s', site, language, url));
-
       return callback();
     }
   );

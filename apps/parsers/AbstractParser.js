@@ -355,11 +355,17 @@ AbstractParser.prototype.gatherOffers = function (language, offerHandler, callba
 
           LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing offers started', site, language, url));
 
-          var offers = that.getOffers(dom, language);
-
-          dom = null;
-
-          that.processOffers(language, offers, offerHandler, done);
+          try {
+            var offers = that.getOffers(dom, language);
+            dom = null;
+            that.processOffers(language, offers, offerHandler, done);
+          }
+          catch (err) {
+            dom = null;
+            
+            LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing offers failed', site, language, url, err));
+            return done(err);
+          }
         }
       }
     ],
@@ -398,15 +404,17 @@ AbstractParser.prototype.processPage = function (options, callback) {
           onSuccess: done
         });
     },
-    function (body, done) {
-        var offers = that.getOffers(body, language),
-          offersNumber = _.size(offers);
-
-        LOG.debug('Total offers found on page', offersNumber);
-
-        body = null;
-
-        done(null, offers);
+    function (dom, done) {
+      try {
+        var offers = that.getOffers(dom, language);
+        return done(null, offers);
+      }
+      catch (err) {
+        dom = null;
+        
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing offers failed', site, language, url, err));
+        return done(err);
+      }
     },
     function (offers, done) {
       that.processOffers(language, offers, offerHandler, done);

@@ -138,15 +138,18 @@ PrismamarketParser.prototype.processPage = function (options, callback) {
         onSuccess: done
       });
     },
-    function (body, done) {
-        var offers = that.getOffers(body, language),
-          offersNumber = _.size(offers.offers);
+    function (dom, done) {
+      try {
+        var offers = that.getOffers(dom, language);
+        return done(null, offers);
+      }
+      catch (err) {
+        dom = null;
+        
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing offers failed', site, language, url, err));
+        return done(err);
+      }
 
-        LOG.info('Total offers found on page', offersNumber);
-
-        body = null;
-
-        done(null, offers);
     },
     function (offers, done) {
         that.processOffers(language, offers.offers, offerHandler, function (err) {
