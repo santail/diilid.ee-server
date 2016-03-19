@@ -278,7 +278,7 @@ AbstractParser.prototype.parse = function parse(dom, language, callback) {
       return result;
     }
     catch (err) {
-      return callback(new Error("Error parsing templates", err), offer);
+      return callback(new Error(util.format("Error parsing templates", err)), offer);
     }
     
   })(this, dom, language);
