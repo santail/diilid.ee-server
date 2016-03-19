@@ -12,11 +12,16 @@ worker.register({
 
     var options = _.extend(event, {});
 
-    processor.run(options, done);
+    try {
+      processor.run(options, done); 
+    }
+    catch (err) {
+      return done(new Error('Error processing offer'));
+    }
   }
 });
 
-worker.on('complete', function (data) { 
+worker.on('complete', function (data) {
   SessionFactory.getDbConnection().jobs.remove({_id: data._id}, function (err, lastErrorObject) {
     if (err) {
       LOG.debug(util.format('[STATUS] [Failure] Removing event failed', err));
@@ -95,7 +100,7 @@ Processor.prototype.offerFetch = function (options, callback) {
 
   parser.fetchOffer(options, function (err, offer) {
     if (err) {
-      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching offer failed', offer.site, offer.id, err));
+      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching offer failed', site, offer.id, err));
       return callback(err);
     }
 
@@ -103,9 +108,9 @@ Processor.prototype.offerFetch = function (options, callback) {
 
     that.db.offers.save(offer, function saveOfferResult(err, saved) {
       LOG.profile("Harvester.saveOffer");
-      
+
       if (err || !saved) {
-        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Saving offer failed', offer.site, offer.id, err));
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Saving offer failed', site, offer.id, err));
         return callback(err);
       }
 

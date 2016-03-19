@@ -481,7 +481,7 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
         dom = null;
 
         if (err) {
-          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing offer failed %s', site, language, url, err));
+          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Parsing offer failed', site, language, url, err));
           return resultHandler(err);
         }
 
