@@ -11,8 +11,6 @@ var queue = Sessionfactory.getQueueConnection('offers_queue');
 var agenda = new Agenda({db: {address: config.db.uri}});
 
 agenda.define('execute harvester', function (job, done) {
-  try {
-
     LOG.debug('Harvesting preconfigured sources');
 
     var numberOfSites = _.size(config.activeSites);
@@ -37,17 +35,16 @@ agenda.define('execute harvester', function (job, done) {
               'error': err.message
             });
 
-            return siteHarvestFinish(err);
+            return siteHarvestFinish();
           }
 
           LOG.info(util.format('[STATUS] [OK] [%s] Harvester run job enqueued', site));
-
           siteHarvestFinish();
         });
       };
     });
 
-    async.waterfall(functions, function (err, results) {
+    async.parallel(functions, function (err, results) {
       if (err) {
         LOG.error({
           'message': '[STATUS] [Failed] Error processing sites',
@@ -61,15 +58,7 @@ agenda.define('execute harvester', function (job, done) {
 
       return done();
     });
-  }
-  catch (ex) {
-    LOG.error({
-      'message': 'Error running harvester',
-      'error': ex.message
-    });
 
-    done();
-  }
 });
 
 agenda.define('execute procurer', function (job, done) {
