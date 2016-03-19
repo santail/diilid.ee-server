@@ -75,7 +75,7 @@ Processor.prototype.offerReactivate = function (offer, callback) {
   }, function offerReactivateResult(err, doc, lastErrorObject) {
     if (err || !doc) {
       LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Reactivating offer failed', offer.site, offer.id, err));
-      return callback(null);
+      return callback(err);
     }
 
     LOG.info(util.format('[STATUS] [OK] [%s] [%s] Reactivating offer finished', offer.site, offer.id));
@@ -96,7 +96,7 @@ Processor.prototype.offerFetch = function (options, callback) {
   parser.fetchOffer(options, function (err, offer) {
     if (err) {
       LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching offer failed', offer.site, offer.id, err));
-      return callback(null);
+      return callback(err);
     }
 
     LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Saving offer', site, parser.getOfferId(offer)));
@@ -106,7 +106,7 @@ Processor.prototype.offerFetch = function (options, callback) {
       
       if (err || !saved) {
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Saving offer failed', offer.site, offer.id, err));
-        return callback(null);
+        return callback(err);
       }
 
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] Saving offer finished', site, parser.getOfferId(saved)));
@@ -130,7 +130,7 @@ Processor.prototype.offerRefresh = function (offer, callback) {
   parser.fetchOffer(options, function (err, offer) {
     if (err) {
       LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Refreshing offer failed', offer.site, offer.id, err));
-      return callback(null);
+      return callback(err);
     }
 
     LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Updating offer', site, offer.id));
@@ -149,7 +149,7 @@ Processor.prototype.offerRefresh = function (offer, callback) {
     }, function offerReactivateResult(err, doc, lastErrorObject) {
       if (err || !doc) {
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Updating offer failed', offer.site, offer.id, err));
-        return callback(null);
+        return callback(err);
       }
 
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] Updating offer finished', doc.site, doc.id));

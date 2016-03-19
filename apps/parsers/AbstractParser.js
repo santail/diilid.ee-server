@@ -459,7 +459,7 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
 
     if (err) {
       LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing offer failed %s', site, language, url, err));
-      return callback(null);
+      return callback(err);
     }
 
     LOG.debug(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing offer finished.', site, language, url));
