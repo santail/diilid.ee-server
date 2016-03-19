@@ -100,21 +100,21 @@ Processor.prototype.offerFetch = function (options, callback) {
 
   parser.fetchOffer(options, function (err, offer) {
     if (err) {
-      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching offer failed', site, offer.id, err));
+      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching offer failed', site, options.id, err));
       return callback(err);
     }
 
-    LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Saving offer', site, parser.getOfferId(offer)));
+    LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Saving offer', site, options.id));
 
     that.db.offers.save(offer, function saveOfferResult(err, saved) {
       LOG.profile("Harvester.saveOffer");
 
       if (err || !saved) {
-        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Saving offer failed', site, offer.id, err));
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Saving offer failed', site, options.id, err));
         return callback(err);
       }
 
-      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Saving offer finished', site, parser.getOfferId(saved)));
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Saving offer finished', site, options.id));
       return callback(null, saved);
     });
   });
