@@ -38,7 +38,6 @@ Processor.prototype.run = function (options, callback) {
 
   LOG.profile('Harvester.processOffers');
 
-
   that.db.offers.findOne({
     id: id
   }, function findOfferResult(err, offer) {
@@ -90,7 +89,7 @@ Processor.prototype.offerFetch = function (options, callback) {
   var that = this,
     site = options.site;
 
-  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Fetching offer', options.site, options.id));
+  LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Fetching offer', options.site, options.id));
 
   var parser = parserFactory.getParser(site);
 
@@ -100,7 +99,7 @@ Processor.prototype.offerFetch = function (options, callback) {
       return callback(null);
     }
 
-    LOG.info(util.format('[STATUS] [OK] [%s] [%s] Saving offer', site, parser.getOfferId(offer)));
+    LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Saving offer', site, parser.getOfferId(offer)));
 
     that.db.offers.save(offer, function saveOfferResult(err, saved) {
       LOG.profile("Harvester.saveOffer");
@@ -122,7 +121,7 @@ Processor.prototype.offerRefresh = function (offer, callback) {
   var that = this,
     site = offer.site;
 
-  LOG.info(util.format('[STATUS] [OK] [%s] [%s] Refreshing offer', site, offer.id));
+  LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Refreshing offer', site, offer.id));
 
   var parser = parserFactory.getParser(site);
 
@@ -134,7 +133,7 @@ Processor.prototype.offerRefresh = function (offer, callback) {
       return callback(null);
     }
 
-    LOG.info(util.format('[STATUS] [OK] [%s] [%s] Updating offer', site, offer.id));
+    LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Updating offer', site, offer.id));
 
     that.db.offers.findAndModify({
       query: {
@@ -153,7 +152,7 @@ Processor.prototype.offerRefresh = function (offer, callback) {
         return callback(null);
       }
 
-      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Updating offer finished', options.site, options._id));
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Updating offer finished', doc.site, doc.id));
       return callback(null);
     });
   });

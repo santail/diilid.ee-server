@@ -262,7 +262,7 @@ eMaximaParser.prototype.processCategoryPage = function (options, callback) {
         });
       },
       function stepCheckPaging(dom, done) {
-        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Checking category page contains paging', site, language, url));
+        LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Checking page contains paging', site, language, url));
 
         if (that.config.paging && that.config.paging.finit) {
           var pagingParams = that.getPagingParameters(language, dom);
