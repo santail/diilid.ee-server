@@ -66,7 +66,6 @@ AbstractParser.prototype.request = function (options) {
 
     response = response || {};
 
-    response.statusCode = 404;
     
     if (err || response.statusCode !== 200 || !data) {
       if (retries) {
