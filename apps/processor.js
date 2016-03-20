@@ -13,7 +13,7 @@ worker.register({
     var options = _.extend(event, {});
 
     try {
-      processor.run(options, done); 
+      processor.run(options, done);
     }
     catch (err) {
       return done(new Error('Error processing offer'));
@@ -78,9 +78,14 @@ Processor.prototype.offerReactivate = function (offer, callback) {
     },
     'new': false
   }, function offerReactivateResult(err, doc, lastErrorObject) {
-    if (err || !doc) {
+    if (err) {
       LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Reactivating offer failed', offer.site, offer.id, err));
       return callback(err);
+    }
+    
+    if (!doc) {
+      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Reactivating offer failed', offer.site, offer.id, err));
+      return callback(new Error('DB update query failed'));
     }
 
     LOG.info(util.format('[STATUS] [OK] [%s] [%s] Reactivating offer finished', offer.site, offer.id));
@@ -109,9 +114,14 @@ Processor.prototype.offerFetch = function (options, callback) {
     that.db.offers.save(offer, function saveOfferResult(err, saved) {
       LOG.profile("Harvester.saveOffer");
 
-      if (err || !saved) {
+      if (err) {
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Saving offer failed', site, options.id, err));
         return callback(err);
+      }
+      
+      if (!saved) {
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Saving offer failed', site, options.id, err));
+        return callback(new Error('DB save query failed'));
       }
 
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] Saving offer finished', site, options.id));
@@ -152,9 +162,14 @@ Processor.prototype.offerRefresh = function (offer, callback) {
       },
       'new': false
     }, function offerReactivateResult(err, doc, lastErrorObject) {
-      if (err || !doc) {
+      if (err) {
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Updating offer failed', offer.site, offer.id, err));
         return callback(err);
+      }
+      
+      if (!doc) {
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Updating offer failed', offer.site, offer.id, err));
+        return callback(new Error('DB update query failed'));
       }
 
       LOG.info(util.format('[STATUS] [OK] [%s] [%s] Updating offer finished', doc.site, doc.id));

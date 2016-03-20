@@ -66,12 +66,23 @@ AbstractParser.prototype.request = function (options) {
 
     response = response || {};
 
+    response.statusCode = 404;
+    
     if (err || response.statusCode !== 200 || !data) {
       if (retries) {
         var timeout = Math.ceil(Math.random(1) * 10000);
 
         retries--;
-        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Fetching page failed %r. Retry in %s msec. Retries left %s', that.config.site, options.uri, response.statusCode, err, timeout, retries, err));
+        
+        if (err) {
+          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching page failed. Retry in %s msec. Retries left %s', that.config.site, options.uri, timeout, retries, err));
+        }
+        else if (response.statusCode !== 200) {
+          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Fetching page failed. Retry in %s msec. Retries left %s', that.config.site, options.uri, response.statusCode, timeout, retries));
+        }
+        else {
+          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Fetching page failed. No data received. Retry in %s msec. Retries left %s', that.config.site, options.uri, response.statusCode, timeout, retries));
+        }
 
         setTimeout(function () {
           response = null;
@@ -82,16 +93,16 @@ AbstractParser.prototype.request = function (options) {
       }
       else {
         LOG.profile('Request');
-        
-        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Fetching page failed', that.config.site, options.uri, response.statusCode, err));
+
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Fetching page failed', that.config.site, options.uri, response.statusCode));
 
         retries = null;
-        return options.onError(err);
+        return options.onError(new Error('Error fetching page. No retries left.'));
       }
     }
     else {
       LOG.profile('Request');
-      
+
       LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Fetching page finished', options.uri, response.statusCode));
       LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Parsing page body', that.config.site, options.uri));
 
@@ -99,7 +110,7 @@ AbstractParser.prototype.request = function (options) {
 
       that.parseResponseBody(data, function (err, dom) {
         data = null;
-        
+
         if (err) {
           LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Parsing page body failed %s', that.config.site, options.uri, err));
           return options.onError(err);
@@ -111,7 +122,12 @@ AbstractParser.prototype.request = function (options) {
     }
   };
 
-  request(options, handler);
+  try {
+    request(options, handler);
+  }
+  catch (err) {
+    return options.onError(err);
+  }
 };
 
 AbstractParser.prototype.compileRequestOptions = function (options) {
@@ -124,7 +140,7 @@ AbstractParser.prototype.getPaging = function () {
 
 AbstractParser.prototype.parseResponseBody = function (data, callback) {
   var that = this;
-  
+
   LOG.debug('Create DOM from body', data);
 
   LOG.profile("tidy");
@@ -145,7 +161,7 @@ AbstractParser.prototype.parseResponseBody = function (data, callback) {
   }, function (err, body) {
     data = null;
     tidy = null;
-    
+
     LOG.profile("tidy");
 
     if (err) {
@@ -270,17 +286,17 @@ AbstractParser.prototype.parse = function parse(dom, language, callback) {
 
     try {
       var result = _parseTemplates(dom, templates, language);
-  
+
       dom = null;
-  
+
       LOG.profile("AbstractParser.parseOffer");
-  
+
       return result;
     }
     catch (err) {
       return callback(new Error(util.format("Error parsing templates", err)), offer);
     }
-    
+
   })(this, dom, language);
 
   return callback(null, offer);
@@ -304,7 +320,7 @@ AbstractParser.prototype.gatherOffers = function (language, offerHandler, callba
     LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Gathering offers finished', site, language, url));
     return callback(null);
   };
-    
+
   LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Fetching index page %s', site, language, url));
 
   that.request({
@@ -364,7 +380,7 @@ AbstractParser.prototype.gatherOffers = function (language, offerHandler, callba
         }
         catch (err) {
           dom = null;
-          
+
           LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing offers failed', site, language, url, err));
           return resultHandler(err);
         }
@@ -393,7 +409,7 @@ AbstractParser.prototype.processPage = function (options, callback) {
     LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page finished', site, language, url));
     return callback(null, result);
   };
-  
+
   LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching page', site, language, url));
 
   that.request({
@@ -407,7 +423,7 @@ AbstractParser.prototype.processPage = function (options, callback) {
       }
       catch (err) {
         dom = null;
-        
+
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing offers failed', site, language, url, err));
         return resultHandler(err);
       }
@@ -486,7 +502,7 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
         }
 
         LOG.debug(util.format('[STATUS] [OK] [%s] [%s] [%s] Parsing offer finished', site, language, url));
-        
+
         var runningTime = new Date();
 
         offer = _.extend(offer, {
@@ -497,7 +513,7 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
           'active': true,
           'parsed': runningTime.getDate() + "/" + runningTime.getMonth() + "/" + runningTime.getFullYear()
         });
-      
+
         return resultHandler(null, offer);
       });
     }

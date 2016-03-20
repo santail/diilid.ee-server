@@ -127,46 +127,34 @@ PrismamarketParser.prototype.processPage = function (options, callback) {
 
   LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page started', site, language, url));
 
-  async.waterfall([
-    function (done) {
-      
-      LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Fetching page started', site, language, url));
+  var resultHandler = function (err, result) {
+    LOG.profile('Harvester.processPage');
+    
+    if (err) {
+      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing page failed %s', site, language, url, err));
+      return callback(err);
+    }
 
-      that.request({
-        uri: url,
-        onError: done,
-        onSuccess: done
-      });
-    },
-    function (dom, done) {
+    LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page finished', site, language, url));
+    return callback(null, result);
+  };
+    
+  that.request({
+    uri: url,
+    onError: resultHandler,
+    onSuccess: function (err, dom) {
       try {
         var offers = that.getOffers(dom, language);
-        return done(null, offers);
+        return that.processOffers(language, offers.offers, offerHandler, done);
       }
       catch (err) {
         dom = null;
-        
+
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing offers failed', site, language, url, err));
-        return done(err);
+        return resultHandler(err);
       }
-
-    },
-    function (offers, done) {
-        that.processOffers(language, offers.offers, offerHandler, function (err) {
-          done(err, offers);
-        });
-    }],
-    function (err, result) {
-      LOG.profile('Harvester.processPage');
-      
-      if (err) {
-        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing page failed %s', site, language, url, err));
-        return callback(err);
-      }
-
-      LOG.info(util.format('[STATUS] [OK] [%s] [%s] [%s] Processing page finished', site, language, url));
-      return callback(null, result);
-    });
+    }
+  });
 };
 
 PrismamarketParser.prototype.parseResponseBody = function (data, callback) {
