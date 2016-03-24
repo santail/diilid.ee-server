@@ -65,6 +65,7 @@ var config = {
     'www.cherry.ee': true,
     'www.chilli.ee': true,
     'www.euronics.ee': true,
+    'www.euronics.discount.ee': true,
     'www.euronics.outlet.ee': true,
     'www.expert.ee': true,
     'www.kriisis.ee': true,
