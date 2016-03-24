@@ -1,11 +1,11 @@
 'use strict';
 
 var util = require('util'),
-  EuronicsParser = require("./www.euronics.ee.js"),
+  AbstractEuronicsParser = require("./AbstractEuronicsParser"),
   _ = require("underscore")._;
 
-function EuronicsOutletParser() {
-  EuronicsParser.call(this);
+function EuronicsParser() {
+  AbstractEuronicsParser.call(this);
 
   var config = {
     'site': 'www.euronics.ee',
@@ -19,6 +19,7 @@ function EuronicsOutletParser() {
   this.config = _.extend(this.config, config);
 }
 
-util.inherits(EuronicsOutletParser, EuronicsParser);
+util.inherits(EuronicsParser, AbstractEuronicsParser);
 
-module.exports = EuronicsOutletParser;
+module.exports = EuronicsParser;
+
