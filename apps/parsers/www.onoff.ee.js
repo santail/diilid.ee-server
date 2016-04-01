@@ -13,9 +13,9 @@ function OnoffParser() {
   this.config = {
     'site': 'www.onoff.ee',
     'index': {
-      'rus': 'http://www.onoff.ee/font-colorb00000predlozenija-mesjatsafont/',
-      'est': 'http://www.onoff.ee/font-colorb00000kuupakkumisedfont/',
-      'eng': 'http://www.onoff.ee/font-colorb00000monthly-offersfont-eng/'
+      'rus': 'http://www.onoff.ee/font-colorff0019predlozenija-mesjatsafont/',
+      'est': 'http://www.onoff.ee/font-colorff0019kuupakkumisedfont/',
+      'eng': 'http://www.onoff.ee/font-colorff0019monthly-offersfont-eng/'
     },
     'list': function ($) {
       return $('div.content.catalog > ul.shop_prod > li > a').map(function () {
