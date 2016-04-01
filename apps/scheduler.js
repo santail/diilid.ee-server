@@ -25,7 +25,8 @@ agenda.define('execute harvester', function (job, done) {
     var functions = _.map(activeSites, function (site, index) {
       return function (siteHarvestFinish) {
         var options = {
-          "site": site
+          "site": site,
+          "reactivate": true
         };
 
         queue.enqueue('harvester_run_event', options, function (err, job) {
