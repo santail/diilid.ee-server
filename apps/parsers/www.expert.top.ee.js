@@ -5,7 +5,7 @@ var util = require('util'),
   _ = require("underscore")._;
 
 function ExpertTopParser() {
-  ExpertTopParser.call(this);
+  AbstractExpertParser.call(this);
 
   var that = this;
 
