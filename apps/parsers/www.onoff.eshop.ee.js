@@ -8,6 +8,7 @@ function OnoffEshopParser() {
   OnoffParser.call(this);
 
   var config = {
+    'site': 'www.onoff.eshop.ee',
     'index': {
       'rus': 'http://www.onoff.ee/font-color3dcc00tolko-v-e-magazinefont/',
       'est': 'http://www.onoff.ee/font-color3dcc00ainult-e-poesfont/',
