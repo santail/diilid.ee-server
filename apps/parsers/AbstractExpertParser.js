@@ -8,23 +8,13 @@ var util = require('util'),
   async = require("async"),
   utils = require("../services/Utils");
 
-function ExpertParser() {
+function AbstractExpertParser() {
   AbstractParser.call(this);
 
   var that = this;
 
   this.config = {
-    'site': 'www.expert.ee',
-    'index': {
-      'est': 'http://www.expert.ee/shop/special-list/product-list'
-    },
 
-    'paging': {
-      finit: true,
-      nextPageUrl: function nextPageUrl(language, offset) {
-        return that.compilePageUrl(language, '?type=lopumuuk&priceRange%5Bmin%5D=49&priceRange%5Bmax%5D=69999&limit=12&offset={offset}&sort=date_desc'.replace('{offset}', offset));
-      }
-    },
     'list': function ($, language) {
       return $('p.heading01 > a.js-link-product.img').map(function () {
         return that.compileOfferUrl(language, $(this).attr('href'));
@@ -63,9 +53,9 @@ function ExpertParser() {
   };
 }
 
-util.inherits(ExpertParser, AbstractParser);
+util.inherits(AbstractExpertParser, AbstractParser);
 
-ExpertParser.prototype.gatherOffers = function (language, processOffer, callback) {
+AbstractExpertParser.prototype.gatherOffers = function (language, processOffer, callback) {
   var that = this,
     site = that.config.site,
     paging = that.config.paging;
@@ -126,19 +116,19 @@ ExpertParser.prototype.gatherOffers = function (language, processOffer, callback
   );
 };
 
-ExpertParser.prototype.compilePageUrl = function compilePageUrl(language, link) {
+AbstractExpertParser.prototype.compilePageUrl = function compilePageUrl(language, link) {
   var that = this;
 
   return urlParser.resolve(that.config.index[language], link);
 };
 
-ExpertParser.prototype.compileOfferUrl = function compileOfferUrl(language, link) {
+AbstractExpertParser.prototype.compileOfferUrl = function compileOfferUrl(language, link) {
   var that = this;
 
   return urlParser.resolve(that.config.index[language], link);
 };
 
-ExpertParser.prototype.compileImageUrl = function compileImageUrl(language, link) {
+AbstractExpertParser.prototype.compileImageUrl = function compileImageUrl(language, link) {
   var that = this;
 
   language = that.languages_reverse[language];
@@ -146,5 +136,5 @@ ExpertParser.prototype.compileImageUrl = function compileImageUrl(language, link
   return urlParser.resolve(that.config.index[language], link);
 };
 
-module.exports = ExpertParser;
+module.exports = AbstractExpertParser;
 
