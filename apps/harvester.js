@@ -62,6 +62,8 @@ worker.register({
 });
 
 worker.on('complete', function (data) {
+  var site = data.params.site;
+  
   SessionFactory.getDbConnection().jobs.remove({_id: data._id}, function (err, lastErrorObject) {
     if (err) {
       LOG.debug(util.format('[STATUS] [Failure] Removing event failed', err));
@@ -70,7 +72,7 @@ worker.on('complete', function (data) {
   });
 
   SessionFactory.getDbConnection().sites.update({
-    'site': data.site
+    'url': site
   }, {
     $set: {
       last_run: new Date()
@@ -80,11 +82,11 @@ worker.on('complete', function (data) {
     'new': false
   }, function (err) {
     if (err) {
-      LOG.error(util.format('[STATUS] [Failure] [%s] Setting last run timestamp failed', data.site, err));
+      LOG.error(util.format('[STATUS] [Failure] [%s] Setting last run timestamp failed', site, err));
       return;
     }
 
-    LOG.info(util.format('[STATUS] [OK] [%s] Setting last run timestamp finished', data.site));
+    LOG.info(util.format('[STATUS] [OK] [%s] Setting last run timestamp finished', site));
     return;
   });
 });
