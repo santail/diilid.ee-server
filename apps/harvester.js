@@ -61,19 +61,38 @@ worker.register({
   }
 });
 
-worker.on('complete', function (data) { 
+worker.on('complete', function (data) {
   SessionFactory.getDbConnection().jobs.remove({_id: data._id}, function (err, lastErrorObject) {
     if (err) {
       LOG.debug(util.format('[STATUS] [Failure] Removing event failed', err));
       return;
     }
   });
+
+  SessionFactory.getDbConnection().sites.update({
+    'site': data.site
+  }, {
+    $set: {
+      last_run: new Date()
+    }
+  }, {
+    'multi': false,
+    'new': false
+  }, function (err) {
+    if (err) {
+      LOG.error(util.format('[STATUS] [Failure] [%s] Setting last run timestamp failed', data.site, err));
+      return;
+    }
+
+    LOG.info(util.format('[STATUS] [OK] [%s] Setting last run timestamp finished', data.site));
+    return;
+  });
 });
 
 worker.start();
 
 var Harvester = function () {
-  this.db = SessionFactory.getDbConnection('');
+  this.db = SessionFactory.getDbConnection();
   this.queue = SessionFactory.getQueueConnection('offers_queue');
 };
 
