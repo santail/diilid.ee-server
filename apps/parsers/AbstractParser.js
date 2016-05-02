@@ -66,13 +66,12 @@ AbstractParser.prototype.request = function (options) {
 
     response = response || {};
 
-    
     if (err || response.statusCode !== 200 || !data) {
       if (retries) {
         var timeout = Math.ceil(Math.random(1) * 10000);
 
         retries--;
-        
+
         if (err) {
           LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Fetching page failed. Retry in %s msec. Retries left %s', that.config.site, options.uri, timeout, retries, err));
         }

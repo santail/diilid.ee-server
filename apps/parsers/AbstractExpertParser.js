@@ -14,7 +14,6 @@ function AbstractExpertParser() {
   var that = this;
 
   this.config = {
-
     'list': function ($, language) {
       return $('p.heading01 > a.js-link-product.img').map(function () {
         return that.compileOfferUrl(language, $(this).attr('href'));

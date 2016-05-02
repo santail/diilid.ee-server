@@ -70,9 +70,11 @@ var config = {
     'www.expert.discount.ee': true,
     'www.expert.outlet.ee': true,
     'www.expert.top.ee': true,
+    'www.k-rauta.ee': true,
     'www.kriisis.ee': true,
     'www.minuvalik.ee': true,
     'www.onoff.ee': true,
+    'www.onoff.eshop.ee': true,
     'www.prismamarket.ee': true,
     'www.selver.ee': true
   },
