@@ -227,7 +227,7 @@ AbstractParser.prototype.getOffers = function (dom, language) {
       'id': that.compileOfferUrl(language, link),
       'site': that.config.site,
       'language': that.languages[language],
-      'url': that.compileOfferUrl(language, link)
+      'url': that.compileOfferUrl(language, link).replace('&amp;', '&')
     };
   });
 };
