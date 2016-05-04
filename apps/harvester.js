@@ -63,15 +63,17 @@ worker.register({
 
 worker.on('complete', function (data) {
   var site = data.params.site;
+
+  var db = SessionFactory.getDbConnection();
   
-  SessionFactory.getDbConnection().jobs.remove({_id: data._id}, function (err, lastErrorObject) {
+  db.jobs.remove({_id: data._id}, function (err, lastErrorObject) {
     if (err) {
       LOG.debug(util.format('[STATUS] [Failure] Removing event failed', err));
       return;
     }
   });
 
-  SessionFactory.getDbConnection().sites.update({
+  db.sites.update({
     'url': site
   }, {
     $set: {
@@ -87,6 +89,21 @@ worker.on('complete', function (data) {
     }
 
     LOG.info(util.format('[STATUS] [OK] [%s] Setting last run timestamp finished', site));
+    return;
+  });
+  
+  db.offers.remove({
+    'site': site,
+    'active': false
+  }, function (err) {
+    LOG.profile("Harvester.cleanup");
+
+    if (err) {
+      LOG.error(util.format('[STATUS] [Failure] [%s] Cleanup failed', site, err));
+      return;
+    }
+
+    LOG.info(util.format('[STATUS] [OK] [%s] Cleanup finished', site));
     return;
   });
 });
