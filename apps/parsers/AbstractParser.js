@@ -227,20 +227,23 @@ AbstractParser.prototype.getOffers = function (dom, language) {
       'id': that.compileOfferUrl(language, link),
       'site': that.config.site,
       'language': that.languages[language],
-      'url': that.compileOfferUrl(language, link).replace('&amp;', '&')
+      'url': that.compileOfferUrl(language, link).replace(/&amp;/g, '&')
     };
   });
 };
 
 AbstractParser.prototype.compileImageUrl = function compileImageUrl(language, link) {
+  link = link.replace(/&amp;/g, '&');
   return link;
 };
 
 AbstractParser.prototype.compilePageUrl = function compilePageUrl(language, link) {
+  link = link.replace(/&amp;/g, '&');
   return link;
 };
 
 AbstractParser.prototype.compileOfferUrl = function compileOfferUrl(language, link) {
+  link = link.replace(/&amp;/g, '&');
   return link;
 };
 
