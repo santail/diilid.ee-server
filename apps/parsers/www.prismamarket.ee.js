@@ -27,15 +27,15 @@ function PrismamarketParser() {
       'fin': 'https://www.prismamarket.ee/api/?path=entry%2Fads&entry_type=PT&language=fi&limit=50&category_ids=16928&sort_order=relevancy&sort_dir=desc'
     },
     'headers': {
-      'Connection': 'keep-alive',
       'Pragma': 'no-cache',
+      'Host': 'www.prismamarket.ee',
       'Cache-Control': 'no-cache',
       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
       'Upgrade-Insecure-Requests': '1',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
       'Accept-Encoding': 'gzip, deflate, sdch',
       'Accept-Language': 'en-US,en;q=0.8,ru;q=0.6,et;q=0.4',
-      'Cookie': 'is_new_user=1; _session_id=b426f59445bc396cfbbb78f8f0668beb'
+      'Cookie': 'is_new_user=1; _session_id=54daba672f21be3ce1353e501021054b'
     },
     'paging': {
       finit: true,
