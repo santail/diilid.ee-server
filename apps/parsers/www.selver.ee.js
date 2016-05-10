@@ -47,7 +47,11 @@ function SelverParser() {
     },
     'templates': {
       'vendor': function ($) {
-        return 'Selver';
+        var header = $('#product-attribute-specs-table tr > th').filter(function () {
+          return $(this).text() === 'Tootja';
+        }).first();
+
+        return header.next('td.data').text().replace(/Määramata/g, '');
       },
       'title': function ($, language) {
         return utils.unleakString($('div.product-essential.row div.page-title > h1').text());
