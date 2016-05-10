@@ -131,6 +131,50 @@
         "NODE_ENV": "production"
       }
     },
+        {
+      "name": "Processor 3",
+      "cwd": "/home/salestracker_eu/diilid.ee-server",
+      "node_args": "--optimize_for_size --max_old_space_size=128 --gc_interval=50 --stack-size=102400000 ",
+      "script": "apps/processor.js",
+      "args": "-f",
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "max_restarts": 10,
+      "max_memory_restart": "256M",
+      "watch": false,
+      "exec_interpreter": "node",
+      "exec_mode": "fork",
+      "instances": 0,
+      "autorestart": false,
+      "env": {
+        "NODE_ENV": "production",
+        "IP": "localhost"
+      },
+      "env_production": {
+        "NODE_ENV": "production"
+      }
+    },
+        {
+      "name": "Processor 4",
+      "cwd": "/home/salestracker_eu/diilid.ee-server",
+      "node_args": "--optimize_for_size --max_old_space_size=128 --gc_interval=50 --stack-size=102400000 ",
+      "script": "apps/processor.js",
+      "args": "-f",
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "max_restarts": 10,
+      "max_memory_restart": "256M",
+      "watch": false,
+      "exec_interpreter": "node",
+      "exec_mode": "fork",
+      "instances": 0,
+      "autorestart": false,
+      "env": {
+        "NODE_ENV": "production",
+        "IP": "localhost"
+      },
+      "env_production": {
+        "NODE_ENV": "production"
+      }
+    },
     {
       "name": "Procurer",
       "cwd": "/home/salestracker_eu/diilid.ee-server",
