@@ -67,13 +67,25 @@ function AbstractEuronicsParser() {
         return pictureUrls;
       },
       'original_price': function ($) {
-        return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-bottom > ul > li > p > span.old-price').text().replace(/Норм. цена |Normal price |Norm hind /, ''));
+        if ($('div.oi-product-description p.price > span.old-price').length === 1) {
+          return utils.unleakString($('div.oi-product-description p.price > span.old-price').text().replace(/Норм. цена |Normal price |Norm hind /, '').replace(/ €/g, ''));
+        }
+
+        return '';
       },
       'price': function ($) {
-        return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-bottom > ul > li > p > span.new-price').text());
+        if ($('div.oi-product-description p.price > span.new-price').length === 1) {
+          return $('div.oi-product-description p.price > span.new-price').text().replace(/ €/g, '');
+        }
+
+        return utils.unleakString($('div.oi-product-description p.price > span').text().replace(/ €/g, ''));
       },
       'discount': function ($) {
-        return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-bottom > ul > li > p > span.discount').text());
+        if ($('div.oi-product-description p.price > span.old-price').length === 1) {
+          return utils.unleakString($('div.oi-product-description p.price > span.discount').text().replace(/ €/g, ''));
+        }
+
+        return '';
       },
       'description': function ($) {
         return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-description > div[class!="oi-fb-like"]').html());

@@ -2,8 +2,7 @@
 
 var util = require('util'),
   AbstractEuronicsParser = require("./AbstractEuronicsParser"),
-  _ = require("underscore")._,
-  utils = require("../services/Utils");
+  _ = require("underscore")._;
 
 function EuronicsOutletParser() {
   AbstractEuronicsParser.call(this);
@@ -18,10 +17,6 @@ function EuronicsOutletParser() {
   };
 
   this.config = _.extend(this.config, config);
-
-  this.config.templates.price = function ($) {
-    return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-bottom > ul > li > p > span').text());
-  };
 }
 
 util.inherits(EuronicsOutletParser, AbstractEuronicsParser);
