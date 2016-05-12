@@ -56,6 +56,22 @@ worker.register({
     LOG.info(util.format('[STATUS] [OK] [%s] Harvesting event received %r', event.site, event));
 
     var options = _.extend(event, {});
+    var site = options.site;
+  
+    SessionFactory.getDbConnection().offers.remove({
+      'site': site,
+      'active': false
+    }, function (err) {
+      LOG.profile("Harvester.cleanup");
+
+      if (err) {
+        LOG.error(util.format('[STATUS] [Failure] [%s] Cleanup failed', site, err));
+        return;
+      }
+
+      LOG.info(util.format('[STATUS] [OK] [%s] Cleanup finished', site));
+      return;
+    });
 
     harvester.run(options, done);
   }
@@ -65,7 +81,7 @@ worker.on('complete', function (data) {
   var site = data.params.site;
 
   var db = SessionFactory.getDbConnection();
-  
+
   db.jobs.remove({_id: data._id}, function (err, lastErrorObject) {
     if (err) {
       LOG.debug(util.format('[STATUS] [Failure] Removing event failed', err));
@@ -89,21 +105,6 @@ worker.on('complete', function (data) {
     }
 
     LOG.info(util.format('[STATUS] [OK] [%s] Setting last run timestamp finished', site));
-    return;
-  });
-  
-  db.offers.remove({
-    'site': site,
-    'active': false
-  }, function (err) {
-    LOG.profile("Harvester.cleanup");
-
-    if (err) {
-      LOG.error(util.format('[STATUS] [Failure] [%s] Cleanup failed', site, err));
-      return;
-    }
-
-    LOG.info(util.format('[STATUS] [OK] [%s] Cleanup finished', site));
     return;
   });
 });
