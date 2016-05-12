@@ -13,7 +13,7 @@ worker.register({
     var options = _.extend(event, {});
 
     try {
-      processor.run(options, function () );
+      processor.run(options, function () {});
     }
     catch (err) {
       return done(new Error('Error processing offer'));
