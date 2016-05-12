@@ -13,11 +13,13 @@ worker.register({
     var options = _.extend(event, {});
 
     try {
-      processor.run(options, done);
+      processor.run(options, function () );
     }
     catch (err) {
       return done(new Error('Error processing offer'));
     }
+    
+    return done();
   }
 });
 
