@@ -76,10 +76,10 @@ function eMaximaParser() {
         }).get();
       },
       'original_price': function ($) {
-        return utils.unleakString($('#ctl00_MainContent_productDetails_campaignInDetailsTop_labelOldPrice, #ctl00_MainContent_prodDetails_campaignInDetailsTop_labelOldPrice').text().trim());
+        return utils.unleakString($('#ctl00_MainContent_productDetails_campaignInDetailsTop_labelOldPrice, #ctl00_MainContent_prodDetails_campaignInDetailsTop_labelOldPrice').text().trim().replace(/€/g, '').trim());
       },
       'price': function ($) {
-        return utils.unleakString($('#ctl00_MainContent_productDetails_campaignInDetailsTop_labelNewPrice, #ctl00_MainContent_prodDetails_campaignInDetailsTop_labelNewPrice').text());
+        return utils.unleakString($('#ctl00_MainContent_productDetails_campaignInDetailsTop_labelNewPrice, #ctl00_MainContent_prodDetails_campaignInDetailsTop_labelNewPrice').text().replace(/€/g, '').trim());
       },
       'description': function ($) {
         return utils.unleakString($('#ctl00_MainContent_productDetails_pnlDescription, #ctl00_MainContent_prodDetails_pnlDescription').html() || '');
@@ -157,7 +157,7 @@ eMaximaParser.prototype.gatherOffers = function (language, offerHandler, callbac
 
       site = null;
       url = null;
-      
+
       if (err) {
         LOG.error(util.format('[STATUS] [OK] [%s] [%s] [%s] Gathering offers failed %s', site, language, url, err));
         return callback(err);
@@ -313,7 +313,7 @@ eMaximaParser.prototype.processCategoryPage = function (options, callback) {
           }
           catch (err) {
             dom = null;
-            
+
             LOG.error(util.format('[STATUS] [Failure] [%s] [%s] [%s] Processing offers failed', site, language, url, err));
             return done(err);
           }
