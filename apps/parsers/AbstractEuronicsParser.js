@@ -68,21 +68,21 @@ function AbstractEuronicsParser() {
       },
       'original_price': function ($) {
         if ($('div.oi-product-description p.price > span.old-price').length === 1) {
-          return utils.unleakString($('div.oi-product-description p.price > span.old-price').text().replace(/Норм. цена |Normal price |Norm hind /, '').replace(/ €/g, ''));
+          return utils.unleakString($('div.oi-product-description p.price > span.old-price').text().replace(/Норм. цена |Normal price |Norm hind /, '').replace(/€/g, '').trim());
         }
 
         return '';
       },
       'price': function ($) {
         if ($('div.oi-product-description p.price > span.new-price').length === 1) {
-          return $('div.oi-product-description p.price > span.new-price').text().replace(/ €/g, '');
+          return $('div.oi-product-description p.price > span.new-price').text().replace(/€/g, '').trim();
         }
 
-        return utils.unleakString($('div.oi-product-description p.price > span').text().replace(/ €/g, ''));
+        return utils.unleakString($('div.oi-product-description p.price > span').text().replace(/€/g, '').trim());
       },
       'discount': function ($) {
         if ($('div.oi-product-description p.price > span.old-price').length === 1) {
-          return utils.unleakString($('div.oi-product-description p.price > span.discount').text().replace(/ €/g, ''));
+          return utils.unleakString($('div.oi-product-description p.price > span.discount').text().replace(/€/g, '').trim());
         }
 
         return '';
@@ -90,7 +90,13 @@ function AbstractEuronicsParser() {
       'description': function ($) {
         return utils.unleakString($('div.oi-section-main-content.clear div.oi-product-description > div.oi-description > div[class!="oi-fb-like"]').html());
       },
-      'vendor': 'Euronics'
+      'vendor': function ($) {
+        var header = $('div.oi-product-details > table th').filter(function () {
+          return _.contains(['tootja:', 'Производитель:', 'producer:'], $(this).text());
+        }).first();
+
+        return header.next('td').text().trim();
+      }
     }
   };
 
