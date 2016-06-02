@@ -2,7 +2,68 @@ var LOG = require("./services/Logger"),
   parserFactory = require("./services/ParserFactory"),
   SessionFactory = require("./services/SessionFactory"),
   _ = require('underscore')._,
-  util = require("util");
+  util = require("util"),
+  elasticsearch = require('elasticsearch');
+
+var elasticClient = new elasticsearch.Client({
+  host: 'localhost:9200',
+  log: 'info'
+});
+
+var indexName = "deals";
+
+var checkIndicesExists = function () {
+  return elasticClient.indices.exists({
+    index: indexName
+  });
+};
+
+var indicesCreate = function () {
+  return elasticClient.indices.create({
+    index: indexName
+  });
+};
+
+var indicesCreateMapping = function () {
+  return elasticClient.indices.putMapping({
+    index: indexName,
+    type: "offer",
+    body: {
+      properties: {
+        title: {
+          type: "string"
+        },
+        description: {
+          type: "string"
+        },
+        details: {
+          type: "string"
+        },
+        language: {
+          type: "string"
+        },
+        active: {
+          type: "boolean"
+        }
+      }
+    }
+  });
+};
+
+var addDocument = function (document) {
+  return elasticClient.index({
+    index: indexName,
+    type: "offer",
+    body: {
+      id: document.id,
+      title: document.title,
+      language: document.language,
+      description: document.description,
+      details: document.details,
+      active: true
+    }
+  });
+};
 
 var worker = SessionFactory.getWorkerConnection(['offers_queue']);
 
@@ -13,7 +74,14 @@ worker.register({
     var options = _.extend(event, {});
 
     try {
-      processor.run(options, function () {});
+      checkIndicesExists().then(function (exists) {
+        if (!exists) {
+          indicesCreate().then(indicesCreateMapping).then(processor.run(options, function () {}));
+        }
+        else {
+          processor.run(options, done);
+        }
+      });
     }
     catch (err) {
       return done(new Error('Error processing offer'));
@@ -24,7 +92,9 @@ worker.register({
 });
 
 worker.on('complete', function (data) {
-  SessionFactory.getDbConnection().jobs.remove({_id: data._id}, function (err, lastErrorObject) {
+  SessionFactory.getDbConnection().jobs.remove({
+    _id: data._id
+  }, function (err, lastErrorObject) {
     if (err) {
       LOG.debug(util.format('[STATUS] [Failure] Removing event failed', err));
       return;
@@ -84,7 +154,7 @@ Processor.prototype.offerReactivate = function (offer, callback) {
       LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Reactivating offer failed', offer.site, offer.id, err));
       return callback(err);
     }
-    
+
     if (!doc) {
       LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Reactivating offer failed', offer.site, offer.id, err));
       return callback(new Error('DB update query failed'));
@@ -120,14 +190,16 @@ Processor.prototype.offerFetch = function (options, callback) {
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Saving offer failed', site, options.id, err));
         return callback(err);
       }
-      
+
       if (!saved) {
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Saving offer failed', site, options.id, err));
         return callback(new Error('DB save query failed'));
       }
 
-      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Saving offer finished', site, options.id));
-      return callback(null, saved);
+      addDocument(offer).then(function () {
+        LOG.info(util.format('[STATUS] [OK] [%s] [%s] Saving offer finished', site, options.id));
+        return callback(null, saved);
+      });
     });
   });
 };
@@ -168,7 +240,7 @@ Processor.prototype.offerRefresh = function (offer, callback) {
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Updating offer failed', offer.site, offer.id, err));
         return callback(err);
       }
-      
+
       if (!doc) {
         LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Updating offer failed', offer.site, offer.id, err));
         return callback(new Error('DB update query failed'));

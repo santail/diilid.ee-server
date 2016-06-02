@@ -8,10 +8,22 @@
         "pictures": [
           "https://www.k-rauta.ee/ehituspood-productimages//big/5/500/500558/500558813_1.jpg"
         ],
-        "price": "89,99 € / tk",
-        "original_price": "149,00 € / tk",
+        "price": "89,99",
+        "original_price": "149,00",
         "vendor": "MAKITA",
         "title": "Akutrell Makita 6271DWPLE 12V 500558813, 88381091961"
+      },
+      "https://www.k-rauta.ee/ProductDisplay?urlRequestType=Base&catalogId=14001&categoryId=338492&productId=118111&errorViewName=ProductDisplayErrorView&urlLangId=&langId=4&top_category=338451&parent_category_rn=338490&storeId=10703": {
+        "description": "Sobib nii kuiva kui ka niiskesse ruumi nagu keldrid, panipaigad ja tehnilised ruumid. Juhtmega, 200W.",
+        "details": "",
+        "original_price": "14,95",
+        "period": "Pakkumine kehtib kuni 10.01.2017",
+        "pictures": [
+          "https://www.k-rauta.ee/ehituspood-productimages//big/5/500/500655/500655553_1.jpg"
+        ],
+        "price": "7,48",
+        "title": "Külmavalvur Mintor 200W juhtmega 500655553, 6420617643751",
+        "vendor": ""
       }
     }
   }

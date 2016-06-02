@@ -5,9 +5,9 @@
         "pictures": [
           "http//m1.selver.ee/media/catalog/product/cache/1/image/800x/32f7925e8bac497a1d65183a10e7db32/5/9/5900281002982.jpg"
         ],
-        "price": "1,19 €",
-        "original_price": "1,59 €",
-        "vendor": "Selver",
+        "price": "1,19",
+        "original_price": "1,59",
+        "vendor": "BONDUELLE",
         "title": "Keskmiselt vürtsikas šampinjoniletšo, BONDUELLE, 450 g",
         "description": ""
       },
@@ -15,9 +15,9 @@
         "pictures": [
           "http//m1.selver.ee/media/catalog/product/cache/1/image/800x/43c40180888385aae88264a1f5475892/5/4/5410853045120.jpg"
         ],
-        "price": "3,29 €",
-        "original_price": "4,59 €",
-        "vendor": "Selver",
+        "price": "3,29",
+        "original_price": "4,59",
+        "vendor": "PANASONIC CORPORATION",
         "title": "Patareid LR20EGE/D, PANASONIC, 2 tk",
         "description": "Panasonic EGE LR20 / D tüüpi alkaline (leelis) patarei 2tk. Kõrgus 61,5mm; diameeter 34,5mm; väljundpinge 1,5V. Panasonic EVOLTA seeria patareid sobivad suure voolutarbega seadmetele."
       },
@@ -25,21 +25,41 @@
         "pictures": [
           "http//m1.selver.ee/media/catalog/product/cache/1/image/800x/07da45b557b80abebc6e53da65261f3a/3/5/3574660717723.jpg"
         ],
-        "price": "4,29 €",
-        "original_price": "5,99 €",
-        "vendor": "Selver",
+        "price": "4,29",
+        "original_price": "5,99",
+        "vendor": "JOHNSON & JOHNSON",
         "title": "Kehaemulsioon sügavniisutav tundlikule, NEUTROGENA, 250 ml",
         "description": "Neutrogena sügavniisutav ihupiim tundlikule nahale. Kuiva naha probleeme leevendav toime on kliiniliselt tõestatud. Niisutab hetkega, nahk on silmanähtavalt siledam, pehmem. Vähendab karedust ja kuivust juba esimesel kasutamisel.Kasutades igapäevaselt paistab nahk kaunis ja terve. Eriti kiirelt imenduv tekstuur. Ei sisalda lõhnaaineid, ei tekita allergilisi reaktsioone."
       },
       "http://www.selver.ee/multimahlajook-star-wars-ullatusmunaga-suprise-drinks-300-ml-1": {
         "description": "Multimahlajook + üllatusmuna",
-        "original_price": "1,29 €",
+        "original_price": "1,29",
         "pictures": [
           "http//m2.selver.ee/media/catalog/product/cache/1/image/800x/0ee0b02feb2d48d6d15c8f7c3d53228c/4/7/4742493000193.jpg"
         ],
-        "price": "0,89 €",
-        "vendor": "Selver",
+        "price": "0,99",
+        "vendor": "SURPRISE DRINKS A.S.",
         "title": "Multimahlajook Star Wars üllatusmunaga, SUPRISE DRINKS, 300 ml"
+      },
+      "https://www.selver.ee/mahlajook-apelsin-ananass-porgan-active-vitamin-500-ml-1": {
+        "description": "Active apelsini-ananassi-porgandi mahlajook vitamiinidega. Mahlasisaldus vähemalt 12%. 0,5l toodet sisaldab 75% täiskasvanud inimese päevasest A-, C- ja E-vitamiini vajadusest. Meeldiva täidlase maitsega kosutav janukustutaja annab energiat terve päeva vältel.",
+        "original_price": "0,79",
+        "pictures": [
+          "http//m1.selver.ee/media/catalog/product/cache/1/image/800x/834b640d5221cdf13523132ea099188f/4/7/4740098072027.jpg"
+        ],
+        "price": "0,59",
+        "title": "Mahlajook apelsin-ananass-porgan, ACTIVE VITAMIN, 500 ml",
+        "vendor": "A. LE COQ AS"
+      },
+      "https://www.selver.ee/energiajook-starter-500-ml-1": {
+        "description": "Kergelt koolamaitseline tauriini ja kofeiini sisaldav energiajook.",
+        "original_price": "0,99",
+        "pictures": [
+          "http//m1.selver.ee/media/catalog/product/cache/1/image/800x/fc9b8473004fd5d89e59aefbcaef4b69/4/7/4740050005063.jpg"
+        ],
+        "price": "0,69",
+        "title": "Energiajook, STARTER, 500 ml",
+        "vendor": "LIVIKO AS"
       }
     }
   }

@@ -61,9 +61,12 @@ worker.register({
     LOG.info(util.format('[STATUS] [OK] [%s] Not active offers cleanup started', site));
 
     SessionFactory.getDbConnection().offers.remove({
-      'site': site,
+      $and: [{
+        'site': { $eq: site }
+      }, {
       'active': false
-    }, function (err) {
+      }]
+    }, function (err, result) {
       LOG.profile("Harvester.cleanup");
 
       if (err) {
@@ -71,7 +74,7 @@ worker.register({
         return;
       }
 
-      LOG.info(util.format('[STATUS] [OK] [%s] Not active offers cleanup finished', site));
+      LOG.info(util.format('[STATUS] [OK] [%s] Not active offers cleanup finished. Deleted %s records ', site, result.nRemoved));
       return;
     });
 

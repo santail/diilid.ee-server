@@ -62,10 +62,10 @@ function KRautoParser() {
         return utils.unleakString($('div.product-description > p').text());
       },
       'price': function ($) {
-        return utils.unleakString($('#product-options div.price-options span.price.show-vat').text().trim());
+        return utils.unleakString($('#product-options div.price-options span.price.show-vat').text().replace(/€ \/ tk/g, '').trim());
       },
       'original_price': function ($) {
-        return $('#product-options div.price-options span.old_price span.old_price_price.show-vat').text().trim();
+        return $('#product-options div.price-options span.old_price span.old_price_price.show-vat').text().replace(/€ \/ tk/g, '').trim();
       },
       'period': function ($) {
         return $('#product-options div.price-options span.discounted_price_suffix').text().trim().replace(/Pakkumine kehtib kuni:/, '');

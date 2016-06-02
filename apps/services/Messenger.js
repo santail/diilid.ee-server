@@ -17,7 +17,7 @@ Messenger.prototype.send = function (notification, callback) {
   that.sendEmail(notification);
 
   if (notification.phone) {
-    that.sendSms(notification.phone, notification.offers);
+    that.sendSms(notification);
   }
 
   callback();
@@ -54,8 +54,10 @@ Messenger.prototype.sendEmail = function (notification) {
   });
 };
 
-Messenger.prototype.sendSms = function (phone, offers) {
-  var that = this;
+Messenger.prototype.sendSms = function (notification) {
+  var that = this,
+  phone = notification.phone,
+  offers = notification.offers;
 
   LOG.debug(util.format('[STATUS] [Sending] [SMS] [%s] Sending SMS', phone));
 

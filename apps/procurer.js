@@ -3,7 +3,13 @@ async = require('async'),
   _ = require('underscore')._,
   LOG = require("./services/Logger"),
   util = require("util"),
-  Sessionfactory = require("./services/SessionFactory");
+  Sessionfactory = require("./services/SessionFactory"),
+  elasticsearch = require('elasticsearch');
+
+var elasticClient = new elasticsearch.Client({
+  host: 'localhost:9200',
+  log: 'info'
+});
 
 var worker = Sessionfactory.getWorkerConnection(['offers_queue']);
 
@@ -49,14 +55,14 @@ Procurer.prototype.run = function (options, callback) {
         }
     }
    ],
-    function (err, wishes) {
+    function (err, result) {
       if (err) {
         LOG.error(util.format('[STATUS] [Failure] Gathering wishes failed', err));
         return callback(err);
       }
 
-      LOG.info(util.format('[STATUS] [OK] Gathering wishes finished. Found %s', _.size(wishes)));
-      return that.aggregateResult(wishes, callback);
+      LOG.info(util.format('[STATUS] [OK] Gathering wishes finished. Found %s', _.size(result)));
+      return that.aggregateResult(result, callback);
     });
 };
 
@@ -88,57 +94,76 @@ Procurer.prototype.aggregateResult = function aggregateResult(res, callback) {
   });
 };
 
-Procurer.prototype.processWish = function (options, callback) {
+Procurer.prototype.processWish = function (wish, callback) {
   var that = this;
 
-  LOG.info(util.format('[STATUS] [OK] Fetching offers for "%s"', options.contains));
+  LOG.info(util.format('[STATUS] [OK] [%s] Fetching offers for "%s"', wish.language, wish.contains));
 
-  var criteria = {
-    $text: {
-      $search: options.contains,
-      $language: options.language
-    },
-    active: true
-  };
-  
-  if (options.language && options.language !== 'none') {
-    criteria.language = options.language;
-  }
-    
-  that.db.offers.find(criteria,
-    function (err, offers) {
-      if (err) {
-        LOG.error(util.format('[STATUS] [Failure] Fetching offers for "%s" failed', options.contains, err));
-        return callback();
-      }
-
-      LOG.info(util.format('[STATUS] [OK] Fetching offers for "%s" finished. Found %s', options.contains, _.size(offers)));
-
-      if (_.size(offers) === 0) {
-        return callback();
-      }
-
-      var notification = {
-        email: options.email,
-        contains: options.contains,
-        offers: offers
-      };
-
-      if (options.phone) {
-        notification.phone = options.phone;
-      }
-
-      that.queue.enqueue('notification_send_event', notification, function (err, job) {
-        if (err) {
-          LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Enqueuing notification failed', notification.email, notification.contains, err));
-          return callback(err);
+  elasticClient.search({
+    index: 'deals',
+    type: 'offer',
+    body: {
+      "query": {
+        "filtered": {
+          "query": {
+            "multi_match": {
+              "query": wish.contains,
+              "type": "best_fields",
+              "fields": ["title"]
+            }
+          },
+          "filter": {
+            "bool": {
+              "must": [{
+                  "term": {
+                    "language": wish.language,
+                  }
+                }, {
+                "term": {
+                  "active": true
+                }
+              }]
+            }
+          }
         }
+      },
+      "highlight": {
+        "fields": {
+          "title": {}
+        }
+      }
+    }
+  }, function (error, response) {
+    console.log(response);
 
-        LOG.info(util.format('[STATUS] [OK] [%s] [%s] Enqueuing notification finished', notification.email, notification.contains));
+    var notification = {
+      email: wish.email,
+      contains: wish.contains
+    };
+
+    if (wish.phone) {
+      notification.phone = wish.phone;
+    }
+
+    if (response.hits.total === 0) {
+      return callback();
+    }
+
+    notification.offers = response.hits.hits;
+
+    that.queue.enqueue('notification_send_event', notification, function (err, job) {
+      if (err) {
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Enqueuing notification failed', notification.email, notification.contains, err));
         return callback();
-      });
-    });
-};
+      }
 
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Enqueuing notification finished', notification.email, notification.contains));
+      return callback();
+    });
+
+
+    console.log(response.hits.hits[0] ? response.hits.hits[0]._source : '');
+  });
+};
 
 module.exports = Procurer;
