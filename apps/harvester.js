@@ -58,7 +58,7 @@ worker.register({
     var options = _.extend(event, {});
     var site = options.site;
 
-    LOG.info(util.format('[STATUS] [OK] [%s] None active offers cleanup started', site));
+    LOG.info(util.format('[STATUS] [OK] [%s] Not active offers cleanup started', site));
 
     SessionFactory.getDbConnection().offers.remove({
       'site': site,
@@ -67,11 +67,11 @@ worker.register({
       LOG.profile("Harvester.cleanup");
 
       if (err) {
-        LOG.error(util.format('[STATUS] [Failure] [%s] None active offers cleanup failed', site, err));
+        LOG.error(util.format('[STATUS] [Failure] [%s] Not active offers cleanup failed', site, err));
         return;
       }
 
-      LOG.info(util.format('[STATUS] [OK] [%s] None active offers cleanup finished', site));
+      LOG.info(util.format('[STATUS] [OK] [%s] Not active offers cleanup finished', site));
       return;
     });
 
