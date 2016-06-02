@@ -26,13 +26,6 @@ _.each(conf.activeSites, function (active, site) {
 
       var data = JSON.parse(fs.readFileSync(__dirname + '/' + parser.config.site + '.data.json', 'utf8'));
 
-      _.each(parser.config.index, function (url, language) {
-
-        it(language + ' should return none empty list of offer hrefs', function (done) {
-          parser.gatherOffers(language, function (offer) {}, done);
-        });
-      });
-
       _.each(data.offers, function (urls, language) {
 
         describe(language, function () {

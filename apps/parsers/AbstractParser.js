@@ -521,4 +521,8 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
   });
 };
 
+AbstractParser.prototype.priceCleanup = function (price) {
+  return price.replace(/[^\\%0-9.,-]+/gi, '').trim();
+};
+
 module.exports = AbstractParser;

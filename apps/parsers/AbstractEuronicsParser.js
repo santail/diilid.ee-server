@@ -68,21 +68,21 @@ function AbstractEuronicsParser() {
       },
       'original_price': function ($) {
         if ($('div.oi-product-description p.price > span.old-price').length === 1) {
-          return utils.unleakString($('div.oi-product-description p.price > span.old-price').text().replace(/Норм. цена |Normal price |Norm hind /, '').replace(/€/g, '').trim());
+          return that.priceCleanup($('div.oi-product-description p.price > span.old-price').text());
         }
 
         return '';
       },
       'price': function ($) {
         if ($('div.oi-product-description p.price > span.new-price').length === 1) {
-          return $('div.oi-product-description p.price > span.new-price').text().replace(/€/g, '').trim();
+          return that.priceCleanup($('div.oi-product-description p.price > span.new-price').text());
         }
 
-        return utils.unleakString($('div.oi-product-description p.price > span').text().replace(/€/g, '').trim());
+        return that.priceCleanup($('div.oi-product-description p.price > span').text());
       },
       'discount': function ($) {
         if ($('div.oi-product-description p.price > span.old-price').length === 1) {
-          return utils.unleakString($('div.oi-product-description p.price > span.discount').text().replace(/€/g, '').trim());
+          return that.priceCleanup($('div.oi-product-description p.price > span.discount').text());
         }
 
         return '';
