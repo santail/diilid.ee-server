@@ -3,7 +3,7 @@ async = require('async'),
   _ = require('underscore')._,
   LOG = require("./services/Logger"),
   util = require("util"),
-  Sessionfactory = require("./services/SessionFactory"),
+  SessionFactory = require("./services/SessionFactory"),
   elasticsearch = require('elasticsearch');
 
 var elasticClient = new elasticsearch.Client({
@@ -11,7 +11,7 @@ var elasticClient = new elasticsearch.Client({
   log: 'info'
 });
 
-var worker = Sessionfactory.getWorkerConnection(['offers_queue']);
+var worker = SessionFactory.getWorkerConnection(['offers_queue']);
 
 worker.register({
   'procurer_run_event': function procurerRunEventHandler(event, done) {
@@ -33,11 +33,22 @@ worker.register({
   }
 });
 
+worker.on('complete', function (data) {
+  SessionFactory.getDbConnection().jobs.remove({
+    _id: data._id
+  }, function (err, lastErrorObject) {
+    if (err) {
+      LOG.debug(util.format('[STATUS] [Failure] Removing event failed', err));
+      return;
+    }
+  });
+});
+
 worker.start();
 
 var Procurer = function () {
-  this.db = Sessionfactory.getDbConnection();
-  this.queue = Sessionfactory.getQueueConnection('offers_queue');
+  this.db = SessionFactory.getDbConnection();
+  this.queue = SessionFactory.getQueueConnection('offers_queue');
 };
 
 Procurer.prototype.run = function (options, callback) {
@@ -134,8 +145,6 @@ Procurer.prototype.processWish = function (wish, callback) {
       }
     }
   }, function (error, response) {
-    console.log(response);
-
     var notification = {
       email: wish.email,
       contains: wish.contains
@@ -145,7 +154,7 @@ Procurer.prototype.processWish = function (wish, callback) {
       notification.phone = wish.phone;
     }
 
-    if (response.hits.total === 0) {
+    if (!response.hits || response.hits.total === 0) {
       return callback();
     }
 
@@ -161,8 +170,6 @@ Procurer.prototype.processWish = function (wish, callback) {
       return callback();
     });
 
-
-    console.log(response.hits.hits[0] ? response.hits.hits[0]._source : '');
   });
 };
 
