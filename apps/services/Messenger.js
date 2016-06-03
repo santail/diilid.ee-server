@@ -88,6 +88,7 @@ Messenger.prototype.compileEmailBody = function (notification) {
 
   _.each(notification.offers, function (offer) {
     var details = '';
+    offer = offer._source;
 
     if (offer.vendor) {
       details += util.format('<span>%s</span>', offer.vendor);
