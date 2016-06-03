@@ -99,6 +99,9 @@ Messenger.prototype.compileEmailBody = function (notification) {
     if (offer.original_price) {
      details += util.format('&nbsp;<span style="text-decoration: line-through;">%s</span>', offer.original_price);
     }
+    if (offer.discount) {
+     details += util.format('&nbsp;<span>%s</span>', offer.discount);
+    }
 
     if (offer.description) {
       details += util.format('<br /><span>%s</span>',  offer.description);

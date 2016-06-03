@@ -51,6 +51,9 @@ var indicesCreateMapping = function () {
         url: {
           type: "string"
         },
+        original_url: {
+          type: "string"
+        },
         price: {
           type: "string"
         },
@@ -74,7 +77,9 @@ var addDocument = function (document) {
       details: document.details,
       price: document.price,
       original_price: document.original_price,
+      discount: document.discount,
       url: document.url,
+      original_url: document.original_url,
       active: true
     }
   });
@@ -101,7 +106,7 @@ worker.register({
     catch (err) {
       return done(new Error('Error processing offer'));
     }
-    
+
     return done();
   }
 });
