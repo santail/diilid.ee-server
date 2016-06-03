@@ -27,15 +27,6 @@ worker.on('complete', function (data) {
   });
 });
 
-worker.on('complete', function (data) { 
-  SessionFactory.getDbConnection().jobs.remove({_id: data._id}, function (err, lastErrorObject) {
-    if (err) {
-      LOG.debug(util.format('[STATUS] [Failure] Removing event failed', err));
-      return;
-    }
-  });
-});
-
 worker.start();
 
 var Notifier = function () {
