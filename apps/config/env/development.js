@@ -59,24 +59,6 @@ var config = {
       'level': 'debug'
     }
   },
-  activeSites: {
-    'www.pakkumised.ee': false,
-    'www.e-maxima.ee': false,
-    'www.chilli.ee': false,
-    'www.euronics.ee': false,
-    'www.euronics.discount.ee': false,
-    'www.euronics.outlet.ee': false,
-    'www.expert.discount.ee': false,
-    'www.expert.outlet.ee': false,
-    'www.expert.top.ee': false,
-    'www.k-rauta.ee': true,
-    'www.kriisis.ee': false,
-    'www.minuvalik.ee': false,
-    'www.onoff.ee': false,
-    'www.onoff.eshop.ee': false,
-    'www.prismamarket.ee': false,
-    'www.selver.ee': false
-  },
   'appdynamics': {
     controllerHostName: 'paid130.saas.appdynamics.com',
     controllerPort: 443, // If SSL, be sure to enable the next line     controllerSslEnabled: true // Optional - use if connecting to controller via SSL

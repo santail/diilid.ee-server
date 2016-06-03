@@ -2,10 +2,28 @@
 
 var expect = require('chai').expect,
   _ = require("underscore")._,
-  fs = require("fs"),
-  conf = require('../../apps/config/env/');
+  fs = require("fs");
 
-_.each(conf.activeSites, function (active, site) {
+var sites = {
+  'www.pakkumised.ee': false,
+  'www.e-maxima.ee': true,
+  'www.chilli.ee': true,
+  'www.euronics.ee': true,
+  'www.euronics.discount.ee': true,
+  'www.euronics.outlet.ee': true,
+  'www.expert.discount.ee': true,
+  'www.expert.outlet.ee': true,
+  'www.expert.top.ee': true,
+  'www.k-rauta.ee': true,
+  'www.kriisis.ee': true,
+  'www.minuvalik.ee': true,
+  'www.onoff.ee': true,
+  'www.onoff.eshop.ee': true,
+  'www.prismamarket.ee': true,
+  'www.selver.ee': true
+};
+
+_.each(sites, function (active, site) {
   if (active) {
     var Parser = require('../../apps/parsers/' + site + '.js');
 
