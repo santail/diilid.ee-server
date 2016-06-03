@@ -62,7 +62,6 @@ var config = {
   activeSites: {
     'www.pakkumised.ee': false,
     'www.e-maxima.ee': false,
-    'www.cherry.ee': false,
     'www.chilli.ee': false,
     'www.euronics.ee': false,
     'www.euronics.discount.ee': false,
