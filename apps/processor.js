@@ -42,8 +42,20 @@ var indicesCreateMapping = function () {
         language: {
           type: "string"
         },
+        vendor: {
+          type: "string"
+        },
         active: {
           type: "boolean"
+        },
+        url: {
+          type: "string"
+        },
+        price: {
+          type: "string"
+        },
+        original_price: {
+          type: "string"
         }
       }
     }
@@ -60,6 +72,9 @@ var addDocument = function (document) {
       language: document.language,
       description: document.description,
       details: document.details,
+      price: document.price,
+      original_price: document.original_price,
+      url: document.url,
       active: true
     }
   });
