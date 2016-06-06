@@ -28,7 +28,7 @@ agenda.define('execute harvester', function (job, done) {
 
     _.each(result, function (site) {
       var payload = {
-        "site": site,
+        "site": site.url,
         "reactivate": true
       };
 
