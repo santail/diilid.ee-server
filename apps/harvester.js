@@ -74,11 +74,12 @@ worker.register({
         return;
       }
 
-      LOG.info(util.format('[STATUS] [OK] [%s] Not active offers cleanup finished. Deleted %s records ', site, result.nRemoved));
-      return;
-    });
+      LOG.info(util.format('[STATUS] [OK] [%s] Not active offers cleanup finished. Deleted %s records ', site, result.n));
 
-    harvester.run(options, done);
+      harvester.run(options, function () {});
+
+      return done();
+    });
   }
 });
 
