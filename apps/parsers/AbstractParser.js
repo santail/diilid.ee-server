@@ -522,7 +522,7 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
 };
 
 AbstractParser.prototype.priceCleanup = function (price) {
-  return price.replace(/[^\\%0-9.,-]+/gi, '').trim();
+  return price.match(/(\d+[,\.]?\d{1,2}(\s?\%)?)/)[0].trim();
 };
 
 module.exports = AbstractParser;
