@@ -42,29 +42,24 @@ Messenger.prototype.sendEmail = function (notification) {
 
   mailgun.messages().send(data, function (err, body) {
     if (err) {
-      LOG.error({
-        'message': util.format('[STATUS] [Failed] [email] [%s] Sending email', notification.email),
-        'error': err.message
-      });
-
+      LOG.error(util.format('[STATUS] [Failure] [%s] Sending email failed', notification.email, err));
       return;
     }
 
-    LOG.info(util.format('[STATUS] [OK] [email] [%s] Succesfully sent.', notification.email));
+    LOG.info(util.format('[STATUS] [Failure] [%s] Sending email completed', notification.email));
   });
 };
 
 Messenger.prototype.sendSms = function (notification) {
   var that = this,
-  phone = notification.phone,
-  offers = notification.offers;
+  phone = notification.phone;
 
   LOG.debug(util.format('[STATUS] [Sending] [SMS] [%s] Sending SMS', phone));
 
   twilio.sendMessage({
       to: phone,
       from: config.notifier.twilio.from,
-      body: that.compileSmsBody(offers)
+      body: that.compileSmsBody(notification)
     },
     function (err, response) {
       if (err) {
@@ -171,11 +166,12 @@ Messenger.prototype.compileEmailBody = function (notification) {
   '</table>';
 };
 
-Messenger.prototype.compileSmsBody = function (offers) {
+Messenger.prototype.compileSmsBody = function (notification) {
   var body = "";
 
-  _.each(offers, function (offer) {
-    body += util.format("%s: %s: %s\r\n\r\n", offer.sales, offer.title, offer.shop);
+  _.each(notification.offers, function (offer) {
+    offer = offer._source;
+    body += util.format("%s: %s: %s\r\n\r\n", offer.ptice, offer.title, offer.shop);
   });
 
   return body;
