@@ -40,7 +40,8 @@ var indicesCreateMapping = function () {
           type: "string"
         },
         language: {
-          type: "string"
+          type: "string",
+          "index": "not_analyzed"
         },
         vendor: {
           type: "string"
@@ -49,16 +50,22 @@ var indicesCreateMapping = function () {
           type: "boolean"
         },
         url: {
-          type: "string"
+          type: "string",
+          "index": "not_analyzed"
         },
         original_url: {
-          type: "string"
+          type: "string",
+          "index": "not_analyzed"
         },
         price: {
-          type: "string"
+          type: "double"
         },
         original_price: {
-          type: "string"
+          type: "double"
+        },
+        "discount": {
+          "type": "string",
+          "index": "not_analyzed"
         }
       }
     }
@@ -69,8 +76,8 @@ var addDocument = function (document) {
   return elasticClient.index({
     index: indexName,
     type: "offer",
+    id: document.id,
     body: {
-      id: document.id,
       title: document.title,
       language: document.language,
       description: document.description,
