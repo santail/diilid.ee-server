@@ -63,10 +63,10 @@ function SelverParser() {
         return [utils.unleakString(that.compileImageUrl(language, $('#main-image-default > a').attr('href')))];
       },
       'price': function ($) {
-        return utils.unleakString($('div.product-essential div.price-box:first-child p.special-price span.price > span:nth-child(1)').text().replace(/ €/g, ''));
+        return that.priceCleanup($('div.product-essential div.price-box:first-child p.special-price span.price > span:nth-child(1)').text());
       },
       'original_price': function ($) {
-        return utils.unleakString($('div.product-essential div.price-box:nth-child(1) p.old-price span.price > span:nth-child(1)').text().replace(/ €/g, ''));
+        return that.priceCleanup($('div.product-essential div.price-box:nth-child(1) p.old-price span.price > span:nth-child(1)').text());
       }
     }
   };

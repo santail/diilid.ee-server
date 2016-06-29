@@ -76,10 +76,10 @@ function eMaximaParser() {
         }).get();
       },
       'original_price': function ($) {
-        return utils.unleakString($('#ctl00_MainContent_productDetails_campaignInDetailsTop_labelOldPrice, #ctl00_MainContent_prodDetails_campaignInDetailsTop_labelOldPrice').text().trim().replace(/€/g, '').trim());
+        return that.priceCleanup($('#ctl00_MainContent_productDetails_campaignInDetailsTop_labelOldPrice, #ctl00_MainContent_prodDetails_campaignInDetailsTop_labelOldPrice').text().trim().replace(/€/g, '').trim());
       },
       'price': function ($) {
-        return utils.unleakString($('#ctl00_MainContent_productDetails_campaignInDetailsTop_labelNewPrice, #ctl00_MainContent_prodDetails_campaignInDetailsTop_labelNewPrice').text().replace(/€/g, '').trim());
+        return that.priceCleanup($('#ctl00_MainContent_productDetails_campaignInDetailsTop_labelNewPrice, #ctl00_MainContent_prodDetails_campaignInDetailsTop_labelNewPrice').text().replace(/€/g, '').trim());
       },
       'description': function ($) {
         return utils.unleakString($('#ctl00_MainContent_productDetails_pnlDescription, #ctl00_MainContent_prodDetails_pnlDescription').html() || '');

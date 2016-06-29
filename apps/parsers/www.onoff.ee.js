@@ -41,16 +41,14 @@ function OnoffParser() {
 
         return pictureUrls;
       },
-
-      'short': function ($) {
+      'description': function ($) {
         return utils.unleakString($('div.center_box__right > div.content.catalog > div.prod_in > div.prod_in__info table').eq(1).html());
       },
-      'long': function ($) {
+      'details': function ($) {
         return utils.unleakString($('div.center_box__right > div.content.catalog > div.prod_in > div.prod_in__text').text());
-
       },
       'original_price': function ($) {
-        return $('div.center_box__right > div.content.catalog > div.prod_in td.old_price > span').text();
+        return that.priceCleanup($('div.center_box__right > div.content.catalog > div.prod_in td.old_price > span').text());
       },
       'price': function ($) {
         var container = $('div.center_box__right > div.content.catalog > div.prod_in > form > div.shop_prod__price').first();
@@ -59,10 +57,10 @@ function OnoffParser() {
         container.children('div').remove();
         container.children('a').remove();
 
-        return utils.unleakString(container.text());
+        return that.priceCleanup(container.text());
       },
       'discount': function ($) {
-        return utils.unleakString($('div.center_box__right > div.content.catalog div.prod_in__pic div.shop_prod__procent').text());
+        return that.priceCleanup($('div.center_box__right > div.content.catalog div.prod_in__pic div.shop_prod__procent').text());
       },
       'vendor': "ONOFF"
     }

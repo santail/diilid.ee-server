@@ -70,7 +70,7 @@ function KriisisParser() {
         var description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').next('p');
 
         if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 1) {
-         description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').next('p');
+          description = $('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').next('p');
         }
 
         if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 2) {
@@ -88,14 +88,14 @@ function KriisisParser() {
       },
       'price': function sales($) {
         if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 1) {
-          return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').text().replace(/Hind: |Цена: /, ''));
+          return that.priceCleanup($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(4)').text());
         }
 
         if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 2) {
-          return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(5)').text().replace(/Hind: |Цена: /, ''));
+          return that.priceCleanup($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(5)').text());
         }
 
-        return utils.unleakString($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').text().replace(/Hind: |Цена: /, ''));
+        return that.priceCleanup($('#01 tr:nth-child(6) > td:nth-child(2) > p.view_sale_date:nth-child(3)').text());
       },
       'period': function period($) {
         if ($('#01 tr:nth-child(6) > td:nth-child(2) > p:not(.view_sale_date) > font').length === 1) {

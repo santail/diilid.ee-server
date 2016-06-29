@@ -35,13 +35,13 @@ function AbstractExpertParser() {
         return utils.unleakString($('#tab02 > div').html());
       },
       'price': function ($) {
-        return utils.unleakString($('#content > div.col00 p.price > span').text().trim());
+        return that.priceCleanup($('#content > div.col00 p.price > span').text().trim());
       },
       'original_price': function ($) {
-        return $('#content > div.col00 p.price > del').text().trim();
+        return that.priceCleanup($('#content > div.col00 p.price > del').text().trim());
       },
       'discount': function ($) {
-        return $('#content > div.col00 p.price > small').text().trim().replace(/Hinnavõit: /, '');
+        return that.priceCleanup($('#content > div.col00 p.price > small').text().trim());
       },
       'vendor': function ($) {
         $('body div.content > div.main-content div.sidebar-box.shopping > div.text > h3 > a').remove();

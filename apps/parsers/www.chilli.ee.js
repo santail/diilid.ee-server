@@ -49,12 +49,12 @@ function ChillyParser() {
         return utils.unleakString(text);
       },
       'original_price': function ($) {
-        return utils.unleakString($('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p > span').text().trim());
+        return that.priceCleanup($('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p > span').text().);
       },
       'price': function ($) {
         $('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p > span').remove();
 
-        return $('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p').text().trim();
+        return that.priceCleanup($('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p').text());
       },
       'vendor': function ($) {
         $('body div.content > div.main-content div.sidebar-box.shopping > div.text > h3 > a').remove();
