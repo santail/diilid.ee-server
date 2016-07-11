@@ -527,7 +527,7 @@ AbstractParser.prototype.priceCleanup = function (price) {
   price = price.match(/(\d+[,\.]?\d{1,2}(\s?\%)?)/);
 
   if (price) {
-    return [0].trim();
+    return price[0].trim();
   }
 
   return '';
