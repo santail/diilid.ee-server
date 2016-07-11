@@ -49,7 +49,7 @@ function ChillyParser() {
         return utils.unleakString(text);
       },
       'original_price': function ($) {
-        return that.priceCleanup($('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p > span').text().);
+        return that.priceCleanup($('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p > span').text());
       },
       'price': function ($) {
         $('body > div.listing-details > div.listing-main.grid-container > div.listing-main-details > p > span').remove();
