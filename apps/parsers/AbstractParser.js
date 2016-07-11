@@ -522,7 +522,15 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
 };
 
 AbstractParser.prototype.priceCleanup = function (price) {
-  return price.match(/(\d+[,\.]?\d{1,2}(\s?\%)?)/)[0].trim();
+  LOG.debug(util.format('[STATUS] [Price] %s', price));
+
+  price = price.match(/(\d+[,\.]?\d{1,2}(\s?\%)?)/);
+
+  if (price) {
+    return [0].trim();
+  }
+
+  return '';
 };
 
 module.exports = AbstractParser;
