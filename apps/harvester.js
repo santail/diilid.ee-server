@@ -53,7 +53,7 @@ worker.register({
   'harvester_run_event': function harvesterRunEventHandler(event, done) {
     var harvester = new Harvester();
 
-    LOG.info(util.format('[STATUS] [OK] [%s] Harvesting event received %r', event.site, event));
+    LOG.info(util.format('[STATUS] [OK] [%s] Harvesting event received', event.site, event));
 
     var options = _.extend(event, {});
     var site = options.site;
