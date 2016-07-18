@@ -35,7 +35,7 @@ function PrismamarketParser() {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
       'Accept-Encoding': 'gzip, deflate, sdch',
       'Accept-Language': 'en-US,en;q=0.8,ru;q=0.6,et;q=0.4',
-      'Cookie': 'is_new_user=1; _session_id=54daba672f21be3ce1353e501021054b'
+      'Cookie': 'is_new_user=1; _session_id=4e85f190aa733690d776667665c40843'
     },
     'paging': {
       finit: true,
