@@ -6,15 +6,42 @@ var util = require('util'),
   utils = require("../services/Utils");
 
 function MinuvalikParser() {
-  AbstractParser.call(this);
-
   var that = this;
+
+  AbstractParser.call(this);
 
   this.config = {
     'site': 'www.minuvalik.ee',
     'index': {
       'rus': 'https://www.minuvalik.ee/ru/?c=all',
       'est': 'https://www.minuvalik.ee/?c=all'
+    },
+    'paging': {
+      finit: true,
+      applyParameters: function paging_func(language, $) {
+        var pagination = $('div.stbst a.link_stbst');
+
+        var paging = {
+          'pattern': '&from={pageNumber}',
+          'first': 1,
+          'last': pagination.last().attr('href').replace(/.*from=(\d)/, "$1"),
+          'pages': function pages() {
+            var pages = [];
+
+            for (var pageNumber = 1; pageNumber <= this.last; pageNumber++) {
+              pages.push(that.compilePageUrl(language, this.pattern.replace('{pageNumber}', pageNumber)));
+            }
+
+            return pages;
+          }
+        };
+
+        return {
+          'first': paging.first,
+          'last': paging.last,
+          'pages': paging.pages()
+        };
+      }
     },
     'list': function ($) {
       return $('div.deals li > a').map(function () {
