@@ -151,7 +151,6 @@ Harvester.prototype.run = function (options, callback) {
           LOG.info(util.format('[STATUS] [OK] [%s] Cleanup finished', site));
           return done();
         });
-
       },
       function stepDeactivate(done) {
         if (!options.reactivate) {

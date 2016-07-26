@@ -1,24 +1,25 @@
 'use strict';
 
 var util = require('util'),
+    _ = require("underscore")._,
   urlParser = require("url"),
   AbstractParser = require("./AbstractParser"),
   utils = require("../services/Utils");
 
 function MinuvalikParser() {
+  AbstractParser.call(this);
+  
   var that = this;
 
-  AbstractParser.call(this);
-
-  this.config = {
+  var config = {
     'site': 'www.minuvalik.ee',
     'index': {
       'rus': 'https://www.minuvalik.ee/ru/?c=all',
       'est': 'https://www.minuvalik.ee/?c=all'
     },
     'paging': {
-      finit: true,
-      applyParameters: function paging_func(language, $) {
+      'finit': true,
+      'applyParameters': function (language, $) {
         var pagination = $('div.stbst a.link_stbst');
 
         var paging = {
@@ -80,6 +81,8 @@ function MinuvalikParser() {
       }
     }
   };
+  
+  this.config = _.extend(this.config, config);
 }
 
 util.inherits(MinuvalikParser, AbstractParser);
