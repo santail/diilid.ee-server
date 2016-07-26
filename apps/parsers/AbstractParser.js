@@ -524,7 +524,7 @@ AbstractParser.prototype.fetchOffer = function (options, callback) {
 AbstractParser.prototype.priceCleanup = function (price) {
   LOG.debug(util.format('[STATUS] [Price] %s', price));
 
-  price = price.match(/(\d+[,\.]?\d{1,2}(\s?\%)?)/);
+  price = price.match(/(\d+[,\.\s]?\d{1,2}(\s?\%)?)/);
 
   if (price) {
     return price[0].trim();
