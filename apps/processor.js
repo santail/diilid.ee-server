@@ -257,7 +257,7 @@ Processor.prototype.offerRefresh = function (offer, callback) {
       },
       update: {
         $set: _.extend(offer, {
-          active: true,
+          active: offer.active === false ? false : true,
           modified: new Date().toISOString()
         })
       },
