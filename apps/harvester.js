@@ -165,6 +165,7 @@ Harvester.prototype.run = function (options, callback) {
           'site': site
         }, {
           $set: {
+            processing: true,
             active: false
           }
         }, {

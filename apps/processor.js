@@ -162,6 +162,54 @@ Processor.prototype.run = function (options, callback) {
   });
 };
 
+Processor.prototype.offerRefresh = function (offer, callback) {
+  LOG.profile('Harvester.processOffer');
+
+  var that = this,
+    site = offer.site;
+
+  LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Refreshing offer', site, offer.id));
+
+  var parser = parserFactory.getParser(site);
+
+  var options = _.extend(offer, {});
+
+  parser.fetchOffer(options, function (err, offer) {
+    if (err) {
+      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Refreshing offer failed', offer.site, offer.id, err));
+      return callback(err);
+    }
+
+    LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Updating offer', site, offer.id));
+
+    that.db.offers.findAndModify({
+      query: {
+        _id: options._id
+      },
+      update: {
+        $set: _.extend(offer, {
+          active: options.active === false ? options.processing ? true : false : true,
+          modified: new Date().toISOString()
+        })
+      },
+      'new': false
+    }, function offerReactivateResult(err, doc, lastErrorObject) {
+      if (err) {
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Updating offer failed', offer.site, offer.id, err));
+        return callback(err);
+      }
+
+      if (!doc) {
+        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Updating offer failed', offer.site, offer.id, err));
+        return callback(new Error('DB update query failed'));
+      }
+
+      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Updating offer finished', doc.site, doc.id));
+      return callback(null);
+    });
+  });
+};
+
 Processor.prototype.offerReactivate = function (offer, callback) {
   LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Reactivating offer', offer.site, offer.id));
 
@@ -171,7 +219,7 @@ Processor.prototype.offerReactivate = function (offer, callback) {
     },
     update: {
       $set: {
-        active: true,
+        active: offer.active === false ? offer.processing ? true : false : true,
         modified: new Date().toISOString()
       }
     },
@@ -227,54 +275,6 @@ Processor.prototype.offerFetch = function (options, callback) {
         LOG.info(util.format('[STATUS] [OK] [%s] [%s] Saving offer finished', site, options.id));
         return callback(null, saved);
       });
-    });
-  });
-};
-
-Processor.prototype.offerRefresh = function (offer, callback) {
-  LOG.profile('Harvester.processOffer');
-
-  var that = this,
-    site = offer.site;
-
-  LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Refreshing offer', site, offer.id));
-
-  var parser = parserFactory.getParser(site);
-
-  var options = _.extend(offer, {});
-
-  parser.fetchOffer(options, function (err, offer) {
-    if (err) {
-      LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Refreshing offer failed', offer.site, offer.id, err));
-      return callback(err);
-    }
-
-    LOG.debug(util.format('[STATUS] [OK] [%s] [%s] Updating offer', site, offer.id));
-
-    that.db.offers.findAndModify({
-      query: {
-        _id: options._id
-      },
-      update: {
-        $set: _.extend(offer, {
-          active: offer.active === false ? false : true,
-          modified: new Date().toISOString()
-        })
-      },
-      'new': false
-    }, function offerReactivateResult(err, doc, lastErrorObject) {
-      if (err) {
-        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Updating offer failed', offer.site, offer.id, err));
-        return callback(err);
-      }
-
-      if (!doc) {
-        LOG.error(util.format('[STATUS] [Failure] [%s] [%s] Updating offer failed', offer.site, offer.id, err));
-        return callback(new Error('DB update query failed'));
-      }
-
-      LOG.info(util.format('[STATUS] [OK] [%s] [%s] Updating offer finished', doc.site, doc.id));
-      return callback(null);
     });
   });
 };
