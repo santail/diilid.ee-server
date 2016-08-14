@@ -9,7 +9,7 @@ var config = {
   },
   procurer: {
     execution: {
-      rule: '11:30am' // every 2 minutes
+      rule: '30 seconds' // every 2 minutes
     }
   },
   harvester: {
