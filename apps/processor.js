@@ -189,7 +189,8 @@ Processor.prototype.offerRefresh = function (offer, callback) {
       update: {
         $set: _.extend(offer, {
           active: options.active === false ? options.processing ? true : false : true,
-          modified: new Date().toISOString()
+          modified: new Date().toISOString(),
+          processing: false
         })
       },
       'new': false
@@ -220,7 +221,8 @@ Processor.prototype.offerReactivate = function (offer, callback) {
     update: {
       $set: {
         active: offer.active === false ? offer.processing ? true : false : true,
-        modified: new Date().toISOString()
+        modified: new Date().toISOString(),
+        processing: false
       }
     },
     'new': false
